@@ -1,7 +1,7 @@
 backend:
   name: github
   branch: main
-  repo: __GITHUB_REPO__
+  repo: thekilnshed
   base_url: __OAUTH_WORKER_URL__
   auth_endpoint: auth
 

@@ -6,3 +6,129 @@
 @source "../javascript/**/*.js";
 
 /* Site styles go here */
+
+@font-face {
+  font-family: "Lovely Mess";
+  src: url("../fonts/LovelyMess.woff") format("woff");
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+@theme {
+  --color-indigo-50: #F6F6FE;
+  --color-indigo-100: #E4E3FD;
+  --color-indigo-200: #D2D0FB;
+  --color-indigo-300: #A4A1F7;
+  --color-indigo-400: #7A75F0;
+  --color-indigo-500: #534DEF;
+  --color-indigo-600: #3A34D5;
+  --color-indigo-700: #2B27A5;
+  --color-indigo-800: #252277;
+  --color-indigo-900: #191650;
+  --color-indigo-950: #0C0B28;
+
+  --color-lime-50: #FDFEF5;
+  --color-lime-100: #F8FDE2;
+  --color-lime-200: #EEFBB6;
+  --color-lime-300: #E3F886;
+  --color-lime-400: #D8F656;
+  --color-lime-500: #CDF325;
+  --color-lime-600: #B0D50C;
+  --color-lime-700: #84A009;
+  --color-lime-800: #5C6F06;
+  --color-lime-900: #303A03;
+  --color-lime-950: #202702;
+
+  --color-brown-25: #FCF9F8;
+  --color-brown-50: #F6EEE9;
+  --color-brown-100: #F0E4DB;
+  --color-brown-150: #E4D4C7;
+  --color-brown-200: #E6D4C5;
+  --color-brown-300: #DBB99F;
+  --color-brown-350: #C9A88E;
+  --color-brown-400: #D49A73;
+  --color-brown-500: #CD8351;
+  --color-brown-600: #B86933;
+  --color-brown-700: #8B4C22;
+  --color-brown-800: #65381B;
+  --color-brown-900: #362112;
+  --color-brown-950: #1F130A;
+
+  --color-red-50: #FCE8E8;
+  --color-red-100: #FAD1D1;
+  --color-red-200: #F4A4A4;
+  --color-red-300: #EF7676;
+  --color-red-400: #E84040;
+  --color-red-500: #E41B1B;
+  --color-red-600: #B61616;
+  --color-red-700: #891010;
+  --color-red-800: #5B0B0B;
+  --color-red-900: #2E0505;
+  
+  --color-coal-0: #FFFFFF;
+  --color-coal-25: #E2E3E9;
+  --color-coal-50: #D8DAE2;
+  --color-coal-100: #C5C7D4;
+  --color-coal-200: #B1B5C5;
+  --color-coal-300: #9EA2B7;
+  --color-coal-400: #9497AB;
+  --color-coal-500: #828698;
+  --color-coal-600: #656878;
+  --color-coal-700: #4B4D59;
+  --color-coal-800: #3D3F49;
+  --color-coal-900: #2F3039;
+  --color-coal-950: #202127;
+  --color-coal-1000: #17181C;
+  --color-coal-1100: #0C0C0E;
+  
+  --font-display: "Lovely Mess", sans-serif;
+  --font-body: "Space Grotesk", sans-serif;
+
+  --shadow-primary-bs: 2px 2px 0px 2px #632502;
+  --shadow-primary-bs-hover: 1px 1px 2px 1px #421901;
+  --shadow-secondary-bs: 2px 2px 0px 2px #1D1D62;
+  --shadow-secondary-bs-hover: 1px 1px 2px 1px #101033;
+}
+
+body {
+  @apply font-body text-[18px];
+}
+
+
+h1 { @apply font-display tracking-wider text-[112px] leading-none; }
+
+h2 { @apply font-display tracking-wider text-6xl leading-none; }
+
+h3 { @apply font-body font-medium text-5xl leading-none; }
+
+h4 { @apply font-body font-medium text-4xl leading-none; }
+
+h5 { @apply font-body font-medium text-3xl leading-none; }
+
+h6 { @apply font-medium text-2xl leading-none; }
+
+a { @apply hover:underline; }
+
+p { @apply leading-7; }
+
+.btn { @apply px-6 py-2 font-medium text-center text-nowrap cursor-pointer transition-colors duration-300 ease-in-out hover:outline hover:outline-2 hover:outline-offset-2 disabled:bg-coal-500 disabled:text-coal-900 !no-underline uppercase tracking-wider rounded-sm; }
+
+.btn-primary { @apply bg-indigo-500 hover:bg-indigo-700 text-coal-0 outline-indigo-500 md:w-fit w-full; }
+.btn-secondary { @apply bg-lime-300 hover:bg-lime-500 text-lime-950 outline-lime-300 md:w-fit w-full; }
+.btn-outline { @apply border w-full block; 
+  &.lime {
+    @apply border-lime-500 hover:bg-lime-500 text-lime-500 hover:text-lime-950 outline-lime-500;
+  }
+  &.brown {
+    @apply border-brown-150 hover:bg-brown-300 text-brown-150 hover:text-brown-800  outline-brown-300;
+  }
+  &.white {
+    @apply border-coal-0 hover:bg-coal-0/50 text-coal-0 hover:text-coal-100 outline-coal-100;
+  }
+}
+
+.hero {
+  @apply pt-36;
+}

@@ -1,4 +1,4 @@
-# __SITE_NAME__
+# The Kiln Shed
 
 A Bridgetown 2.2 site, generated from [flagrant-site-template](https://github.com/beflagrant/flagrant-site-template).
 
