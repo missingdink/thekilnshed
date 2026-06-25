@@ -1,0 +1,105 @@
+name: Deploy Site to Cloudflare Pages
+env:
+  URL: __SITE_URL__
+  BASE_URL: __SITE_URL__
+  BASE_PATH: /
+  CLOUDFLARE_PROJECT: __CLOUDFLARE_PROJECT__
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      initialized: ${{ steps.check.outputs.initialized }}
+    steps:
+      - uses: actions/checkout@v6
+      - id: check
+        run: |
+          if [[ -f .template-initialized ]]; then
+            echo "initialized=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No .template-initialized marker found; run bin/init-site to bootstrap. Skipping deploy."
+            echo "initialized=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: gate
+    if: needs.gate.outputs.initialized == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [26.2.0]
+        ruby-version: [4.0.5]
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Install libvips (required by bridgetown-image-pipeline)
+        uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05 # v1.6.0
+        with:
+          packages: libvips libvips-tools libheif1 libheif-dev libheif-plugin-aomenc libheif-plugin-libde265
+          version: 1.0
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: latest
+          bundler-cache: true
+          cache-version: 3
+
+      - name: Cache image-pipeline derivatives
+        uses: actions/cache@v4
+        with:
+          path: |
+            .bridgetown-cache/image_pipeline
+            output/_bridgetown/image_pipeline
+          key: image-pipeline-${{ hashFiles('Gemfile.lock', 'config/initializers.rb', 'src/images/**') }}
+          restore-keys: |
+            image-pipeline-
+
+      - name: Write jit-refresh
+        run: touch frontend/styles/jit-refresh.css
+
+      - name: Build site
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-output
+          path: output
+
+  deploy:
+    needs: [gate, build]
+    if: needs.gate.outputs.initialized == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site-output
+          path: output
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy output --project-name=${{ env.CLOUDFLARE_PROJECT }} --branch=main

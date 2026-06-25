@@ -1,0 +1,131 @@
+name: Perf Monitor (PSI)
+
+on:
+  workflow_run:
+    workflows: ["Deploy Site to Cloudflare Pages"]
+    types: [completed]
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: perf-monitor
+  cancel-in-progress: false
+
+env:
+  TARGET_URL: __SITE_URL__
+  REGRESSION_THRESHOLD: '0.10'
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      initialized: ${{ steps.check.outputs.initialized }}
+    steps:
+      - uses: actions/checkout@v6
+      - id: check
+        run: |
+          if [[ -f .template-initialized ]]; then
+            echo "initialized=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No .template-initialized marker found; skipping perf-monitor."
+            echo "initialized=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  measure:
+    needs: gate
+    if: needs.gate.outputs.initialized == 'true' && (github.event.workflow_run == null || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Run PageSpeed Insights (mobile + desktop)
+        env:
+          PSI_API_KEY: ${{ secrets.PSI_API_KEY }}
+        run: |
+          set -eu
+          which jq curl
+          mkdir -p out
+          # Strip whitespace from secret in case it was set with stray spaces/newlines.
+          # @uri-encode to be safe even though valid PSI keys are URL-clean.
+          trimmed_key="$(printf '%s' "${PSI_API_KEY:-}" | tr -d '[:space:]')"
+          encoded_url=$(jq -nr --arg u "$TARGET_URL" '$u|@uri')
+          for strategy in mobile desktop; do
+            url="https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encoded_url}&strategy=${strategy}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO"
+            if [ -n "$trimmed_key" ]; then
+              encoded_key=$(jq -nr --arg k "$trimmed_key" '$k|@uri')
+              url="${url}&key=${encoded_key}"
+            fi
+            echo "Fetching $strategy"
+            curl -sS --fail -o "out/$strategy.json" "$url"
+            jq '{
+              strategy: "'"$strategy"'",
+              fetchTime: .lighthouseResult.fetchTime,
+              perf: .lighthouseResult.categories.performance.score,
+              a11y: .lighthouseResult.categories.accessibility.score,
+              bp: .lighthouseResult.categories."best-practices".score,
+              seo: .lighthouseResult.categories.seo.score,
+              fcp: .lighthouseResult.audits."first-contentful-paint".numericValue,
+              lcp: .lighthouseResult.audits."largest-contentful-paint".numericValue,
+              si: .lighthouseResult.audits."speed-index".numericValue,
+              tbt: .lighthouseResult.audits."total-blocking-time".numericValue,
+              cls: .lighthouseResult.audits."cumulative-layout-shift".numericValue,
+              cruxFcpP75: .loadingExperience.metrics.FIRST_CONTENTFUL_PAINT_MS.percentile,
+              cruxLcpP75: .loadingExperience.metrics.LARGEST_CONTENTFUL_PAINT_MS.percentile,
+              cruxClsP75: .loadingExperience.metrics.CUMULATIVE_LAYOUT_SHIFT_SCORE.percentile,
+              cruxInpP75: .loadingExperience.metrics.INTERACTION_TO_NEXT_PAINT.percentile
+            }' "out/$strategy.json" > "out/$strategy-summary.json"
+            echo "=== $strategy ==="
+            cat "out/$strategy-summary.json"
+          done
+
+      - name: Upload PSI raw + summary as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: psi-${{ github.run_id }}-${{ github.run_attempt }}
+          path: out/
+          retention-days: 90
+
+      - name: Detect regression vs previous artifact
+        id: regression
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Fetch previous run's mobile summary; bail quietly if not present.
+          prev_run=$(gh run list \
+            --workflow=perf-monitor.yml \
+            --status=success \
+            --limit 5 \
+            --json databaseId,conclusion \
+            -q '[.[] | select(.databaseId != ${{ github.run_id }})] | .[0].databaseId' 2>/dev/null || echo "")
+          if [ -z "$prev_run" ] || [ "$prev_run" = "null" ]; then
+            echo "No previous run found — first sample, skipping regression check"
+            echo "regressed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          mkdir -p prev
+          if ! gh run download "$prev_run" --pattern 'psi-*' --dir prev 2>/dev/null; then
+            echo "No artifact on previous run — skipping"
+            echo "regressed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          prev_summary=$(find prev -name 'mobile-summary.json' | head -1)
+          if [ -z "$prev_summary" ]; then
+            echo "Previous summary missing — skipping"
+            echo "regressed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          curr_perf=$(jq -r '.perf' out/mobile-summary.json)
+          prev_perf=$(jq -r '.perf' "$prev_summary")
+          delta=$(awk -v c="$curr_perf" -v p="$prev_perf" 'BEGIN{printf "%.3f", p-c}')
+          threshold="${REGRESSION_THRESHOLD}"
+          echo "Mobile perf: prev=$prev_perf curr=$curr_perf delta=$delta threshold=$threshold"
+          echo "curr_perf=$curr_perf" >> "$GITHUB_OUTPUT"
+          echo "prev_perf=$prev_perf" >> "$GITHUB_OUTPUT"
+          echo "delta=$delta" >> "$GITHUB_OUTPUT"
+          is_regression=$(awk -v d="$delta" -v t="$threshold" 'BEGIN{print (d>t)?"true":"false"}')
+          echo "regressed=$is_regression" >> "$GITHUB_OUTPUT"

@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
+
+@source "../../src/**/*.{erb,html,md,svg}";
+@source "../javascript/**/*.js";
+
+/* Site styles go here */

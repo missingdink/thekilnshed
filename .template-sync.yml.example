@@ -1,0 +1,53 @@
+upstream:
+  repo: beflagrant/flagrant-site-template
+  ref: main
+schedule: weekly
+
+features:
+  # Set to true after generating baselines via the Update Visual Baselines
+  # workflow_dispatch. See docs/visual-regression.md.
+  visual_regression: false
+
+tracked:
+  - AGENTS.md
+  - CLAUDE.md
+  - .github/workflows/deploy-site.yml
+  - .github/workflows/preview-deploy.yml
+  - .github/workflows/preview-cleanup.yml
+  - .github/workflows/perf-monitor.yml
+  - .github/workflows/template-sync.yml
+  - .github/workflows/visual-regression.yml
+  - .github/dependabot.yml
+  - .devcontainer/devcontainer.json
+  - .gitattributes
+  - bin/template-sync
+  - bin/bridgetown
+  - bin/cloudflare-verify
+  - esbuild.config.js
+  - postcss.config.js
+  - playwright.config.ts
+  - Rakefile
+  - config.ru
+  - Procfile
+  - .ruby-version
+  - .nvmrc
+
+excluded:
+  - src/**
+  - frontend/**
+  - config/initializers.rb
+  - package.json
+  - Gemfile
+  - package-lock.json
+  - Gemfile.lock
+  - README.md
+  - oauth-worker/**
+  - bin/init-site
+  - bin/oauth-worker-deploy
+  - docs/**
+  - test/visual/snapshots/**
+  - test/visual/*.spec.ts
+
+last_synced:
+  sha: ""
+  date: ""

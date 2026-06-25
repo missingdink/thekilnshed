@@ -1,0 +1,76 @@
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request:
+
+jobs:
+  no-template-initialized-marker:
+    # The template repo itself must never commit .template-initialized.
+    # That file is the marker bin/init-site writes for *child sites* so
+    # their deploy workflows un-skip. If it lands on this repo, the
+    # template's own deploys would try to deploy to __CLOUDFLARE_PROJECT__.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Guard against accidental marker commit
+        run: |
+          if [[ -f .template-initialized ]]; then
+            echo "::error::.template-initialized must not be committed to the template repo."
+            echo "This file is written by bin/init-site on child sites; the template itself should never carry it."
+            exit 1
+          fi
+
+  init-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 4.0.5
+          bundler-cache: true
+      - name: Run init-script tests
+        run: bundle exec ruby test/init_site_test.rb
+
+  template-sync-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 4.0.5
+          bundler-cache: true
+      - name: Run template-sync tests
+        run: bundle exec ruby test/template_sync_test.rb
+
+  smoke-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 26.2.0
+          cache: "npm"
+
+      - run: npm ci
+
+      - uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05
+        with:
+          packages: libvips libvips-tools libheif1 libheif-dev libheif-plugin-aomenc libheif-plugin-libde265
+          version: 1.0
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 4.0.5
+          bundler-cache: true
+
+      - name: Initialize site with defaults
+        run: bin/init-site --non-interactive --defaults
+
+      - run: touch frontend/styles/jit-refresh.css
+      - run: npm run build
+
+      - name: Assert output exists
+        run: |
+          test -f output/index.html
+          test -f output/404.html

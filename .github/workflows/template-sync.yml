@@ -1,0 +1,71 @@
+name: Template Sync
+
+on:
+  schedule:
+    - cron: '0 10 * * 1'  # Monday 10:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          app-id: ${{ secrets.TEMPLATE_SYNC_APP_ID }}
+          private-key: ${{ secrets.TEMPLATE_SYNC_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            ${{ github.event.repository.name }}
+            flagrant-site-template
+
+      - uses: actions/checkout@v6
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 4.0.5
+          bundler-cache: false
+
+      - name: Configure git
+        run: |
+          git config user.name "template-sync-bot"
+          git config user.email "template-sync@users.noreply.github.com"
+
+      - name: Run template-sync (dry-run, summary only)
+        id: dry
+        env:
+          TEMPLATE_SYNC_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          out=$(bin/template-sync --dry-run=true)
+          echo "$out"
+          echo "changed=$(echo "$out" | grep -c '^  ' || true)" >> "$GITHUB_OUTPUT"
+
+      - name: Apply sync and commit
+        if: steps.dry.outputs.changed != '0'
+        env:
+          TEMPLATE_SYNC_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: bin/template-sync --dry-run=false
+
+      - name: Push branch and open PR
+        if: steps.dry.outputs.changed != '0'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          branch=$(git rev-parse --abbrev-ref HEAD)
+          git push -u --force-with-lease origin "$branch"
+          if gh pr view "$branch" --json number >/dev/null 2>&1; then
+            echo "PR already open for $branch; branch updated."
+            exit 0
+          fi
+          gh pr create \
+            --base main \
+            --head "$branch" \
+            --title "Template sync: $branch" \
+            --label template-sync \
+            --body "Automated template sync. Review file-by-file diffs below."

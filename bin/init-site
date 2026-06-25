@@ -1,0 +1,128 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "optparse"
+require "find"
+
+PLACEHOLDERS = %w[
+  __SITE_NAME__
+  __SITE_URL__
+  __GITHUB_REPO__
+  __CLOUDFLARE_PROJECT__
+  __OAUTH_WORKER_URL__
+  __GITHUB_ORG_SLUG__
+].freeze
+
+DEFAULTS = {
+  "__SITE_NAME__"        => "Example Site",
+  "__SITE_URL__"         => "https://example.com",
+  "__GITHUB_REPO__"      => "example-org/example-site",
+  "__CLOUDFLARE_PROJECT__"       => "example-site",
+  "__OAUTH_WORKER_URL__" => "https://decap-oauth-example.workers.dev",
+  "__GITHUB_ORG_SLUG__"         => "example-org",
+}.freeze
+
+PROMPTS = {
+  "__SITE_NAME__"        => "Site name (human-readable)",
+  "__SITE_URL__"         => "Site URL (https://...)",
+  "__GITHUB_REPO__"      => "GitHub org/repo (e.g. acmeco/acme-website)",
+  "__CLOUDFLARE_PROJECT__"       => "Cloudflare Pages project name",
+  "__OAUTH_WORKER_URL__" => "OAuth Worker URL",
+  "__GITHUB_ORG_SLUG__"  => "GitHub org slug (the GH org that owns the repo; used to name the OAuth worker)",
+}.freeze
+
+SKIP_PATHS = [
+  %r{\A\.git/},
+  %r{\Anode_modules/},
+  %r{\Avendor/},
+  %r{\Aoutput/},
+  %r{\A\.bridgetown-cache/},
+  %r{\Apackage-lock\.json\z},
+  %r{\AGemfile\.lock\z},
+  %r{\A\.template-sync\.yml\z},
+  %r{\Abin/},
+  %r{\Atest/},
+  %r{\Adocs/},
+]
+
+TEXT_EXTS = %w[.rb .erb .yml .yaml .json .js .css .md .html .toml .ru .conf .example].freeze
+
+def parse_options(argv)
+  opts = { interactive: true, defaults: false, force: false }
+  OptionParser.new do |o|
+    o.on("--non-interactive") { opts[:interactive] = false }
+    o.on("--defaults")        { opts[:defaults] = true }
+    o.on("--force")           { opts[:force] = true }
+  end.parse!(argv)
+  opts
+end
+
+def already_initialized?(root)
+  Find.find(root) do |path|
+    rel = path.sub(/\A#{Regexp.escape(root)}\/?/, "")
+    Find.prune if SKIP_PATHS.any? { |re| rel =~ re }
+    next unless File.file?(path)
+    next unless TEXT_EXTS.include?(File.extname(path)) || File.extname(path) == ""
+    content = File.read(path)
+    return false if PLACEHOLDERS.any? { |p| content.include?(p) }
+  end
+  true
+end
+
+def gather_answers(opts)
+  answers = {}
+  PLACEHOLDERS.each do |key|
+    if !opts[:interactive] || opts[:defaults]
+      answers[key] = DEFAULTS[key]
+    else
+      print "#{PROMPTS[key]} [#{DEFAULTS[key]}]: "
+      input = STDIN.gets&.chomp
+      answers[key] = (input.nil? || input.empty?) ? DEFAULTS[key] : input
+    end
+  end
+  answers
+end
+
+def substitute_all(root, answers)
+  Find.find(root) do |path|
+    rel = path.sub(/\A#{Regexp.escape(root)}\/?/, "")
+    Find.prune if SKIP_PATHS.any? { |re| rel =~ re }
+    next unless File.file?(path)
+    next unless TEXT_EXTS.include?(File.extname(path)) || File.extname(path) == ""
+    content = File.read(path)
+    replaced = content.dup
+    answers.each { |k, v| replaced.gsub!(k, v) }
+    File.write(path, replaced) if replaced != content
+  end
+end
+
+def rename_template_sync_example(root)
+  src = File.join(root, ".template-sync.yml.example")
+  dst = File.join(root, ".template-sync.yml")
+  File.rename(src, dst) if File.exist?(src) && !File.exist?(dst)
+end
+
+def write_initialized_marker(root)
+  File.write(File.join(root, ".template-initialized"), Time.now.utc.strftime("%Y-%m-%d") + "\n")
+end
+
+def main(argv)
+  opts = parse_options(argv)
+  root = Dir.pwd
+
+  if already_initialized?(root) && !opts[:force]
+    warn "init-site appears to have already been run (no placeholders found)."
+    warn "Re-run with --force to substitute again."
+    exit 2
+  end
+
+  answers = gather_answers(opts)
+  substitute_all(root, answers)
+  rename_template_sync_example(root)
+  write_initialized_marker(root)
+
+  puts "Site initialized:"
+  answers.each { |k, v| puts "  #{k.tr('_', ' ').strip} = #{v}" }
+end
+
+main(ARGV) if __FILE__ == $PROGRAM_NAME

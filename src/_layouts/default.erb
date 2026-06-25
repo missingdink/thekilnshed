@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="<%= site.data.site_metadata.locale %>">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= resource.data.title || site.data.site_metadata.title %></title>
+  <meta name="description" content="<%= site.data.site_metadata.description %>">
+  <link rel="stylesheet" href="<%= asset_path :css %>">
+  <script src="<%= asset_path :js %>" defer></script>
+</head>
+<body>
+  <main>
+    <%= yield %>
+  </main>
+</body>
+</html>

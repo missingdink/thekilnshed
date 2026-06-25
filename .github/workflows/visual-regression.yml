@@ -1,0 +1,399 @@
+name: Visual Regression
+
+env:
+  URL: __SITE_URL__
+  CLOUDFLARE_PROJECT: __CLOUDFLARE_PROJECT__
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_run:
+    workflows: ["Deploy Site to Cloudflare Pages"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Where to capture baselines from"
+        type: choice
+        options:
+          - production
+          - preview
+        default: production
+      preview_pr:
+        description: "PR number (only if target=preview)"
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      initialized: ${{ steps.check.outputs.initialized }}
+    steps:
+      - uses: actions/checkout@v6
+      - id: check
+        run: |
+          if [[ -f .template-initialized ]]; then
+            echo "initialized=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No .template-initialized marker found; skipping visual regression."
+            echo "initialized=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  visual-regression-pull-request:
+    needs: gate
+    if: needs.gate.outputs.initialized == 'true' && github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          lfs: true
+
+      - name: Check visual_regression feature flag
+        id: feature
+        run: |
+          if [ ! -f .template-sync.yml ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          enabled=$(grep -E "^[[:space:]]+visual_regression:" .template-sync.yml | awk '{print $2}' || echo "false")
+          echo "enabled=${enabled:-false}" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if feature flag off
+        if: steps.feature.outputs.enabled != 'true'
+        run: |
+          echo "visual_regression feature flag is off; skipping"
+          exit 0
+
+      - name: Check for existing baselines
+        id: baselines
+        if: steps.feature.outputs.enabled == 'true'
+        run: |
+          count=$(find test/visual/snapshots -name "*.png" 2>/dev/null | wc -l | tr -d ' ')
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if no baselines
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count == '0'
+        run: |
+          echo "No baselines committed yet. Run 'Update Visual Baselines' workflow_dispatch to bootstrap."
+          exit 0
+
+      - uses: actions/setup-node@v6
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0'
+        with:
+          node-version: 26.2.0
+          cache: "npm"
+
+      - name: Install dependencies
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0'
+        run: npm ci
+
+      - name: Resolve Playwright version
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0'
+        id: pw-version
+        run: echo "version=$(npx playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0'
+        id: pw-cache
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw-version.outputs.version }}
+
+      - name: Install Playwright browsers (cache miss)
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0' && steps.pw-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Install Playwright system deps (cache hit)
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0' && steps.pw-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium firefox webkit
+
+      - name: Wait for preview to be ready
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0'
+        timeout-minutes: 10
+        run: |
+          url="https://pr-${{ github.event.pull_request.number }}.${{ env.CLOUDFLARE_PROJECT }}.pages.dev"
+          echo "Polling $url for HTTP 200..."
+          until curl -sfo /dev/null --max-time 10 "$url"; do
+            echo "Waiting for $url..."
+            sleep 5
+          done
+          echo "Preview ready at $url"
+          echo "BASE_URL=$url" >> "$GITHUB_ENV"
+
+      - name: Run Playwright visual regression
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0'
+        id: playwright
+        run: npx playwright test
+
+      - name: Upload diff artifacts
+        if: always() && steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0' && steps.playwright.outcome == 'failure'
+        uses: actions/upload-artifact@v5
+        with:
+          name: visual-regression-diffs-pr-${{ github.event.pull_request.number }}
+          path: test-results/
+          retention-days: 14
+
+      - name: Comment on PR with artifact link
+        if: always() && steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0' && steps.playwright.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runId = context.runId;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = context.issue.number;
+            const artifactName = `visual-regression-diffs-pr-${prNumber}`;
+            const artifactUrl = `https://github.com/${owner}/${repo}/actions/runs/${runId}`;
+            const body = [
+              '### Visual regression detected',
+              '',
+              `Snapshot diffs are available as a workflow artifact (\`${artifactName}\`).`,
+              '',
+              `View [run #${runId}](${artifactUrl}) and download the artifact to inspect \`expected-\`, \`actual-\`, and \`diff-\` PNGs.`,
+              '',
+              '#### Resolving',
+              '',
+              'If the change is intentional, regenerate baselines via the **Update Visual Baselines** workflow_dispatch (target: `preview`, preview_pr: this PR number), then re-run this workflow.',
+              '',
+              'See `docs/visual-regression.md` for details.',
+            ].join('\n');
+            await github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner,
+              repo,
+              body,
+            });
+
+  visual-regression-production:
+    needs: gate
+    if: needs.gate.outputs.initialized == 'true' && github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          lfs: true
+
+      - name: Check visual_regression feature flag
+        id: feature
+        run: |
+          if [ ! -f .template-sync.yml ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          enabled=$(grep -E "^[[:space:]]+visual_regression:" .template-sync.yml | awk '{print $2}' || echo "false")
+          echo "enabled=${enabled:-false}" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if feature flag off
+        if: steps.feature.outputs.enabled != 'true'
+        run: |
+          echo "visual_regression feature flag is off; skipping"
+          exit 0
+
+      - name: Check for existing baselines
+        id: baselines
+        if: steps.feature.outputs.enabled == 'true'
+        run: |
+          count=$(find test/visual/snapshots -name "*.png" 2>/dev/null | wc -l | tr -d ' ')
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if no baselines
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count == '0'
+        run: |
+          echo "No baselines committed yet. Run 'Update Visual Baselines' workflow_dispatch to bootstrap."
+          exit 0
+
+      - uses: actions/setup-node@v6
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0'
+        with:
+          node-version: 26.2.0
+          cache: "npm"
+
+      - name: Install dependencies
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0'
+        run: npm ci
+
+      - name: Resolve Playwright version
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0'
+        id: pw-version
+        run: echo "version=$(npx playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0'
+        id: pw-cache
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw-version.outputs.version }}
+
+      - name: Install Playwright browsers (cache miss)
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0' && steps.pw-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Install Playwright system deps (cache hit)
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0' && steps.pw-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium firefox webkit
+
+      - name: Set BASE_URL to production
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0'
+        run: echo "BASE_URL=${{ env.URL }}" >> "$GITHUB_ENV"
+
+      - name: Run Playwright visual regression
+        if: steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0'
+        id: playwright
+        run: npx playwright test
+
+      - name: Upload diff artifacts
+        if: always() && steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0' && steps.playwright.outcome == 'failure'
+        uses: actions/upload-artifact@v5
+        with:
+          name: visual-regression-diffs-prod-${{ github.event.workflow_run.head_sha }}
+          path: test-results/
+          retention-days: 30
+
+      - name: Open or update production regression issue
+        if: always() && steps.feature.outputs.enabled == 'true' && steps.baselines.outputs.count != '0' && steps.playwright.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const sha = '${{ github.event.workflow_run.head_sha }}';
+            const shortSha = sha.substring(0, 7);
+            const runId = context.runId;
+            const artifactName = `visual-regression-diffs-prod-${sha}`;
+            const artifactUrl = `https://github.com/${owner}/${repo}/actions/runs/${runId}`;
+            const url = '${{ env.URL }}';
+
+            const body = [
+              '### Visual regression on production',
+              '',
+              `**Commit:** \`${shortSha}\``,
+              `**Production URL:** ${url}`,
+              `**Diff artifact:** [${artifactName}](${artifactUrl})`,
+              '',
+              '#### Possible causes',
+              '',
+              `Recent commits on \`main\`: see [compare](https://github.com/${owner}/${repo}/commits/main).`,
+              '',
+              '#### How to resolve',
+              '',
+              '1. Download the artifact and inspect `diff-` PNGs.',
+              '2. If the change is intentional, run **Update Visual Baselines** workflow_dispatch (target: `production`), commit the new baselines, redeploy.',
+              '3. If the change is a bug, revert or fix on `main`.',
+              '4. Close this issue once resolved.',
+              '',
+              'See `docs/visual-regression.md` for details.',
+            ].join('\n');
+
+            const existing = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              labels: 'visual-regression,production',
+              state: 'open',
+            });
+
+            if (existing.data.length > 0) {
+              const issue = existing.data[0];
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: issue.number,
+                body: `Regression still present at commit \`${shortSha}\`.\n\n${body}`,
+              });
+              console.log(`Commented on existing issue #${issue.number}`);
+            } else {
+              const created = await github.rest.issues.create({
+                owner,
+                repo,
+                title: `Visual regression on prod: ${shortSha}`,
+                labels: ['visual-regression', 'production'],
+                body,
+              });
+              console.log(`Opened issue #${created.data.number}`);
+            }
+
+  visual-regression-update-baselines:
+    needs: gate
+    if: needs.gate.outputs.initialized == 'true' && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          lfs: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 26.2.0
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Resolve Playwright version
+        id: pw-version
+        run: echo "version=$(npx playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw-version.outputs.version }}
+
+      - name: Install Playwright browsers (cache miss)
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Install Playwright system deps (cache hit)
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium firefox webkit
+
+      - name: Configure target URL
+        run: |
+          target="${{ github.event.inputs.target }}"
+          if [ "$target" = "preview" ]; then
+            pr="${{ github.event.inputs.preview_pr }}"
+            if [ -z "$pr" ]; then
+              echo "preview target requires preview_pr input"
+              exit 1
+            fi
+            url="https://pr-${pr}.${{ env.CLOUDFLARE_PROJECT }}.pages.dev"
+          else
+            url="${{ env.URL }}"
+          fi
+          echo "Capturing baselines from $url"
+          echo "BASE_URL=$url" >> "$GITHUB_ENV"
+
+      - name: Wait for URL to be reachable
+        timeout-minutes: 10
+        run: |
+          until curl -sfo /dev/null --max-time 10 "$BASE_URL"; do
+            echo "Waiting for $BASE_URL..."
+            sleep 5
+          done
+          echo "Ready at $BASE_URL"
+
+      - name: Update baselines
+        run: npx playwright test --update-snapshots
+
+      - name: Configure git
+        run: |
+          git config user.name "visual-baselines-bot"
+          git config user.email "visual-baselines@users.noreply.github.com"
+
+      - name: Commit baselines
+        run: |
+          git add test/visual/snapshots/
+          if git diff --cached --quiet; then
+            echo "No baseline changes to commit"
+            exit 0
+          fi
+          git commit -m "test: update visual regression baselines (target: ${{ github.event.inputs.target }})"
+          git push origin HEAD

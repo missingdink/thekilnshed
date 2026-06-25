@@ -1,0 +1,109 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "optparse"
+require "yaml"
+require "fileutils"
+require "tmpdir"
+require "digest"
+require "open3"
+
+MANIFEST = ".template-sync.yml"
+
+def parse_options(argv)
+  opts = {
+    upstream_path: nil,
+    dry_run: true,
+    commit: true,
+    branch_prefix: "template-sync",
+  }
+  OptionParser.new do |o|
+    o.on("--upstream-path PATH")     { |v| opts[:upstream_path] = v }
+    o.on("--dry-run=BOOL")           { |v| opts[:dry_run] = !%w[false 0 no].include?(v.to_s.downcase) }
+    o.on("--no-commit")              { opts[:commit] = false }
+  end.parse!(argv)
+  opts
+end
+
+def load_manifest
+  abort "No #{MANIFEST} in current directory" unless File.exist?(MANIFEST)
+  YAML.load_file(MANIFEST)
+end
+
+def fetch_upstream(manifest)
+  upstream_dir = Dir.mktmpdir("template-sync-upstream-")
+  repo = manifest.dig("upstream", "repo")
+  ref  = manifest.dig("upstream", "ref") || "main"
+  abort "upstream.repo missing in manifest" unless repo
+  token = ENV["TEMPLATE_SYNC_TOKEN"] || ENV["GH_TOKEN"] || ENV["GITHUB_TOKEN"]
+  url =
+    if token && !token.empty?
+      "https://x-access-token:#{token}@github.com/#{repo}.git"
+    else
+      "https://github.com/#{repo}.git"
+    end
+  system("git", "clone", "--depth=1", "--branch", ref, url, upstream_dir, exception: true)
+  upstream_dir
+end
+
+def upstream_sha(dir)
+  Dir.chdir(dir) { `git rev-parse HEAD`.strip }
+end
+
+def files_differ?(a, b)
+  return true unless File.exist?(a) && File.exist?(b)
+  Digest::SHA256.file(a).hexdigest != Digest::SHA256.file(b).hexdigest
+end
+
+def main(argv)
+  opts = parse_options(argv)
+  manifest = load_manifest
+
+  upstream = opts[:upstream_path] || fetch_upstream(manifest)
+  sha = opts[:upstream_path] ? "local" : upstream_sha(upstream)
+
+  tracked = manifest["tracked"] || []
+  changed = []
+
+  tracked.each do |rel|
+    src = File.join(upstream, rel)
+    dst = File.join(Dir.pwd, rel)
+    unless File.exist?(src)
+      warn "skip (missing upstream): #{rel}"
+      next
+    end
+    if files_differ?(src, dst)
+      changed << rel
+      next if opts[:dry_run]
+      FileUtils.mkdir_p(File.dirname(dst))
+      FileUtils.cp(src, dst)
+    end
+  end
+
+  if changed.empty?
+    puts "no changes"
+    exit 0
+  end
+
+  if opts[:dry_run]
+    puts "would update #{changed.size} files:"
+    changed.each { |f| puts "  #{f}" }
+    exit 0
+  end
+
+  manifest["last_synced"] ||= {}
+  manifest["last_synced"]["sha"] = sha
+  manifest["last_synced"]["date"] = Time.now.utc.strftime("%Y-%m-%d")
+  File.write(MANIFEST, manifest.to_yaml)
+
+  puts "updated #{changed.size} files (and manifest)"
+  changed.each { |f| puts "  #{f}" }
+  exit 0 unless opts[:commit]
+
+  branch = "#{opts[:branch_prefix]}/#{sha[0, 7]}"
+  system("git", "checkout", "-b", branch, exception: true)
+  system("git", "add", *changed, MANIFEST, exception: true)
+  system("git", "commit", "-m", "Template sync: #{sha[0, 7]}", exception: true)
+end
+
+main(ARGV) if __FILE__ == $PROGRAM_NAME

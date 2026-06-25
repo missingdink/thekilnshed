@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: bundler
+    directory: "/"
+    schedule: { interval: weekly, day: monday }
+    open-pull-requests-limit: 5
+    groups:
+      bridgetown:
+        patterns: ["bridgetown*"]
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: npm
+    directory: "/"
+    schedule: { interval: weekly, day: monday }
+    open-pull-requests-limit: 5
+    groups:
+      tailwind:
+        patterns: ["tailwindcss", "@tailwindcss/*"]
+      decap:
+        patterns: ["decap-*"]
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+# Note: github-actions ecosystem deliberately omitted. Workflow action
+# versions are bumped manually on the template repo and propagate to
+# sites via template-sync. Dependabot was generating duplicate PRs
+# across every site for the same upstream bump.

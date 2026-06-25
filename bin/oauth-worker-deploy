@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+#
+# Per-org OAuth Worker deploy wrapper.
+
+require "fileutils"
+
+WORKER_DIR = File.expand_path("../oauth-worker", __dir__)
+TEMPLATE   = File.join(WORKER_DIR, "wrangler.toml.template")
+TARGET     = File.join(WORKER_DIR, "wrangler.toml")
+
+unless File.exist?(TEMPLATE)
+  abort "oauth-worker/wrangler.toml.template not found"
+end
+
+def prompt(label, default = nil)
+  print default ? "#{label} [#{default}]: " : "#{label}: "
+  input = STDIN.gets&.chomp
+  (input.nil? || input.empty?) ? default : input
+end
+
+org_slug = prompt("GitHub org slug (the GH org owning the repo, e.g. acmeco)")
+abort "GitHub org slug required" if org_slug.nil? || org_slug.empty?
+
+origins = prompt("Comma-separated allowed origins (e.g. https://acme.com,https://www.acme.com)")
+repos   = prompt("Comma-separated allowed repos (e.g. acmeco/acme-website)")
+
+content = File.read(TEMPLATE)
+content = content
+  .gsub("__GITHUB_ORG_SLUG__", org_slug)
+  .gsub(%r{ALLOWED_ORIGINS = ".*"}, %Q(ALLOWED_ORIGINS = "#{origins}"))
+  .gsub(%r{ALLOWED_REPOS = ".*"}, %Q(ALLOWED_REPOS = "#{repos}"))
+File.write(TARGET, content)
+puts "Wrote #{TARGET}"
+
+puts "Next steps:"
+puts "  cd #{WORKER_DIR}"
+puts "  npx wrangler secret put OAUTH_GITHUB_CLIENT_ID"
+puts "  npx wrangler secret put OAUTH_GITHUB_CLIENT_SECRET"
+puts "  npx wrangler secret put WORKER_SECRET"
+puts "  npx wrangler deploy"

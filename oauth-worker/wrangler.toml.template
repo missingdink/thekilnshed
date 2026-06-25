@@ -1,0 +1,12 @@
+name = "decap-oauth-__GITHUB_ORG_SLUG__"
+main = "src/worker.js"
+compatibility_date = "2026-01-01"
+
+[vars]
+ALLOWED_ORIGINS = "https://example.com"
+ALLOWED_REPOS = "example-org/example-site"
+
+# Secrets (set via `wrangler secret put`):
+#   OAUTH_GITHUB_CLIENT_ID
+#   OAUTH_GITHUB_CLIENT_SECRET
+#   WORKER_SECRET

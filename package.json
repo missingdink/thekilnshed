@@ -1,0 +1,34 @@
+{
+  "name": "__SITE_NAME__",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "esbuild": "node esbuild.config.js --minify",
+    "build": "NODE_ENV=\"production\" npm run esbuild && BRIDGETOWN_ENV=\"production\" bundle exec bridgetown build",
+    "esbuild-dev": "node esbuild.config.js --watch",
+    "start": "./bin/bridgetown start",
+    "cms-start": "npx decap-server",
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots"
+  },
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "decap-cms-app": "^3.13.0",
+    "decap-server": "^3.8.0",
+    "esbuild": "^0.28.0",
+    "glob": "^13.0.6",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-load-config": "^6.0.1",
+    "read-cache": "^1.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@tailwindcss/forms": "^0.5.11",
+    "@tailwindcss/postcss": "^4.1.17",
+    "@tailwindcss/typography": "^0.5.19",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "postcss-import": "^16.1.0",
+    "prettier": "^3.8.3"
+  }
+}
