@@ -1,0 +1,100 @@
+---
+layout: default
+title: Classes & Workshops
+---
+
+<section class="py-20 px-12 bg-indigo-900 hero">
+  <div class="space-y-2 mb-10">
+    <h2 class="text-lime-500">Classes! Workshops!</h2>
+  </div>
+  <h5 class="text-brown-100">You’re allowed to take it seriously here—without having to take yourself too seriously.</h5>
+</section>
+
+<section class="py-20 bg-brown-100 px-12">
+  <h4 class="mb-10">Here at The Kiln Shed we offer classes & workshops at a variety of skill levels.</h4>
+  <p class="mb-10">Some are just starting out, learning how clay moves and what it can do. Others have been at it for years and are dialing in their process. Most fall somewhere in between.</p>
+  <p class="">Everyone’s working on something different, but it all shares the same thing: it’s made by hand, and it means something to the person making it.</p>
+</section>
+
+<section class="py-20 bg-coal-900 px-12 flex flex-col md:flex-row gap-20">
+  <div class="">
+    <h2 class="text-lime-500 mb-10">Class:Pottery 101</h2>
+    <h5 class="text-lime-500 mb-10">This 5 week course is a great class for both new and returning potters.</h5>
+    <p class="text-coal-0 mb-4">The goal of POTTERY 101 is to teach you how to create food-safe functional pottery using the wheel! </p>
+    <p class="text-coal-0 mb-4">We will cover things like, Centering, throwing, trimming, adding handles, decorating and glazing!</p>
+    <p class="text-coal-0">Upon completion of the course you will have the skills needed to start/continue your clay adventure!</p>
+  </div>
+
+  <ul class="flex flex-col space-y-10 w-full md:w-1/3">
+    <li class="flex flex-row gap-3">
+      <img src="images/icons/pottery.svg" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Pottery</span>
+    </li>
+    <li class="flex flex-row gap-3">
+      <img src="images/icons/sculpture.svg" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Sculpture</span>
+    </li>
+    <li class="flex flex-row gap-3">
+      <img src="images/icons/glaze.svg" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">GLAZE-MAKING</span>
+    </li>
+    <li class="flex flex-row gap-3">
+      <img src="images/icons/mold.svg" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Mold Making</span>
+    </li>
+  </ul>
+</section>
+
+<section class="py-20 bg-coal-1100 px-12">
+  <h2 class="text-lime-500 mb-10 text-center">Pottery 101: Info & Upcoming Schedules</h2>
+  <div class="flex flex-col md:flex-row gap-10">
+    <div class="w-full">
+      <h3 class="font-display text-lime-500 mb-4 tracking-wider">Tuesday Night</h3>
+      <% dates = "Mar 25 - Jun 23"; start_time = "2:00"; end_time = "3:00"; cost = "$200"; class_day = "Tuesday" %>
+      <ul class="space-y-2">
+        <% 3.times do |i| %>
+        <%= render Shared::Class.new(
+          dates: dates,
+          start_time: start_time,
+          end_time: end_time,
+          cost: cost,
+          class_day: class_day) %>
+        <% end %>
+      </ul>
+    </div>
+    <aside class="w-full max-w-xs">
+      <ul class="list-image-[url(/images/icons/lime-disc.svg)] space-y-4 p-6">
+        <h6 class="text-lime-700">Included with the class:</h6>
+        <li class="pl-3">
+          <p class="text-lg text-coal-0 mb-1 tracking-wider font-medium">UNLIMITED CLAY</p>
+          <p class="text-md text-coal-100">(no production potters, please)</p>
+        </li>
+        <li class="pl-3">
+          <span class="text-lg text-coal-0 mb-2 tracking-wider font-medium">TOOLS</span>
+          <p class="text-md text-coal-100">(tools provided, will sell you a kit if you want your own)</p>
+        </li>
+        <li class="pl-3">
+          <span class="text-lg text-coal-0 mb-2 tracking-wider font-medium">OPEN STUDIO</span>
+          <p class="text-md text-coal-100">(one per week! practice makes perfect)</p>
+        </li>
+        <li class="pl-3">
+          <span class="text-lg text-coal-0 mb-2 tracking-wider font-medium">UP TO 10 pieces to take home!</span>
+          <p class="text-md text-coal-100">(extras are $5 each)</p>
+        </li>
+      </ul>
+
+      <div class="bg-brown-950/60 backdrop-blur-md border border-brown-900 p-6 rounded-md mb-5">
+        <div class="flex flex-col md:flex-row justify-between items-center w-full mb-3">
+          <h6 class="text-red-50 uppercase tracking-wider">Warning</h6>
+          <img src="/images/icons/messy.svg" class="w-14 h-14 object-cover" />
+        </div>
+        <p class="text-brown-300 mb-3">Clay is MESSY, bring a towel/apron & wear clothes you don't mind getting dirty!!</p>
+        <p class="text-brown-300">(it does wash out, don't worry!)</p>
+      </div>
+      <div class="bg-brown-950/60 backdrop-blur-md border border-brown-900 p-6 rounded-md">
+        <div class="flex flex-col md:flex-row justify-between items-center w-full mb-3">
+          <h6 class="text-red-50 uppercase tracking-wider">Warning</h6>
+          <img src="/images/icons/finger-nails.svg" class="w-14 h-14 object-cover" />
+        </div>
+        <p class="text-brown-300 mb-3">Individuals with long/false nails might find it tough to throw on the potter's wheel. </p>
+        <p class="text-brown-300">We recommend trimming your nails prior to the course! </p>
+      </div>
+    </aside>
+  </div>
+</section>

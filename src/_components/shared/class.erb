@@ -1,0 +1,16 @@
+<li class="even:bg-lime-950 odd:bg-lime-900 px-12 py-6">
+  <div class="flex flex-col md:flex-row justify-between items-center w-full">
+    <div class="w-full">
+      <% pill_status = "seats-left"; pill_count = "2"; pill_text = "Seats Left" %>
+      <h5 class="text-coal-0 mb-2 flex items-center gap-3"><%= @dates %><%= render Shared::Pill.new(
+        text: pill_text, 
+        count: pill_count, 
+        status: pill_status) if pill_status.present? %></h5>
+      <div class="text-lime-500 flex flex-row gap-3">
+        <span class=""><%= @start_time %> - <%= @end_time %></span> - <span class=""><%= @cost %></span>
+      </div>
+    </div>
+    <a href="" class="btn btn-outline lime icon-right" style="--icon: url('/images/icons/arrow-up-right.svg')">Sign Up</a>
+  <div>
+</li>
+
