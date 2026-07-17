@@ -1,0 +1,20 @@
+<li class="bg-indigo-900">
+  <img src="<%= @image_src %>" alt="<%= @alt_text %>" class="" />
+  <div class="p-5 space-y-4">
+    <h6 class=""><%= @title %></h6>
+    <p class="text-sm/6"><%= @description %></p>
+    <div class="flex flex-row gap-4">
+      <div class="text-center">
+        <span class="text-lg font-bold"><%= @start_date %></span>
+        <span class="text-sm"><%= @start_time %></span>
+      </div>
+      <div class="text-center">
+        <span class="text-lg font-bold"><%= @end_date %></span>
+        <span class="text-sm"><%= @end_time %></span>
+      </div>
+    </div>
+    <p class="text-center text-xl"><%= @cost %></p>
+    <a href="" class="btn btn-outline white mb-4">LEARN MORE & SIGN UP</a>
+    <a href="mailto:kelly@example.com" class="text-indigo-300 text-sm text-center block"><%= @message %></a>
+  </div>
+</li>

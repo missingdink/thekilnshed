@@ -16,7 +16,7 @@ title: Classes & Workshops
   <p class="">Everyone’s working on something different, but it all shares the same thing: it’s made by hand, and it means something to the person making it.</p>
 </section>
 
-<section class="py-20 bg-coal-900 px-12 flex flex-col md:flex-row gap-20">
+<section class="py-20 bg-coal-1000 px-12 flex flex-col md:flex-row gap-20">
   <div class="">
     <h2 class="text-lime-500 mb-10">Class:Pottery 101</h2>
     <h5 class="text-lime-500 mb-10">This 5 week course is a great class for both new and returning potters.</h5>
@@ -43,22 +43,64 @@ title: Classes & Workshops
 
 <section class="py-20 bg-coal-1100 px-12">
   <h2 class="text-lime-500 mb-10 text-center">Pottery 101: Info & Upcoming Schedules</h2>
+
   <div class="flex flex-col md:flex-row gap-10">
+
+    <%# Classes %> 
+
     <div class="w-full">
-      <h3 class="font-display text-lime-500 mb-4 tracking-wider">Tuesday Night</h3>
-      <% dates = "Mar 25 - Jun 23"; start_time = "2:00"; end_time = "3:00"; cost = "$200"; class_day = "Tuesday" %>
-      <ul class="space-y-2">
-        <% 3.times do |i| %>
-        <%= render Shared::Class.new(
-          dates: dates,
-          start_time: start_time,
-          end_time: end_time,
-          cost: cost,
-          class_day: class_day) %>
-        <% end %>
-      </ul>
+      <div class="w-full mb-10">
+        <h3 class="font-display text-lime-500 mb-4 tracking-wider">Tuesday Night</h3>
+        <% dates = "Mar 25 - Jun 23"; start_time = "2:00"; end_time = "3:00"; cost = "$200"; class_day = "Tuesday" %>
+        <ul class="space-y-2">
+          <% 3.times do |i| %>
+          <%= render Shared::Class.new(
+            dates: dates,
+            start_time: start_time,
+            end_time: end_time,
+            cost: cost,
+            class_day: class_day) %>
+          <% end %>
+        </ul>
+      </div>
+      <div class="w-full mb-10">
+        <h3 class="font-display text-lime-500 mb-4 tracking-wider">Wednesday Night</h3>
+        <% dates = "Jun 25 - Jul 23"; start_time = "2:00"; end_time = "4:00"; cost = "$400"; class_day = "Tuesday" %>
+        <ul class="space-y-2">
+          <% 3.times do |i| %>
+          <%= render Shared::Class.new(
+            dates: dates,
+            start_time: start_time,
+            end_time: end_time,
+            cost: cost,
+            class_day: class_day) %>
+          <% end %>
+        </ul>
+      </div>
+      <div class="w-full mb-10">
+        <h3 class="font-display text-lime-500 mb-4 tracking-wider">Thursday Night</h3>
+        <% dates = "Mar 25 - Jun 23"; start_time = "2:00"; end_time = "3:00"; cost = "$200"; class_day = "Tuesday" %>
+        <ul class="space-y-2">
+          <% 3.times do |i| %>
+          <%= render Shared::Class.new(
+            dates: dates,
+            start_time: start_time,
+            end_time: end_time,
+            cost: cost,
+            class_day: class_day) %>
+          <% end %>
+        </ul>
+      </div>
+
+      <div class="flex flex-col md:flex-row text-lime-500 gap-10">
+        <h6 class="">Cancellation Policy:</h6>
+        <p class="">Full refund if canceled 14 days before class. 50% refund if cancellation is 7 days prior to first class. No Refund after this 7 day period.</p>
+      </div>
+
     </div>
-    <aside class="w-full max-w-xs">
+
+
+    <aside class="w-full max-w-xs flex flex-col justify-between h-full">
       <ul class="list-image-[url(/images/icons/lime-disc.svg)] space-y-4 p-6">
         <h6 class="text-lime-700">Included with the class:</h6>
         <li class="pl-3">
@@ -78,23 +120,70 @@ title: Classes & Workshops
           <p class="text-md text-coal-100">(extras are $5 each)</p>
         </li>
       </ul>
-
-      <div class="bg-brown-950/60 backdrop-blur-md border border-brown-900 p-6 rounded-md mb-5">
-        <div class="flex flex-col md:flex-row justify-between items-center w-full mb-3">
-          <h6 class="text-red-50 uppercase tracking-wider">Warning</h6>
-          <img src="/images/icons/messy.svg" class="w-14 h-14 object-cover" />
+      <div class="">
+        <div class="bg-brown-950/60 backdrop-blur-md border border-brown-900 p-6 rounded-md mb-5">
+          <div class="flex flex-col md:flex-row justify-between items-center w-full mb-3">
+            <h6 class="text-red-50 uppercase tracking-wider">Warning</h6>
+            <img src="/images/icons/messy.svg" class="w-14 h-14 object-cover" />
+          </div>
+          <p class="text-brown-300 mb-3">Clay is MESSY, bring a towel/apron & wear clothes you don't mind getting dirty!!</p>
+          <p class="text-brown-300">(it does wash out, don't worry!)</p>
         </div>
-        <p class="text-brown-300 mb-3">Clay is MESSY, bring a towel/apron & wear clothes you don't mind getting dirty!!</p>
-        <p class="text-brown-300">(it does wash out, don't worry!)</p>
-      </div>
-      <div class="bg-brown-950/60 backdrop-blur-md border border-brown-900 p-6 rounded-md">
-        <div class="flex flex-col md:flex-row justify-between items-center w-full mb-3">
-          <h6 class="text-red-50 uppercase tracking-wider">Warning</h6>
-          <img src="/images/icons/finger-nails.svg" class="w-14 h-14 object-cover" />
+        <div class="bg-brown-950/60 backdrop-blur-md border border-brown-900 p-6 rounded-md">
+          <div class="flex flex-col md:flex-row justify-between items-center w-full mb-3">
+            <h6 class="text-red-50 uppercase tracking-wider">Warning</h6>
+            <img src="/images/icons/finger-nails.svg" class="w-14 h-14 object-cover" />
+          </div>
+          <p class="text-brown-300 mb-3">Individuals with long/false nails might find it tough to throw on the potter's wheel. </p>
+          <p class="text-brown-300">We recommend trimming your nails prior to the course! </p>
         </div>
-        <p class="text-brown-300 mb-3">Individuals with long/false nails might find it tough to throw on the potter's wheel. </p>
-        <p class="text-brown-300">We recommend trimming your nails prior to the course! </p>
       </div>
     </aside>
   </div>
 </section>
+
+<section class="py-20 bg-indigo-950 px-12 text-coal-0 flex flex-col md:flex-row justify-between">
+  <div class="w-full">
+    <h2 class="text-lime-500 mb-10">Workshops</h2>
+    <h5 class="mb-6 !leading-10">Are you hungry for more? Ready to master the teapot? Trying to make that big ol' planter? These one day workshops are EXACTLY what you need!</h5>
+    <p class="mb-4">These quick and dirty classes are designed for intermediate and advanced skill level. We want to help you sharpen specific skills! Make make make... then chop and slice it all up at the end. Learn from mistakes AND successes in a laid back yet challenging class format</p>
+    <p class="mb-4">Join instructors Brendan Kelley, James Griffiths, Tab Link, and MORE for workshops that will help you up your game with focused, detailed demos, challenging projects, & LOTS of tricks to go practice.</p>
+    <p class="mb-4">Each student can use as much clay as needed! We don’t plan on keeping anything. BUT we can fire stuff for a fee. (take it with if you have kiln access)</p>
+    <p class="">General Prerequisite: Pottery 101</p>
+  </div>
+  <aside class="w-full max-w-sm pl-0 md:pl-10">
+    <ul class="list-image-[url(/images/icons/lime-disc.svg)] space-y-4 p-6">
+      <h6 class="text-lime-700">Included with the class:</h6>
+      <li class="pl-3">
+        1.5 hours of focused practice & attentive instruction
+      </li>
+      <li class="pl-3">
+        Pick and choose only what YOU want to learn!
+      </li>
+      <li class="pl-3">
+        We provide EVERYTHING (bring your own tools & clay if you want!)
+      </li>
+    </ul>
+  </aside>
+
+  
+</section>
+<section class="py-20 bg-indigo-950 px-12 text-coal-0">
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <% image_src = "/images/example-workshop.jpg"; alt_text = "picture description"; title = "Soda Fire Workshop"; description = "Bring your own pots and join us for this 3 day soda fire workshop! "; start_date = "Thur, Aug 14"; end_date = "Sat, Aug 16"; start_time = "3:00pm"; end_time = "6:00m"; cost = "$200"; message = "Email me when another is scheduled" %>
+      <% 9.times do |i| %>
+        <%= render Shared::Workshop.new(
+          image_src: image_src,
+          alt_text: alt_text,
+          title: title,
+          description: description,
+          start_date: start_date,
+          end_date: end_date,
+          start_time: start_time,
+          end_time: end_time,
+          cost: cost,
+          message: message
+          ) %>
+        <% end %>
+    </ul>
+  </section>

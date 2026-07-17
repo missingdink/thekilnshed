@@ -103,11 +103,11 @@ h2 { @apply font-display tracking-wider text-6xl leading-none; }
 
 h3 { @apply font-medium text-5xl leading-none; }
 
-h4 { @apply font-body font-medium text-4xl leading-none; }
+h4 { @apply font-body font-medium text-4xl; }
 
-h5 { @apply font-body font-medium text-3xl leading-none; }
+h5 { @apply font-body font-medium text-3xl; }
 
-h6 { @apply font-medium text-2xl leading-none; }
+h6 { @apply font-medium text-2xl; }
 
 a { @apply hover:underline; }
 
@@ -138,7 +138,7 @@ p { @apply leading-7; }
     @apply border-brown-150 hover:bg-brown-300 text-brown-150 hover:text-brown-800  outline-brown-300;
   }
   &.white {
-    @apply border-coal-0 hover:bg-coal-0/50 text-coal-0 hover:text-coal-100 outline-coal-100;
+    @apply border-coal-0 hover:bg-coal-0/10 text-coal-0 outline-coal-100;
   }
 }
 
