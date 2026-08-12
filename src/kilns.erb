@@ -7,3 +7,21 @@ title: Kilns
     <h2 class="text-lime-500">Kilns</h2>
   </div>
 </section>
+
+<section class="bg-brown-100">
+  <span class="clipped-shape"></span>
+  <div class="space-y-2 bg-coal-0 mr-40 p-12">
+    <h2 class="text-indigo-600">Kiln & Firing FAQs</h2>
+    <ul>
+      <% site.data.faqs.each_with_index do |(slug, faq), i| %>
+        <%= render Shared::Faq.new(
+          question:    faq.question,
+          answer:      faq.answer,
+          button_text: faq.button_text,
+          link:        faq.link
+        ) %>
+      <% end %>
+    </ul>
+  </div>
+
+</section>

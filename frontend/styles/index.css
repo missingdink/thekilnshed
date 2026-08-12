@@ -149,3 +149,17 @@ p { @apply leading-7; }
 .hero {
   @apply pt-36;
 }
+
+.faq-answer > p {
+  @apply mb-4 ml-4;
+
+  a { @apply text-indigo-600 underline; }
+}
+
+/* HTML: <div class="triangle"></div> */
+.clipped-shape {
+  @apply w-full h-24 bg-coal-0 block mt-10;
+  aspect-ratio: 1/cos(40deg);
+  clip-path: polygon(0% 0, 86% 100%,0 100%);
+
+}

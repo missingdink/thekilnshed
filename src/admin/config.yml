@@ -18,3 +18,14 @@ collections:
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: faqs
+    label: "Faqs"
+    folder: "src/_data/faqs"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Question", name: "question", widget: "string" }
+      - { label: "Answer", name: "answer", widget: "string" }
+      - { label: "Button Text", name: "button_text", widget: "string" }
+      - { label: "Button Link", name: "link", widget: "string" }

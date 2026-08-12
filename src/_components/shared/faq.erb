@@ -1,0 +1,9 @@
+<li class="mb-14">
+  <div class="faq-answer">
+    <h6 class="mb-2 text-indigo-600"><%= @question %></h6>
+    <p class=""><%== @answer %></p>
+    <% if @link && @button_text %>
+      <a href="<%= @link %>" class="btn btn-primary mt-4"><%= @button_text %></a>
+    <% end %>
+  </div>
+</li>
