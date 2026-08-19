@@ -3,30 +3,33 @@ layout: default
 title: Home
 ---
 
-<section class="py-12 px-8 md:py-20 md:px-12 bg-brown-900 hero bg-[url(/images/hero-cracks.jpg)]">
+<section class="py-12 px-8 md:py-24 md:px-12 bg-brown-900 hero bg-[url(/images/hero-cracks.jpg)] bg-fixed">
   <div class="space-y-2 mb-10">
     <h1 class="text-lime-500">Made by hand</h2>
     <h1 class="text-lime-500 ml-0 md:ml-40">No Bullshit</h2>
   </div>
-  <h5 class="text-brown-100">Northside Madison. Kilns hot. Shelves full. Come join.</h5>
+  <h5 class="text-brown-100 mb-10">Northside Madison. Kilns hot. Shelves full. Come join.</h5>
 </section>
 
 <section class="flex flex-col lg:flex-row">
-  <div class="w-full md:w-1/2 py-12 md:py-20 px-8 md:px-12">
-    <h4 class="text-indigo-600 mb-10">It's not fancy. It's not polished. But it works—and that's the point.</h4>
-    <p class="">This is a working ceramic studio on Madison's north side, built inside an old warehouse and 
+  <div class="w-full md:w-1/2 py-12 md:pb-14 md:pt-20 px-8 md:px-12">
+    <h4 class="text-indigo-600 mb-3">It's not fancy.</h4>
+    <h4 class="text-indigo-600 mb-3">It's not polished.</h4> 
+    <h4 class="text-indigo-600 mb-10">But it works—and that's the point.</h4>
+    <p class="mb-4">This is a working ceramic studio on Madison's north side, built inside an old warehouse and 
     shaped by the people who use it.</p>
     <p class="">No pressure to perform. No expectation to be anything other than where you are.</p>
   </div>
   <div class="w-full lg:w-1/2 relative h-50 md:h-auto">
-    <img src="/images/brown-vase.png" class="w-full max-w-[200px] md:max-w-[310px] lg:max-w-[450px] h-auto object-cover absolute right-0 -bottom-5 lg:-bottom-20" />
-    <img src="/images/lime-jug.png" class="w-full max-w-[140px] md:max-w-[200px] lg:max-w-[275px] h-auto object-cover absolute right-[160px] md:right-[240px] lg:right-95 -bottom-10 lg:-bottom-30" />
+    <img src="/images/brown-vase.png" class="w-full max-w-[200px] md:max-w-[310px] lg:max-w-[470px] h-auto object-cover absolute right-0 -bottom-5 lg:-bottom-20" />
+    <img src="/images/lime-jug.png" class="w-full max-w-[140px] md:max-w-[200px] lg:max-w-[290px] h-auto object-cover absolute right-[160px] md:right-[240px] lg:right-95 -bottom-10 lg:-bottom-30" />
   </div>
 </section>
 
-<section class="py-12 md:pt-40 md:pb-100 px-8 md:px-12 bg-coal-1100">
-  <div class="flex flex-col lg:flex-row justify-evenly items-center gap-20">
-    <div class="w-fit">
+<div class="triangle-bottomright border-b-coal-1100"></div>
+<section class="py-12 md:pt-40 md:pb-80 px-8 md:px-12 lg:px-24 bg-coal-1100">
+  <div class="flex flex-col lg:flex-row justify-evenly items-center lg:gap-20 mb-10">
+    <div class="w-fit mb-24 container mx-auto">
       <h2 class="text-lime-500 text-nowrap mb-10 text-center">Classes & Workshops</h2>
       <ul class="grid grid-cols-1 md:grid-cols-2 md:justify-items-start gap-6 lg:gap-10">
         <li class="flex flex-row gap-3 items-center justify-center">
@@ -43,11 +46,15 @@ title: Home
         </li>
       </ul>
     </div>
-    <div class="w-full">
+    <div class="w-full container mx-auto  mb-10">
       <p class="text-lime-100 mb-4">Never tried pottery before? Has it been awhile since that class you took?  We offer classes at a variety of skill levels.</p>
       <p class="text-lime-100 mb-10">Trying to improve? want to expand your skillset? Sign up to one of our workshops and make it happen! </p>
-      <a href="#" class="btn btn-primary">Peep our classes & Workshops</a>
+      <a href="/classes" class="btn btn-primary md:w-fit w-full">Peep our classes & Workshops</a>
     </div>
+  </div>
+  <div class="container mx-auto">
+    <iframe src="https://embed.styledcalendar.com/#1N8zvqMl0B2ovaZ0t6Rb" title="Styled Calendar" class="styled-calendar-container" style="width: 100%; border: none;" data-cy="calendar-embed-iframe"></iframe>
+    <script async type="module" src="https://embed.styledcalendar.com/assets/parent-window.js"></script>
   </div>
 </section>
 
@@ -71,46 +78,48 @@ title: Home
 </section>
 
 <section class="py-12 md:py-20 px-8 md:px-12 bg-brown-950">
-  <h2 class="text-brown-600 mb-4 text-center">Membership</h2>
-  <h4 class="text-brown-300 mb-10 text-center">A community studio with a variety of memberships to fit your making style and schedule.</h4>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+  <div class="container mx-auto">
+    <h2 class="text-brown-600 mb-4 text-center">Membership</h2>
+    <h4 class="text-brown-300 mb-10 text-center">A community studio with a variety of memberships to fit your making style and schedule.</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
 
-    <div class="flex flex-col justify-between border border-brown-900">
-      <div class="p-8 bg-brown-900 space-y-3">
-        <h4 class="text-lime-500 mb-2 text-center">Drop-In Access</h4>
-        <p class="text-brown-150 text-center">4 times / month</p>
+      <div class="flex flex-col justify-between border border-brown-900">
+        <div class="p-8 bg-brown-900 space-y-3">
+          <h4 class="text-lime-500 mb-2 text-center">Drop-In Access</h4>
+          <p class="text-brown-150 text-center">4 times / month</p>
+        </div>
+        <ul class="list-image-[url(/images/icons/brown-disc.svg)] list-inside space-y-4 py-12 px-6">
+          <li class="text-brown-150"> Drop off & pick up of fired works</li>
+          <li class="text-brown-150"> Additional days can be added </li>
+        </ul>
+        <a href="#" class="btn btn-outline brown m-4">Learn More</a>
       </div>
-      <ul class="list-image-[url(/images/icons/brown-disc.svg)] list-inside space-y-4 py-12 px-6">
-        <li class="text-brown-150"> Drop off & pick up of fired works</li>
-        <li class="text-brown-150"> Additional days can be added </li>
-      </ul>
-      <a href="#" class="btn btn-outline brown m-4">Learn More</a>
-    </div>
 
-    <div class="flex flex-col justify-between border border-brown-900">
-      <div class="p-8 bg-brown-900 space-y-3">
-        <h4 class="text-lime-500 mb-2 text-center">Open Studio</h4>
-        <p class="text-brown-150 text-center">24 / 7 access</p>
+      <div class="flex flex-col justify-between border border-brown-900">
+        <div class="p-8 bg-brown-900 space-y-3">
+          <h4 class="text-lime-500 mb-2 text-center">Open Studio</h4>
+          <p class="text-brown-150 text-center">24 / 7 access</p>
+        </div>
+        <ul class="list-image-[url(/images/icons/brown-disc.svg)] list-inside space-y-4 py-12 px-6">
+          <li class="text-brown-150"> Ample shelf space to store clay, tools & your work</li>
+          <li class="text-brown-150"> Access to clay to purchase & studio selected bulk glazes</li>
+          <li class="text-brown-150"> Discounts on workshops, classes, material and firing</li>
+        </ul>
+        <a href="#" class="btn btn-outline brown m-4">Learn More</a>
       </div>
-      <ul class="list-image-[url(/images/icons/brown-disc.svg)] list-inside space-y-4 py-12 px-6">
-        <li class="text-brown-150"> Ample shelf space to store clay, tools & your work</li>
-        <li class="text-brown-150"> Access to clay to purchase & studio selected bulk glazes</li>
-        <li class="text-brown-150"> Discounts on workshops, classes, material and firing</li>
-      </ul>
-      <a href="#" class="btn btn-outline brown m-4">Learn More</a>
-    </div>
 
-    <div class="flex flex-col justify-between border border-brown-900">
-      <div class="p-8 bg-brown-900 space-y-3">
-        <h4 class="text-lime-500 mb-2 text-center">Private Studio</h4>
-        <p class="text-brown-150 text-center">24 / 7 access</p>
+      <div class="flex flex-col justify-between border border-brown-900">
+        <div class="p-8 bg-brown-900 space-y-3">
+          <h4 class="text-lime-500 mb-2 text-center">Private Studio</h4>
+          <p class="text-brown-150 text-center">24 / 7 access</p>
+        </div>
+        <ul class="list-image-[url(/images/icons/brown-disc.svg)] list-inside space-y-4 py-12 px-6">
+          <li class="text-brown-150"> Multi sized spaces ranging from 6 x 8 to 10 x 12</li>
+          <li class="text-brown-150"> Access to clay to purchase & studio selected bulk glazes</li>
+          <li class="text-brown-150"> Discounts on workshops, classes, material and firing</li>
+        </ul>
+        <a href="#" class="btn btn-outline brown m-4">Learn More</a>
       </div>
-      <ul class="list-image-[url(/images/icons/brown-disc.svg)] list-inside space-y-4 py-12 px-6">
-        <li class="text-brown-150"> Multi sized spaces ranging from 6 x 8 to 10 x 12</li>
-        <li class="text-brown-150"> Access to clay to purchase & studio selected bulk glazes</li>
-        <li class="text-brown-150"> Discounts on workshops, classes, material and firing</li>
-      </ul>
-      <a href="#" class="btn btn-outline brown m-4">Learn More</a>
     </div>
   </div>
 </section>

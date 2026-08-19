@@ -2,15 +2,15 @@
 layout: default
 title: Kilns
 ---
-<section class="py-20 px-12 bg-red-900 hero bg-[url(/images/hero-bubble.jpg)]">
+<section class="py-20 px-12 bg-red-900 hero bg-[url(/images/hero-bubble.jpg)] bg-fixed">
   <div class="space-y-2 mb-10">
     <h2 class="text-lime-500">Kilns</h2>
   </div>
 </section>
 
-<section class="bg-brown-100">
-  <span class="clipped-shape"></span>
-  <div class="space-y-2 bg-coal-0 mr-40 p-12">
+
+<section class="bg-brown-100 py-20 px-12">
+  <div class="space-y-2 bg-coal-0 p-20">
     <h2 class="text-indigo-600">Kiln & Firing FAQs</h2>
     <ul>
       <% site.data.faqs.each_with_index do |(slug, faq), i| %>

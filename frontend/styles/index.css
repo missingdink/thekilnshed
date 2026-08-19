@@ -118,7 +118,7 @@ h6 { @apply font-medium text-base md:text-lg xl:text-2xl; }
 
 a { @apply hover:underline; }
 
-p { @apply leading-7; }
+p { @apply text-lg leading-7; }
 
 .btn 
   { @apply px-6 py-2 h-fit font-medium text-center text-nowrap cursor-pointer transition-colors duration-300 ease-in-out hover:outline hover:outline-2 hover:outline-offset-2 disabled:bg-coal-500 disabled:text-coal-900 uppercase tracking-wider rounded-sm hover:!no-underline inline-block;
@@ -175,3 +175,25 @@ p { @apply leading-7; }
     );
   }
 }
+
+.triangle-topleft {
+  @apply w-full h-0 border-t-[50px] border-r-[100vw] border-r-transparent;
+}
+/* border-t-coal-1100 */
+
+.triangle-topright {
+  @apply w-full h-0 border-t-[50px]  border-l-[100vw] border-l-transparent
+  border-t-coal-1000;
+}
+
+.triangle-bottomleft {
+  @apply w-full h-0 border-b-[50px]  border-r-[100vw] border-r-transparent border-b-coal-1000;
+  
+}
+
+.triangle-bottomright {
+  @apply w-full h-0 border-b-[50px] border-l-[100vw] border-l-transparent;
+}
+/* border-b-coal-1100 */
+
+
