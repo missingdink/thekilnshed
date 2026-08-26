@@ -8,11 +8,54 @@ title: Kilns
   </div>
 </section>
 
+<div class="triangle-bottomright bg-transparent border-b-red-600 -mt-[50px]"></div>
+<section class="bg-red-600 px-12 py-20 flex flex-col md:flex-row gap-10">
+  <div class="">
+    <h3 class="text-coal-0 mb-4">Types of kilns</h3>
+    <p class="text-coal-0">Maiores quo eum est. Nobis culpa quia. Aut et dolores nostrum ut eos rerum.</p>
+  </div>
+  <ul class="flex flex-col md:flex-row w-full gap-4">
+    <li class="w-full bg-coal-0/80 p-5">
+      <img src="/images/electric-kiln.jpg" class="mb-5" />
+      <h4 class="mb-4 uppercase !font-black">Electric</h4>
+      <h6 class="mb-2 text-red-500">Electric Firing</h6>
+      <p class="mb-3">UP TO CONE 6</p>
+      <p class="">Maiores quo eum est. Nobis culpa quia. Aut et dolores nostrum ut eos rerum.</p>
+    </li>
+    <li class="w-full bg-coal-0/80 p-5">
+      <img src="/images/soda-kiln.jpg" class="mb-5" />
+      <h4 class="mb-4 uppercase !font-black">Soda</h4>
+      <h6 class="mb-2 text-red-500">Soda Reduction</h6>
+      <p class="mb-3">CONE 10</p>
+      <p class="">Maiores quo eum est. Nobis culpa quia. Aut et dolores nostrum ut eos rerum.</p>
+    </li>
+    <li class="w-full bg-coal-0/80 p-5">
+      <img src="/images/wood-kiln.jpg" class="mb-5" />
+      <h4 class="mb-4 uppercase !font-black">Wood</h4>
+      <h6 class="mb-2 text-red-500">Lorem Ipsum</h6>
+      <p class="mb-3">Aut et dolores</p>
+      <p class="">Maiores quo eum est. Nobis culpa quia. Aut et dolores nostrum ut eos rerum.</p>
+    </li>
+  </ul>
+</section>
+<div class="triangle-topleft bg-red-900 border-t-red-600"></div>
+
+<section class="bg-red-900 w-full py-20 px-12 ">
+  <div class="container mx-auto flex flex-col md:flex-row gap-10 relative">
+    <div class="relative">
+      <h3 class="w-fit text-lime-400 mb-10">Kiln Firing </br>Calendar</h3>
+      <p class="text-lime-100">All scheduling is done through email or our rental request form</p>
+    </div>
+    <img src="/images/brown-jug.png" class="absolute w-[450px] -left-50 -bottom-50" />
+    <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FChicago&showPrint=0&src=Y180NmIwMmM5NjA4OTc2MTA1MjdlZTEzMDFlZmRlN2Y5MzZjNjQzOTBjMDI0NGZmNzU4ODI0ZTZiMmI4N2NlZmM1QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%238e24aa" style="" width="100%" height="700px" frameborder="0" scrolling="no" class="bg-lime-500"></iframe>
+  </div>
+</section>
+
 
 <section class="bg-brown-100 py-20 px-12">
-  <div class="space-y-2 bg-coal-0 p-20">
-    <h2 class="text-indigo-600">Kiln & Firing FAQs</h2>
-    <ul>
+  
+  <ul class="container mx-auto space-y-2 p-20">
+    <h2 class="text-red-600 mb-10">Kiln & Firing FAQs</h2>
       <% site.data.faqs.each_with_index do |(slug, faq), i| %>
         <%= render Shared::Faq.new(
           question:    faq.question,
@@ -22,6 +65,5 @@ title: Kilns
         ) %>
       <% end %>
     </ul>
-  </div>
 
 </section>

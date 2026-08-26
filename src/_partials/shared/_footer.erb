@@ -8,9 +8,9 @@
         <a href="#" class=""><img src="images/icons/youtube.svg" class="w-6 h-6 object-fit" alt=""/></a>
       </div>
     </div>
-    <div class="text-lime-500 text-left md:text-right">
+    <div class="text-lime-500 text-left md:text-right flex flex-col">
       <a href="tel:<%= site.data.site_metadata.phone %>"><%= site.data.site_metadata.phone %></a>
-      <p><%= site.data.site_metadata.email %></p>
+      <a href="mailto:<%= site.data.site_metadata.email %>" class="text-lime-500"><%= site.data.site_metadata.email %></a>
       <p><%= site.data.site_metadata.address %></p>
     </div>
   </div>
