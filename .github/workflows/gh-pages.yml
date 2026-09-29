@@ -1,0 +1,68 @@
+name: Deploy to GitHub Pages
+env:
+  SITE_URL: https://missingdink.github.io
+  BASE_PATH: /thekilnshed/
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 26.2.0
+          cache: "npm"
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Install libvips (required by bridgetown-image-pipeline)
+        uses: awalsh128/cache-apt-pkgs-action@acb598e5ddbc6f68a970c5da0688d2f3a9f04d05 # v1.6.0
+        with:
+          packages: libvips libvips-tools libheif1 libheif-dev libheif-plugin-aomenc libheif-plugin-libde265
+          version: 1.0
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 4.0.5
+          rubygems: latest
+          bundler-cache: true
+          cache-version: 3
+
+      - name: Write jit-refresh
+        run: touch frontend/styles/jit-refresh.css
+
+      - name: Build site
+        run: npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: output
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
