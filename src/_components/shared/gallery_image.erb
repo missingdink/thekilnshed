@@ -1,0 +1,7 @@
+<div class="relative">
+  <div class="hover:bg-coal-1000/88 w-full h-full text-coal-0 z-10 opacity-0 hover:opacity-100 absolute transition-all duration-400 ease-in-out flex flex-col gap-3 items-start justify-end p-8">
+    <p class="font-bold !text-xl"><%= @title %></p>
+    <p class="line-clamp-5"><%= @message %></p>
+  </div>
+  <img src="<%= @image_src %>" class="w-full h-full max-h-[400px] object-cover hover:blur-md" />
+</div>

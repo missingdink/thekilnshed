@@ -8,3 +8,12 @@ title: Gallery
     <h2 class="text-lime-500">Gallery</h2>
   </div>
 </section>
+<section class="p-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <% site.data.gallery.each_with_index do |(slug, image), i| %>
+    <%= render Shared::GalleryImage.new(
+      image_src:    image.image_src,
+      title: image.title,
+      message: image.message
+    ) %>
+  <% end %>
+</section>
