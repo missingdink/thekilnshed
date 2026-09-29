@@ -3,7 +3,7 @@ layout: default
 title: Membership
 ---
 
-<section class="py-20 px-12 bg-brown-900 hero bg-[url(/images/hero-strokes.jpg)] bg-fixed">
+<section class="py-20 px-12 bg-brown-900 hero bg-fixed" style="background-image: url(<%= relative_url '/images/hero-strokes.jpg' %>)">
   <div class="space-y-2 mb-10">
     <h2 class="text-lime-500">Membership</h2>
   </div>
@@ -14,10 +14,10 @@ title: Membership
     <h5 class="mb-4">A community studio with a variety of memberships to fit your making style & schedule.​</h5>
     <p class="!text-xl">Here at THE KILN SHED, we provide a variety of ways to get messy.</p>
   </div>
-  <img src="/images/red-bowl.png" class="h-fit w-auto -mt-44 z-1" />
+  <img src="<%= relative_url '/images/red-bowl.png' %>" class="h-fit w-auto -mt-44 z-1" />
 </section>
 
-<section class="py-20 px-12 bg-indigo-900 bg-[url(/images/bg-kilnshed-lg.jpg)] bg-cover bg-fixed pb-100">
+<section class="py-20 px-12 bg-indigo-900 bg-cover bg-fixed pb-100" style="background-image: url(<%= relative_url '/images/bg-kilnshed-lg.jpg' %>)">
 
   <div class="flex flex-col md:flex-row mb-10 container mx-auto">
     <div class="bg-indigo-950 flex flex-col items-center justify-center p-12 text-center space-y-4 w-xl">
@@ -26,7 +26,7 @@ title: Membership
       <h5 class="text-indigo-300">Starting at $50 / month</h5>
     </div>
     <div class="bg-indigo-950/80 backdrop-blur-sm p-12 flex-1">
-      <ul class="list-image-[url(/images/icons/indigo-disc.svg)] space-y-4 mb-8 text-indigo-200">
+      <ul class="space-y-4 mb-8 text-indigo-200" style="list-style-image: url(<%= relative_url '/images/icons/indigo-disc.svg' %>)">
         <li class="pl-3">DROP OFF your work to be fired; PICK UP your work when its done!</li>
         <li class="pl-3">Come in to open studio FOUR TIMES each month! Need more? ($10 for the DAY)</li>
         <li class="pl-3">Access to clay and glaze materials</li>
@@ -43,7 +43,7 @@ title: Membership
       <h5 class="text-indigo-300">Starting at $115 / month</h5>
     </div>
     <div class="bg-indigo-950/80 backdrop-blur-sm p-12 flex-1">
-      <ul class="list-image-[url(/images/icons/indigo-disc.svg)] space-y-4 mb-8 text-indigo-200">
+      <ul class="space-y-4 mb-8 text-indigo-200" style="list-style-image: url(<%= relative_url '/images/icons/indigo-disc.svg' %>)">
         <li class="pl-3">Ample shelf space to safely store clay, tools & your work</li>
         <li class="pl-3">24hr access to the building and your space. <span class="block text-indigo-300 text-base">(classroom wheels unavailable during class times)</span>
         </li>
@@ -57,7 +57,7 @@ title: Membership
   <div class="flex flex-col md:flex-row container mx-auto">
     <div class="">
       <div class="h-[220px]">
-        <img src="/images/studio-space.jpg" class="w-full h-full object-cover object-top"/>
+        <img src="<%= relative_url '/images/studio-space.jpg' %>" class="w-full h-full object-cover object-top"/>
       </div>
       <div class="bg-indigo-950 flex flex-col items-center justify-center p-12 text-center space-y-4 w-xl">
         <h2 class="text-lime-500">Private Studio</h2>
@@ -67,7 +67,7 @@ title: Membership
 
     </div>
     <div class="bg-indigo-950/80 backdrop-blur-sm p-12 flex-1">
-      <ul class="list-image-[url(/images/icons/indigo-disc.svg)] space-y-4 mb-8 text-indigo-200">
+      <ul class="space-y-4 mb-8 text-indigo-200" style="list-style-image: url(<%= relative_url '/images/icons/indigo-disc.svg' %>)">
         <li class="pl-3">Our PRIVATE STUDIOS come in a variety of sizes:
           <div class="flex flex-col md:flex-row gap-4 mt-2">
             <span class="bg-indigo-800 py-2 px-4">6x8</span>
@@ -91,11 +91,11 @@ title: Membership
   <div class="text-brown-700 p-12 w-full mr-10">
     <h2 class="mb-4">CANT WAIT? CONTACT US TODAY!</h2>
     <h6 class="mb-10">Subscribe to our email list to be the first to know about classes, workshops, firings & more!</h6>
-    <a href="/contact" class="btn btn-primary">Contact us now</a>
+    <a href="<%= relative_url '/contact' %>" class="btn btn-primary">Contact us now</a>
   </div>
   <div class="relative w-full md:max-w-[300px] lg:max-w-[450px]">
-    <img src="/images/green-mug.png" class="z-1 max-w-[140px] lg:max-w-[220px] h-auto absolute bottom-0 right-[280px]" />
-    <img src="/images/indigo-pitcher.png" class="max-w-[200px] lg:max-w-[320px] h-auto absolute bottom-0 right-10 transform-[scaleX(-1)]" />
+    <img src="<%= relative_url '/images/green-mug.png' %>" class="z-1 max-w-[140px] lg:max-w-[220px] h-auto absolute bottom-0 right-[280px]" />
+    <img src="<%= relative_url '/images/indigo-pitcher.png' %>" class="max-w-[200px] lg:max-w-[320px] h-auto absolute bottom-0 right-10 transform-[scaleX(-1)]" />
   </div>
 
 </section>
