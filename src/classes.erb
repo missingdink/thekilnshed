@@ -3,7 +3,7 @@ layout: default
 title: Classes & Workshops
 ---
 
-<section class="py-20 px-12 bg-indigo-900 hero bg-[url(/images/hero-molten.png)] bg-fixed">
+<section class="py-20 px-12 bg-indigo-900 hero bg-fixed" style="background-image: url(<%= relative_url '/images/hero-molten.png' %>)">
   <div class="space-y-2 mb-10">
     <h2 class="text-lime-500">Classes! Workshops!</h2>
   </div>
@@ -11,13 +11,13 @@ title: Classes & Workshops
 </section>
 
 <section class="bg-brown-100 flex flex-col lg:flex-row gap-10">
-  <img src="/images/lime-sculpt.png" class="-mt-10 h-full w-full max-w-[330px] object-cover ml-10 z-1"/>
+  <img src="<%= relative_url '/images/lime-sculpt.png' %>" class="-mt-10 h-full w-full max-w-[330px] object-cover ml-10 z-1"/>
   <div class="container mx-auto pb-30 pt-10 px-12 ">
     <h4 class="mb-10 text-lime-800">Here at The Kiln Shed we offer classes & workshops at a variety of skill levels.</h4>
     <p class="mb-4">Some are just starting out, learning how clay moves and what it can do. Others have been at it for years and are dialing in their process. Most fall somewhere in between.</p>
     <p class="">Everyone's working on something different, but it all shares the same thing: <span class="text-lime-800">it's made by hand, and it means something to the person making it.</span></p>
   </div>
-  <img src="/images/indigo-wheels.jpg" class="w-auto h-full object-cover" />
+  <img src="<%= relative_url '/images/indigo-wheels.jpg' %>" class="w-auto h-full object-cover" />
 </section>
 <div class="triangle-bottomleft bg-transparent -mt-20"></div>
 <section class="bg-coal-1000 py-20 px-12 ">
@@ -32,16 +32,16 @@ title: Classes & Workshops
     
     <ul class="flex flex-col space-y-10 w-full md:w-1/3">
       <li class="flex flex-row gap-3">
-        <img src="images/icons/pottery.svg" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Pottery</span>
+        <img src="<%= relative_url '/images/icons/pottery.svg' %>" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Pottery</span>
       </li>
       <li class="flex flex-row gap-3">
-        <img src="images/icons/sculpture.svg" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Sculpture</span>
+        <img src="<%= relative_url '/images/icons/sculpture.svg' %>" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Sculpture</span>
       </li>
       <li class="flex flex-row gap-3">
-        <img src="images/icons/glaze.svg" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">GLAZE-MAKING</span>
+        <img src="<%= relative_url '/images/icons/glaze.svg' %>" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">GLAZE-MAKING</span>
       </li>
       <li class="flex flex-row gap-3">
-        <img src="images/icons/mold.svg" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Mold Making</span>
+        <img src="<%= relative_url '/images/icons/mold.svg' %>" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Mold Making</span>
       </li>
     </ul>
   </div>
@@ -109,7 +109,7 @@ title: Classes & Workshops
 
 
       <aside class="w-full max-w-xs flex flex-col justify-between h-full">
-        <ul class="list-image-[url(/images/icons/lime-disc.svg)] space-y-4 p-6">
+        <ul class="space-y-4 p-6" style="list-style-image: url(<%= relative_url '/images/icons/lime-disc.svg' %>)">
           <h6 class="text-lime-700">Included with the class:</h6>
           <li class="pl-3">
             <p class="text-lg text-coal-0 mb-1 tracking-wider font-medium">UNLIMITED CLAY</p>
@@ -132,7 +132,7 @@ title: Classes & Workshops
           <div class="bg-brown-950/60 backdrop-blur-md border border-brown-900 p-6 rounded-md mb-5">
             <div class="flex flex-col md:flex-row justify-between items-center w-full mb-3">
               <h6 class="text-red-50 uppercase tracking-wider">Warning</h6>
-              <img src="/images/icons/messy.svg" class="w-14 h-14 object-cover" />
+              <img src="<%= relative_url '/images/icons/messy.svg' %>" class="w-14 h-14 object-cover" />
             </div>
             <p class="text-brown-300 mb-3">Clay is MESSY, bring a towel/apron & wear clothes you don't mind getting dirty!!</p>
             <p class="text-brown-300">(it does wash out, don't worry!)</p>
@@ -140,7 +140,7 @@ title: Classes & Workshops
           <div class="bg-brown-950/60 backdrop-blur-md border border-brown-900 p-6 rounded-md">
             <div class="flex flex-col md:flex-row justify-between items-center w-full mb-3">
               <h6 class="text-red-50 uppercase tracking-wider">Warning</h6>
-              <img src="/images/icons/finger-nails.svg" class="w-14 h-14 object-cover" />
+              <img src="<%= relative_url '/images/icons/finger-nails.svg' %>" class="w-14 h-14 object-cover" />
             </div>
             <p class="text-brown-300 mb-3">Individuals with long/false nails might find it tough to throw on the potter's wheel. </p>
             <p class="text-brown-300">We recommend trimming your nails prior to the course! </p>
@@ -151,7 +151,7 @@ title: Classes & Workshops
   </div>
 </section>
 
-<section class="py-20 bg-indigo-950 px-12 text-coal-0  bg-[url(/images/bg-kilnshelves-lg.jpg)] bg-fixed">
+<section class="py-20 bg-indigo-950 px-12 text-coal-0  bg-fixed" style="background-image: url(<%= relative_url '/images/bg-kilnshelves-lg.jpg' %>)">
   <div class="container mx-auto flex flex-col md:flex-row justify-between">
     <div class="">
       <h2 class="text-lime-500 mb-10">Workshops</h2>
@@ -162,7 +162,7 @@ title: Classes & Workshops
       <p class="">General Prerequisite: Pottery 101</p>
     </div>
     <aside class="pl-0 md:pl-10">
-      <ul class="list-image-[url(/images/icons/lime-disc.svg)] space-y-4 p-6">
+      <ul class="space-y-4 p-6" style="list-style-image: url(<%= relative_url '/images/icons/lime-disc.svg' %>)">
         <h6 class="text-lime-700">Included with the class:</h6>
         <li class="pl-3">
           1.5 hours of focused practice & attentive instruction

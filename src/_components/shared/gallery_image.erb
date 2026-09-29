@@ -3,5 +3,5 @@
     <p class="font-bold !text-xl"><%= @title %></p>
     <p class="line-clamp-5"><%= @message %></p>
   </div>
-  <img src="<%= @image_src %>" class="w-full h-full max-h-[400px] object-cover hover:blur-md" />
+  <img src="<%= relative_url @image_src %>" class="w-full h-full max-h-[400px] object-cover hover:blur-md" />
 </div>

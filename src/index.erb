@@ -3,7 +3,7 @@ layout: default
 title: Home
 ---
 
-<section class="py-12 px-8 md:py-24 md:px-12 bg-brown-900 hero bg-[url(/images/hero-cracks.jpg)] bg-fixed">
+<section class="py-12 px-8 md:py-24 md:px-12 bg-brown-900 hero bg-fixed" style="background-image: url(<%= relative_url '/images/hero-cracks.jpg' %>)">
   <div class="space-y-2 mb-10">
     <h1 class="text-lime-500">Made by hand</h2>
     <h1 class="text-lime-500 ml-0 md:ml-40">No Bullshit</h2>
@@ -21,8 +21,8 @@ title: Home
     <p class="">No pressure to perform. No expectation to be anything other than where you are.</p>
   </div>
   <div class="w-full lg:w-1/2 relative h-50 md:h-auto">
-    <img src="/images/brown-vase.png" class="w-full max-w-[200px] md:max-w-[310px] lg:max-w-[470px] h-auto object-cover absolute right-0 -bottom-5 lg:-bottom-20" />
-    <img src="/images/lime-jug.png" class="w-full max-w-[140px] md:max-w-[200px] lg:max-w-[290px] h-auto object-cover absolute right-[160px] md:right-[240px] lg:right-95 -bottom-10 lg:-bottom-30" />
+    <img src="<%= relative_url '/images/brown-vase.png' %>" class="w-full max-w-[200px] md:max-w-[310px] lg:max-w-[470px] h-auto object-cover absolute right-0 -bottom-5 lg:-bottom-20" />
+    <img src="<%= relative_url '/images/lime-jug.png' %>" class="w-full max-w-[140px] md:max-w-[200px] lg:max-w-[290px] h-auto object-cover absolute right-[160px] md:right-[240px] lg:right-95 -bottom-10 lg:-bottom-30" />
   </div>
 </section>
 
@@ -33,23 +33,23 @@ title: Home
       <h2 class="text-lime-500 text-nowrap mb-10 text-center">Classes & Workshops</h2>
       <ul class="grid grid-cols-1 md:grid-cols-2 md:justify-items-start gap-6 lg:gap-10">
         <li class="flex flex-row gap-3 items-center justify-center">
-          <img src="images/icons/pottery.svg" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Pottery</span>
+          <img src="<%= relative_url '/images/icons/pottery.svg' %>" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Pottery</span>
         </li>
         <li class="flex flex-row gap-3 items-center justify-center">
-          <img src="images/icons/sculpture.svg" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Sculpture</span>
+          <img src="<%= relative_url '/images/icons/sculpture.svg' %>" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Sculpture</span>
         </li>
         <li class="flex flex-row gap-3 items-center justify-center">
-          <img src="images/icons/glaze.svg" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">GLAZE-MAKING</span>
+          <img src="<%= relative_url '/images/icons/glaze.svg' %>" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">GLAZE-MAKING</span>
         </li>
         <li class="flex flex-row gap-3 items-center justify-center">
-          <img src="images/icons/mold.svg" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Mold Making</span>
+          <img src="<%= relative_url '/images/icons/mold.svg' %>" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Mold Making</span>
         </li>
       </ul>
     </div>
     <div class="w-full container mx-auto  mb-10">
       <p class="text-lime-100 mb-4">Never tried pottery before? Has it been awhile since that class you took?  We offer classes at a variety of skill levels.</p>
       <p class="text-lime-100 mb-10">Trying to improve? want to expand your skillset? Sign up to one of our workshops and make it happen! </p>
-      <a href="/classes" class="btn btn-primary md:w-fit w-full">Peep our classes & Workshops</a>
+      <a href="<%= relative_url '/classes' %>" class="btn btn-primary md:w-fit w-full">Peep our classes & Workshops</a>
     </div>
   </div>
   <div class="container mx-auto">
@@ -60,7 +60,7 @@ title: Home
 
 <section class="arc-element flex md:flex-row flex-col md:-mt-60">
   <div class="w-full md:max-w-sm rounded-lg">
-    <img src="/images/kilnshed-empty.png" class="w-full h-40 md:h-full object-cover bg-center max-h-md" />
+    <img src="<%= relative_url '/images/kilnshed-empty.png' %>" class="w-full h-40 md:h-full object-cover bg-center max-h-md" />
   </div>
   <div class="w-full py-12 md:py-20 px-8 md:px-20 bg-coal-0 flex flex-col justify-center">
     <h2 class="text-indigo-600 mb-10">The Shed</h2>
@@ -68,7 +68,7 @@ title: Home
     <p class="mb-10">It's practical, a little rough, and always evolving. You'll find worktables, wheels, kilns, and shelves packed with pieces in every stage—wet, drying, fired, glazed.</p>
 
     <h5 class="text-indigo-600 mb-4">Who It Works For</h5>
-    <ul class="list-image-[url(/images/icons/indigo-disc.svg)] list-inside space-y-2">
+    <ul class="list-inside space-y-2" style="list-style-image: url(<%= relative_url '/images/icons/indigo-disc.svg' %>)">
       <li class=""> People who want a consistent place to make, not just visit</li>
       <li class=""> Folks who learn best by doing, not being told</li>
       <li class=""> Makers who want time, space, and access to keep improving</li>
@@ -88,7 +88,7 @@ title: Home
           <h4 class="text-lime-500 mb-2 text-center">Drop-In Access</h4>
           <p class="text-brown-150 text-center">4 times / month</p>
         </div>
-        <ul class="list-image-[url(/images/icons/brown-disc.svg)] list-inside space-y-4 py-12 px-6">
+        <ul class="list-inside space-y-4 py-12 px-6" style="list-style-image: url(<%= relative_url '/images/icons/brown-disc.svg' %>)">
           <li class="text-brown-150"> Drop off & pick up of fired works</li>
           <li class="text-brown-150"> Additional days can be added </li>
         </ul>
@@ -100,7 +100,7 @@ title: Home
           <h4 class="text-lime-500 mb-2 text-center">Open Studio</h4>
           <p class="text-brown-150 text-center">24 / 7 access</p>
         </div>
-        <ul class="list-image-[url(/images/icons/brown-disc.svg)] list-inside space-y-4 py-12 px-6">
+        <ul class="list-inside space-y-4 py-12 px-6" style="list-style-image: url(<%= relative_url '/images/icons/brown-disc.svg' %>)">
           <li class="text-brown-150"> Ample shelf space to store clay, tools & your work</li>
           <li class="text-brown-150"> Access to clay to purchase & studio selected bulk glazes</li>
           <li class="text-brown-150"> Discounts on workshops, classes, material and firing</li>
@@ -113,7 +113,7 @@ title: Home
           <h4 class="text-lime-500 mb-2 text-center">Private Studio</h4>
           <p class="text-brown-150 text-center">24 / 7 access</p>
         </div>
-        <ul class="list-image-[url(/images/icons/brown-disc.svg)] list-inside space-y-4 py-12 px-6">
+        <ul class="list-inside space-y-4 py-12 px-6" style="list-style-image: url(<%= relative_url '/images/icons/brown-disc.svg' %>)">
           <li class="text-brown-150"> Multi sized spaces ranging from 6 x 8 to 10 x 12</li>
           <li class="text-brown-150"> Access to clay to purchase & studio selected bulk glazes</li>
           <li class="text-brown-150"> Discounts on workshops, classes, material and firing</li>
@@ -135,14 +135,14 @@ title: Home
     <div class="flex flex-col xl:flex-row items-center justify-center">
       <div class="p-8 bg-coal-0/50 backdrop-blur-sm w-full xl:w-fit text-center h-fit">
         <div class="flex flex-row mb-4 gap-4 justify-center">
-          <img src="/images/icons/kiln1.svg" class="w-10 h-10 object-fit" alt="" />
-          <img src="/images/icons/kiln2.svg" class="w-10 h-10 object-fit" alt="" />
+          <img src="<%= relative_url '/images/icons/kiln1.svg' %>" class="w-10 h-10 object-fit" alt="" />
+          <img src="<%= relative_url '/images/icons/kiln2.svg' %>" class="w-10 h-10 object-fit" alt="" />
         </div>
         <p class="mb-4">Have your own electric kiln? </br> Need repair?</p>
         <p class="text-2xl font-extrabold mb-2">Call James today!</p>
         <a href="tel:<%= site.data.site_metadata.phone %>"><%= site.data.site_metadata.phone %></a>
       </div>
-      <img src="/images/kiln.jpg" class="ml-0 xl:-ml-8 w-full xl:max-w-sm h-auto object-cover" />
+      <img src="<%= relative_url '/images/kiln.jpg' %>" class="ml-0 xl:-ml-8 w-full xl:max-w-sm h-auto object-cover" />
     </div>
 </section>
 

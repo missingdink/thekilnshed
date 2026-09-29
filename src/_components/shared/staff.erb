@@ -1,14 +1,14 @@
 <div class="w-fit">
-  <img src="<%= @image %>" class="w-full h-auto object-cover" />
+  <img src="<%= relative_url @image %>" class="w-full h-auto object-cover" />
   <div class="bg-coal-0 w-fit text-indigo-600 p-8 w-full">
     <h4 class=""><%= @name %></h4>
     <h6 class="mb-6 !font-normal text-indigo-800"><%= @title %></h6>
     <div class="flex flex-col md:flex-row gap-6 mb-6">
       <% if @instagram %>
-        <a href="<%= @instagram %>" target="_blank" class="flex flex-row items-center gap-3"><img src="/images/icons/instagram-blue.svg" class="w-6 h-6 object-cover"/>Instagram</a>
+        <a href="<%= @instagram %>" target="_blank" class="flex flex-row items-center gap-3"><img src="<%= relative_url '/images/icons/instagram-blue.svg' %>" class="w-6 h-6 object-cover"/>Instagram</a>
       <% end %>
       <% if @website %>
-        <a href="<%= @website %>" target="_blank" class="flex flex-row items-center gap-3"><img src="/images/icons/website-blue.svg" class="w-6 h-6 object-cover"/>Website</a>
+        <a href="<%= @website %>" target="_blank" class="flex flex-row items-center gap-3"><img src="<%= relative_url '/images/icons/website-blue.svg' %>" class="w-6 h-6 object-cover"/>Website</a>
       <% end %>
     </div>
   <p class=""><%= @bio %></p>
