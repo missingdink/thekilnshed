@@ -3,8 +3,27 @@ layout: default
 title: About Us
 ---
 
-<section class="py-20 px-12 bg-lime-900 hero bg-[url(/images/hero-grafitti.jpg)] bg-fixed">
+<section class="py-12 px-8 md:py-24 md:px-12 bg-lime-900 hero bg-[url(/images/hero-bricks.png)] bg-fixed">
   <div class="space-y-2 mb-10">
-    <h2 class="text-lime-500">About</h2>
+    <h2 class="text-lime-500">Behind the Kiln</h2>
   </div>
+</section>
+<section class="flex flex-col md:flex-row gap-4 md:gap-16 p-12 text-indigo-600">
+  <h2 class="md:max-w-2xs md:!text-wrap">Et quibus damut</h2>
+  <h5 class="w-full">Enim maxime saepe sit vero aut vel. Tempora nihil aliquam. Modi quam qui. </br></br> Beatae praesentium sequi nostrum provident.</h5>
+  <p class="w-full">Maiores quo eum est. Nobis culpa quia. Aut et dolores nostrum ut eos rerum. Omnis voluptatem optio blanditiis quae dicta vitae suscipit consequuntur autem. </br> </br>Eligendi alias velit. Beatae praesentium sequi nostrum provident maiores quidem consequuntur. Numquam ut consectetur non recusandae suscipit quasi beatae. Esse commodi ut ea odit architecto illum rem et.</p>
+</section>
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-12 bg-brown-50">
+
+  <% site.data.staff.each_with_index do |(slug, staff), i| %>
+    <%= render Shared::Staff.new(
+      image:    staff.image,
+      name:    staff.name,
+      title:    staff.title,
+      instagram:      staff.instagram,
+      website: staff.website,
+      bio:        staff.bio
+    ) %>
+  <% end %>
+  
 </section>

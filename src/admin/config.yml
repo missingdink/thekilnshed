@@ -29,3 +29,16 @@ collections:
       - { label: "Answer", name: "answer", widget: "string" }
       - { label: "Button Text", name: "button_text", widget: "string" }
       - { label: "Button Link", name: "link", widget: "string" }
+
+  - name: staff
+    label: "Staff"
+    folder: "src/_data/staff"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Instagram Link", name: "instrgram", widget: "string" }
+      - { label: "Website Link", name: "website", widget: "string" }
+      - { label: "Bio", name: "bio", widget: "string" }
