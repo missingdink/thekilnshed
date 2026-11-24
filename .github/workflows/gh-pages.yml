@@ -6,6 +6,9 @@ env:
 on:
   push:
     branches: [main]
+  # Rebuild daily so the gallery picks up new Instagram posts
+  schedule:
+    - cron: '0 11 * * *'
   workflow_dispatch:
 
 permissions:
@@ -50,6 +53,8 @@ jobs:
 
       - name: Build site
         run: npm run build
+        env:
+          BEHOLD_FEED_URL: ${{ secrets.BEHOLD_FEED_URL }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

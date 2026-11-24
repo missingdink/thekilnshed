@@ -41,6 +41,20 @@ Pushes to `main` deploy via GitHub Actions to Cloudflare Pages. Required repo se
 
 See [docs/cloudflare-pages.md](docs/cloudflare-pages.md) for setup.
 
+## Instagram gallery
+
+The gallery page shows the latest posts from the studio's Instagram account through a [Behold](https://behold.so) JSON feed. The feed is fetched at build time, so each build uses one feed view and site visitors use none. The GitHub Pages deploy rebuilds daily to pick up new posts. Without a feed URL, the gallery shows the CMS-managed images instead.
+
+Repo secret:
+
+- `BEHOLD_FEED_URL`: the JSON feed URL from the Behold dashboard
+
+To preview the feed locally:
+
+```sh
+BEHOLD_FEED_URL=... bin/bridgetown start
+```
+
 ## Template lineage
 
 This site syncs structural files from the upstream template weekly. See [docs/template-sync.md](docs/template-sync.md).
