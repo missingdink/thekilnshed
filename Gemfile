@@ -8,7 +8,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ####
 
 # Bridgetown core
-gem "bridgetown", "~> 2.2.0"
+gem "bridgetown", "~> 2.2.2"
 
 # File-based dynamic routing (uncomment if needed)
 # gem "bridgetown-routes", "~> 1.0.0", group: :bridgetown_plugins
