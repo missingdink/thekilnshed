@@ -13,23 +13,23 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "decap-cms-app": "^3.13.0",
-    "decap-server": "^3.8.0",
-    "esbuild": "^0.28.0",
+    "decap-cms-app": "^3.15.1",
+    "decap-server": "^3.10.0",
+    "esbuild": "^0.28.2",
     "glob": "^13.0.6",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-load-config": "^6.0.1",
-    "read-cache": "^1.0.0"
+    "read-cache": "^1.0.2"
   },
   "devDependencies": {
-    "@playwright/test": "^1.48.0",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/forms": "^0.5.11",
-    "@tailwindcss/postcss": "^4.1.17",
-    "@tailwindcss/typography": "^0.5.19",
-    "autoprefixer": "^10.4.20",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/typography": "^0.5.20",
+    "autoprefixer": "^10.5.4",
     "postcss": "^8.4.47",
     "postcss-import": "^16.1.0",
-    "prettier": "^3.8.3",
+    "prettier": "^3.9.6",
     "tailwindcss": "^4.3.1"
   }
 }
