@@ -1,3 +1,7 @@
+# Lets the CMS edit local files through the Decap server (npx decap-server)
+# when opened on localhost. Ignored on the live site.
+local_backend: true
+
 backend:
   name: github
   branch: main
@@ -5,40 +9,184 @@ backend:
   base_url: __OAUTH_WORKER_URL__
   auth_endpoint: auth
 
+# Every change is saved as a draft first. Move it to "Ready" and then
+# "Publish" in the Workflow tab to put it on the live site.
 publish_mode: editorial_workflow
 media_folder: "src/images/uploads"
 public_folder: "/images/uploads"
 
 collections:
+  - name: class_extras
+    label: "Class Extras"
+    label_singular: "Class Extra"
+    description: >-
+      Classes and workshops are managed in Square. The class name, dates,
+      times, price and Sign Up link all come from Square automatically, so
+      change those in Square, not here. Use a Class Extra to add things Square
+      does not have: a photo, a short blurb for the workshop card, a Featured
+      flag, or a switch to hide a class from the website. Classes without a
+      Class Extra still show up, using a stock photo and the start of their
+      Square description. Pottery 101 sessions appear in the schedule list
+      and do not use photos or blurbs; all other classes appear as cards in
+      the Workshops section.
+    folder: "src/_data/class_extras"
+    extension: "yml"
+    format: "yml"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: label
+    summary: "{{label}}{{featured | ternary(' (featured)', '')}}{{hide | ternary(' (hidden)', '')}}"
+    fields:
+      - label: "Class Name"
+        name: "label"
+        widget: "string"
+        hint: >-
+          Only used to find this entry in the CMS list; it is not shown on the
+          website. Use the class name from Square, e.g. "Handle those handles".
+      - label: "Square Item ID"
+        name: "square_id"
+        widget: "string"
+        pattern: ['^[A-Za-z0-9]+$', "Use only letters and numbers, with no spaces."]
+        hint: >-
+          Connects this entry to a class in Square. In the Square Dashboard, go
+          to Items, open the class, and copy the long code of letters and
+          numbers at the end of the page address (e.g. PM2MH5V4BFBENO6ZFB7V3PLT).
+          If it does not match a Square item exactly, this entry does nothing.
+      - label: "Photo"
+        name: "image"
+        widget: "image"
+        required: false
+        hint: >-
+          Shown at the top of the workshop card. Landscape photos around
+          1200 x 800 pixels look best. Leave empty to use the stock photo.
+      - label: "Photo Description"
+        name: "alt_text"
+        widget: "string"
+        required: false
+        hint: >-
+          Describe what is in the photo in one short sentence, e.g. "Three
+          speckled mugs drying on a ware board". Screen readers read this
+          aloud to people who cannot see the image. Fill this in whenever you
+          add a photo.
+      - label: "Card Blurb"
+        name: "card_text"
+        widget: "text"
+        required: false
+        hint: >-
+          One to three sentences for the workshop card. The full Square
+          description is still used on Square's sign-up page. Leave empty to
+          use the first couple of sentences from Square instead.
+      - label: "Featured"
+        name: "featured"
+        widget: "boolean"
+        default: false
+        required: false
+        hint: "Turn on to move this workshop to the front of the Workshops section."
+      - label: "Hide From Website"
+        name: "hide"
+        widget: "boolean"
+        default: false
+        required: false
+        hint: >-
+          Turn on to keep this class off the website while leaving it for sale
+          in Square. To stop selling a class, change it in Square instead.
+
+  - name: faqs
+    label: "FAQs"
+    label_singular: "FAQ"
+    description: >-
+      Questions and answers shown on the Kilns page. Each entry is one
+      question. Add, edit or delete entries here; the page updates when the
+      change is published.
+    folder: "src/_data/faqs"
+    extension: "yml"
+    format: "yml"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: question
+    fields:
+      - label: "Question"
+        name: "question"
+        widget: "string"
+        hint: "Write it the way a visitor would ask it, e.g. \"How much does a kiln rental cost?\""
+      - label: "Answer"
+        name: "answer"
+        widget: "text"
+        hint: "Keep it short and plain. A few sentences is plenty."
+      - label: "Button Text"
+        name: "button_text"
+        widget: "string"
+        required: false
+        hint: >-
+          Optional. Adds a button under the answer, e.g. "Book a kiln". The
+          button only appears when Button Link is also filled in.
+      - label: "Button Link"
+        name: "link"
+        widget: "string"
+        required: false
+        hint: >-
+          Optional. Where the button goes. Use a full web address
+          (https://...), a page on this site (/contact), or an email link
+          (mailto:manager@thekilnshed.studio).
+
+  - name: staff
+    label: "Staff"
+    label_singular: "Staff Member"
+    description: >-
+      People shown on the About page. Add an entry for each person; delete an
+      entry to remove them from the page.
+    folder: "src/_data/staff"
+    extension: "yml"
+    format: "yml"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: name
+    fields:
+      - label: "Photo"
+        name: "image"
+        widget: "image"
+        hint: "A clear photo of the person. Square photos around 800 x 800 pixels work best."
+      - label: "Name"
+        name: "name"
+        widget: "string"
+        hint: "Their name as they would like it shown."
+      - label: "Title"
+        name: "title"
+        widget: "string"
+        hint: "Their role at the studio, e.g. Co-owner, Kiln manager, Instructor."
+      - label: "Instagram Link"
+        name: "instagram"
+        widget: "string"
+        required: false
+        hint: "Optional. The full address of their Instagram profile, e.g. https://www.instagram.com/theirname/"
+      - label: "Website Link"
+        name: "website"
+        widget: "string"
+        required: false
+        hint: "Optional. The full address of their website or shop, starting with https://"
+      - label: "Bio"
+        name: "bio"
+        widget: "text"
+        hint: "A short paragraph about them and their work. Two to four sentences works well."
+
   - name: pages
-    label: "Pages"
+    label: "Extra Pages"
+    label_singular: "Page"
+    description: >-
+      Simple text pages that are not part of the main menu, like policies or
+      announcements. The main pages (Home, Classes, Membership, Gallery,
+      Kilns, About, Contact) are built by the developer and are not edited
+      here. A new page gets its own web address based on its title and
+      needs to be linked from somewhere for visitors to find it.
     folder: "src/_pages"
     create: true
     slug: "{{slug}}"
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Body", name: "body", widget: "markdown" }
-
-  - name: faqs
-    label: "Faqs"
-    folder: "src/_data/faqs"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - { label: "Question", name: "question", widget: "string" }
-      - { label: "Answer", name: "answer", widget: "string" }
-      - { label: "Button Text", name: "button_text", widget: "string" }
-      - { label: "Button Link", name: "link", widget: "string" }
-
-  - name: staff
-    label: "Staff"
-    folder: "src/_data/staff"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - { label: "Image", name: "image", widget: "image" }
-      - { label: "Name", name: "name", widget: "string" }
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Instagram Link", name: "instrgram", widget: "string" }
-      - { label: "Website Link", name: "website", widget: "string" }
-      - { label: "Bio", name: "bio", widget: "string" }
+      - label: "Title"
+        name: "title"
+        widget: "string"
+        hint: "The page heading. It also sets the page address, so keep it short."
+      - label: "Body"
+        name: "body"
+        widget: "markdown"
+        hint: "The page content. Use the toolbar for headings, lists, links and images."

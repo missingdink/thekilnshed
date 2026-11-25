@@ -6,6 +6,8 @@ permalink: /admin/
 <head>
   <meta charset="utf-8">
   <title>Content Manager</title>
+  <%# Point Decap at its config explicitly so /admin and /admin/ both work under any base path %>
+  <link href="<%= relative_url '/admin/config.yml' %>" type="text/yaml" rel="cms-config-url">
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.3.3/dist/decap-cms.js"></script>

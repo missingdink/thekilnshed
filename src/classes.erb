@@ -3,6 +3,12 @@ layout: default
 title: Classes & Workshops
 ---
 
+<%
+  square_classes = site.data.square_classes || []
+  pottery_101, workshops = square_classes.partition { |c| c.course? && c.name.match?(/pottery 101/i) }
+  workshops = workshops.partition(&:featured).flatten
+%>
+
 <section class="py-20 px-12 bg-indigo-900 hero bg-fixed" style="background-image: url(<%= relative_url '/images/hero-molten.png' %>)">
   <div class="space-y-2 mb-10">
     <h2 class="text-lime-500">Classes! Workshops!</h2>
@@ -54,51 +60,27 @@ title: Classes & Workshops
 
     <div class="flex flex-col md:flex-row gap-10">
 
-      <%# Classes %> 
+      <%# Pottery 101 sessions from Square, grouped by night %>
       <div class="w-full">
+        <% if pottery_101.empty? %>
+          <p class="text-coal-0 mb-10">No Pottery 101 sessions are scheduled right now. Check back soon!</p>
+        <% end %>
+        <% pottery_101.group_by(&:weekday).each do |weekday, sessions| %>
         <div class="w-full mb-10">
-          <h3 class="font-display text-lime-500 mb-4 tracking-wider">Tuesday Night</h3>
-          <% dates = "Mar 25 - Jun 23"; start_time = "2:00"; end_time = "3:00"; cost = "$200"; class_day = "Tuesday" %>
+          <h3 class="font-display text-lime-500 mb-4 tracking-wider"><%= weekday || "To Be Scheduled" %><%= " Night" if weekday %></h3>
           <ul class="space-y-2">
-            <% 3.times do |i| %>
+            <% sessions.each do |session| %>
             <%= render Shared::Class.new(
-              dates: dates,
-              start_time: start_time,
-              end_time: end_time,
-              cost: cost,
-              class_day: class_day) %>
+              dates: session.date_range,
+              start_time: session.start_time,
+              end_time: session.end_time,
+              cost: session.price,
+              class_day: session.weekday,
+              link: session.url) %>
             <% end %>
           </ul>
         </div>
-        <div class="w-full mb-10">
-          <h3 class="font-display text-lime-500 mb-4 tracking-wider">Wednesday Night</h3>
-          <% dates = "Jun 25 - Jul 23"; start_time = "2:00"; end_time = "4:00"; cost = "$400"; class_day = "Tuesday" %>
-          <ul class="space-y-2">
-            <% 3.times do |i| %>
-            <%= render Shared::Class.new(
-              dates: dates,
-              start_time: start_time,
-              end_time: end_time,
-              cost: cost,
-              class_day: class_day) %>
-            <% end %>
-          </ul>
-        </div>
-        <div class="w-full mb-10">
-          <h3 class="font-display text-lime-500 mb-4 tracking-wider">Thursday Night</h3>
-          <% dates = "Mar 25 - Jun 23"; start_time = "2:00"; end_time = "3:00"; cost = "$200"; class_day = "Tuesday"; link="" %>
-          <ul class="space-y-2">
-            <% 3.times do |i| %>
-            <%= render Shared::Class.new(
-              dates: dates,
-              start_time: start_time,
-              end_time: end_time,
-              cost: cost,
-              class_day: class_day,
-              link: link) %>
-            <% end %>
-          </ul>
-        </div>
+        <% end %>
 
         <div class="flex flex-col md:flex-row text-lime-500 gap-10">
           <h6 class="">Cancellation Policy:</h6>
@@ -177,20 +159,20 @@ title: Classes & Workshops
     </aside>
   </div>
   <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 container mx-auto">
-      <% image_src = "/images/example-workshop.jpg"; alt_text = "picture description"; title = "Soda Fire Workshop"; description = "Bring your own pots and join us for this 3 day soda fire workshop! "; start_date = "Thur, Aug 14"; end_date = "Sat, Aug 16"; start_time = "3:00pm"; end_time = "6:00m"; cost = "$200"; message = "Email me when another is scheduled" %>
-      <% 9.times do |i| %>
+      <% workshops.each do |workshop| %>
         <%= render Shared::Workshop.new(
-          image_src: image_src,
-          alt_text: alt_text,
-          title: title,
-          description: description,
-          start_date: start_date,
-          end_date: end_date,
-          start_time: start_time,
-          end_time: end_time,
-          cost: cost,
-          message: message
+          image_src: workshop.image || "/images/example-workshop.jpg",
+          alt_text: workshop.alt_text.to_s,
+          title: workshop.name,
+          description: workshop.summary,
+          start_date: workshop.start_date&.strftime("%a, %b %-d"),
+          end_date: (workshop.end_date&.strftime("%a, %b %-d") if workshop.multi_day?),
+          start_time: workshop.start_time,
+          end_time: workshop.end_time,
+          cost: workshop.price,
+          message: "Email me when another is scheduled",
+          link: workshop.url
           ) %>
-        <% end %>
+      <% end %>
     </ul>
 </section>
