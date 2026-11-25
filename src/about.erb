@@ -2,27 +2,162 @@
 layout: default
 title: About Us
 ---
+<%
+  about = site.data.about
+  intro, story, house_rules, space, visit = about.intro, about.story, about.house_rules, about.space, about.visit
+  meta = site.data.site_metadata
+  visiting = meta.visiting
+%>
 
-<section class="py-12 px-8 md:py-24 md:px-12 bg-lime-900 hero bg-fixed" style="background-image: url(<%= relative_url '/images/hero-bricks.png' %>)">
+<% banner = about.banner || {} %>
+<section class="py-12 px-8 md:py-24 md:px-12 bg-lime-900 hero bg-fixed" style="background-image: url(<%= relative_url('/images/hero-bricks.png') %>)">
   <div class="space-y-2 mb-10">
-    <h2 class="text-lime-500">Behind the Kiln</h2>
+    <h2 class="text-lime-500"><%= banner["heading"].presence || "Behind the Kiln" %></h2>
   </div>
 </section>
-<section class="flex flex-col md:flex-row gap-4 md:gap-16 p-12 text-indigo-600">
-  <h2 class="md:max-w-2xs md:!text-wrap">Et quibus damut</h2>
-  <h5 class="w-full">Enim maxime saepe sit vero aut vel. Tempora nihil aliquam. Modi quam qui. </br></br> Beatae praesentium sequi nostrum provident.</h5>
-  <p class="w-full">Maiores quo eum est. Nobis culpa quia. Aut et dolores nostrum ut eos rerum. Omnis voluptatem optio blanditiis quae dicta vitae suscipit consequuntur autem. </br> </br>Eligendi alias velit. Beatae praesentium sequi nostrum provident maiores quidem consequuntur. Numquam ut consectetur non recusandae suscipit quasi beatae. Esse commodi ut ea odit architecto illum rem et.</p>
-</section>
-<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-12 bg-brown-50">
 
+<%# Intro %>
+<% if show_content?(intro) %>
+<section class="p-12 pb-24 text-indigo-600">
+  <%= render Shared::ReviewFlag.new(item: intro) %>
+  <div class="flex flex-col md:flex-row gap-4 md:gap-16">
+    <h2 class="md:max-w-2xs md:!text-wrap"><%= intro.heading %></h2>
+    <h5 class="w-full"><%= intro.lead %></h5>
+    <div class="w-full space-y-4">
+      <% paragraphs(intro.body).each do |paragraph| %>
+        <p><%= paragraph %></p>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+
+<%# Origin story %>
+<% if show_content?(story) %>
+<section class="angle-top-right -mt-[50px] bg-coal-1000 text-coal-0 pt-32 pb-24 px-12">
+  <div class="container mx-auto">
+    <%= render Shared::ReviewFlag.new(item: story) %>
+    <div class="flex flex-col md:flex-row gap-12 items-center">
+      <div class="w-full md:w-1/2 space-y-4">
+        <h2 class="text-lime-500 mb-10"><%= story.heading %></h2>
+        <% paragraphs(story.body).each do |paragraph| %>
+          <p><%= paragraph %></p>
+        <% end %>
+      </div>
+      <% if story.image.present? %>
+        <img src="<%= relative_url story.image %>" alt="<%= story.image_alt %>" class="w-full md:w-1/2 h-auto object-cover" />
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+
+<%# Staff %>
+<section class="angle-top-left -mt-[50px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-12 pt-24 md:pt-32 pb-24 bg-brown-50">
   <% site.data.staff.each_with_index do |(slug, staff), i| %>
     <%= render Shared::Staff.new(
-      image:    staff.image,
-      name:    staff.name,
-      title:    staff.title,
-      instagram:      staff.instagram,
-      website: staff.website,
-      bio:        staff.bio
+      image:        staff.image,
+      name:         staff.name,
+      title:        staff.title,
+      instagram:    staff.instagram,
+      website:      staff.website,
+      bio:          (staff.bio if show_content?(staff)),
+      needs_review: needs_review?(staff)
     ) %>
   <% end %>
 </section>
+
+<%# How we run things %>
+<% if show_content?(house_rules) %>
+<section class="angle-top-right -mt-[50px] bg-indigo-900 text-coal-0 pt-32 pb-24 px-12">
+  <div class="container mx-auto">
+    <%= render Shared::ReviewFlag.new(item: house_rules) %>
+    <h2 class="text-lime-500 mb-10"><%= house_rules.heading %></h2>
+    <ul class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <% Array(house_rules.items).each do |rule| %>
+        <li>
+          <h6 class="text-lime-500 mb-2"><%= rule.title %></h6>
+          <p class="text-coal-100"><%= rule.text %></p>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</section>
+<% end %>
+
+<%# The space %>
+<% if show_content?(space) %>
+<section class="angle-top-left -mt-[50px] bg-brown-100 pt-32 pb-24 px-12">
+  <div class="container mx-auto">
+    <%= render Shared::ReviewFlag.new(item: space) %>
+    <div class="flex flex-col md:flex-row gap-10 mb-12">
+      <h2 class="text-lime-800 md:w-1/3"><%= space.heading %></h2>
+      <div class="md:w-2/3 space-y-4">
+        <% paragraphs(space.body).each do |paragraph| %>
+          <p><%= paragraph %></p>
+        <% end %>
+      </div>
+    </div>
+    <% if Array(space.facts).any? %>
+      <ul class="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <% space.facts.each do |fact| %>
+          <li>
+            <span class="block font-display text-5xl text-lime-800 tracking-wider"><%= fact.value %></span>
+            <span class="block uppercase tracking-wider text-brown-900"><%= fact.label %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+    <% if Array(space.photos).any? %>
+      <ul class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <% space.photos.each do |photo| %>
+          <li><img src="<%= relative_url photo.image %>" alt="<%= photo.alt %>" class="w-full aspect-[4/3] object-cover" /></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</section>
+<% end %>
+
+<%# Visit %>
+<% if show_content?(visit) %>
+<section class="angle-top-right -mt-[50px] bg-coal-1100 text-coal-0 pt-32 pb-20 px-12">
+  <div class="container mx-auto">
+    <%= render Shared::ReviewFlag.new(item: visit) %>
+    <div class="flex flex-col md:flex-row gap-12">
+      <div class="md:w-1/2 space-y-4">
+        <h2 class="text-lime-500 mb-10"><%= visit.heading %></h2>
+        <% paragraphs(visit.body).each do |paragraph| %>
+          <p><%= paragraph %></p>
+        <% end %>
+        <div class="flex flex-wrap gap-4 pt-6">
+          <a href="<%= relative_url '/classes' %>" class="btn btn-secondary">Classes</a>
+          <a href="<%= relative_url '/membership' %>" class="btn btn-outline lime">Membership</a>
+          <a href="<%= relative_url '/contact' %>" class="btn btn-primary">Contact</a>
+        </div>
+      </div>
+      <dl class="md:w-1/2 space-y-8">
+        <div>
+          <dt class="text-lime-500 uppercase tracking-wider mb-2">Address</dt>
+          <dd><%= meta.address %></dd>
+        </div>
+        <% if visiting && show_content?(visiting) %>
+          <div><%= render Shared::ReviewFlag.new(item: visiting) %></div>
+          <% if Array(visiting.hours).any? %>
+            <div>
+              <dt class="text-lime-500 uppercase tracking-wider mb-2">Staffed hours</dt>
+              <dd><% visiting.hours.each do |row| %><span class="block"><%= row.days %>, <%= row.times %></span><% end %></dd>
+            </div>
+          <% end %>
+          <% if visiting.accessibility.present? %>
+            <div>
+              <dt class="text-lime-500 uppercase tracking-wider mb-2">Accessibility</dt>
+              <dd><%= visiting.accessibility %></dd>
+            </div>
+          <% end %>
+        <% end %>
+      </dl>
+    </div>
+  </div>
+</section>
+<% end %>

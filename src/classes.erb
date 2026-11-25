@@ -7,63 +7,55 @@ title: Classes & Workshops
   square_classes = site.data.square_classes || []
   pottery_101, workshops = square_classes.partition { |c| c.course? && c.name.match?(/pottery 101/i) }
   workshops = workshops.partition(&:featured).flatten
+  page_copy = site.data.classes_page
+  banner, intro, course, workshop_copy = page_copy["banner"] || {}, page_copy["intro"], page_copy["pottery_101"], page_copy["workshops"]
 %>
 
-<section class="py-20 px-12 bg-indigo-900 hero bg-fixed" style="background-image: url(<%= relative_url '/images/hero-molten.png' %>)">
+<section class="py-20 px-12 bg-indigo-900 hero bg-fixed" style="background-image: url(<%= relative_url('/images/hero-molten.png') %>)">
   <div class="space-y-2 mb-10">
-    <h2 class="text-lime-500">Classes! Workshops!</h2>
+    <h2 class="text-lime-500"><%= banner["heading"].presence || "Classes! Workshops!" %></h2>
   </div>
-  <h5 class="text-brown-100">You’re allowed to take it seriously here—without having to take yourself too seriously.</h5>
+  <% if banner["tagline"].present? %><h5 class="text-brown-100"><%= banner["tagline"] %></h5><% end %>
 </section>
 
 <section class="bg-brown-100 flex flex-col lg:flex-row gap-10">
-  <img src="<%= relative_url '/images/lime-sculpt.png' %>" class="-mt-10 h-full w-full max-w-[330px] object-cover ml-10 z-1"/>
+  <img src="<%= relative_url '/images/lime-sculpt.png' %>" alt="" class="-mt-10 h-full w-full max-w-[330px] object-cover ml-10 z-1"/>
   <div class="container mx-auto pb-30 pt-10 px-12 ">
-    <h4 class="mb-10 text-lime-800">Here at The Kiln Shed we offer classes & workshops at a variety of skill levels.</h4>
-    <p class="mb-4">Some are just starting out, learning how clay moves and what it can do. Others have been at it for years and are dialing in their process. Most fall somewhere in between.</p>
-    <p class="">Everyone's working on something different, but it all shares the same thing: <span class="text-lime-800">it's made by hand, and it means something to the person making it.</span></p>
+    <h4 class="mb-10 text-lime-800"><%= intro["heading"] %></h4>
+    <% intro_paragraphs = paragraphs(intro["body"]) %>
+    <% intro_paragraphs.each_with_index do |paragraph, i| %>
+      <p class="<%= 'mb-4' unless i == intro_paragraphs.length - 1 %>"><%= paragraph %><% if i == intro_paragraphs.length - 1 && intro["highlight"].present? %> <span class="text-lime-800"><%= intro["highlight"] %></span><% end %></p>
+    <% end %>
   </div>
-  <img src="<%= relative_url '/images/indigo-wheels.jpg' %>" class="w-auto h-full object-cover" />
+  <img src="<%= relative_url '/images/indigo-wheels.jpg' %>" alt="" class="w-auto h-full object-cover" />
 </section>
 <div class="triangle-bottomleft bg-transparent -mt-20"></div>
 <section class="bg-coal-1000 py-20 px-12 ">
   <div class="container mx-auto flex flex-col md:flex-row gap-20">
     <div class="w-full md:w-2/3">
-      <h2 class="text-lime-500 mb-10">Class:Pottery 101</h2>
-      <h5 class="text-lime-500 mb-10">This 5 week course is a great class for both new and returning potters.</h5>
-      <p class="text-coal-0 mb-4">The goal of POTTERY 101 is to teach you how to create food-safe functional pottery using the wheel! </p>
-      <p class="text-coal-0 mb-4">We will cover things like, Centering, throwing, trimming, adding handles, decorating and glazing!</p>
-      <p class="text-coal-0">Upon completion of the course you will have the skills needed to start/continue your clay adventure!</p>
+      <h2 class="text-lime-500 mb-10"><%= course["heading"] %></h2>
+      <h5 class="text-lime-500 mb-10"><%= course["lead"] %></h5>
+      <% course_paragraphs = paragraphs(course["body"]) %>
+      <% course_paragraphs.each_with_index do |paragraph, i| %>
+        <p class="text-coal-0 <%= 'mb-4' unless i == course_paragraphs.length - 1 %>"><%= paragraph %></p>
+      <% end %>
     </div>
-    
-    <ul class="flex flex-col space-y-10 w-full md:w-1/3">
-      <li class="flex flex-row gap-3">
-        <img src="<%= relative_url '/images/icons/pottery.svg' %>" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Pottery</span>
-      </li>
-      <li class="flex flex-row gap-3">
-        <img src="<%= relative_url '/images/icons/sculpture.svg' %>" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Sculpture</span>
-      </li>
-      <li class="flex flex-row gap-3">
-        <img src="<%= relative_url '/images/icons/glaze.svg' %>" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">GLAZE-MAKING</span>
-      </li>
-      <li class="flex flex-row gap-3">
-        <img src="<%= relative_url '/images/icons/mold.svg' %>" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Mold Making</span>
-      </li>
-    </ul>
+    <%= render Shared::Disciplines.new(items: course["disciplines"], layout: :column) %>
   </div>
 </section>
 <div class="triangle-topright bg-coal-1100"></div>
 
 <section class="py-20 bg-coal-1100 px-12">
   <div class="container mx-auto">
-    <h2 class="text-lime-500 mb-10 text-center">Pottery 101: Info & Upcoming Schedules</h2>
+    <h2 class="text-lime-500 mb-10 text-center"><%= course["schedule_heading"] %></h2>
+
 
     <div class="flex flex-col md:flex-row gap-10">
 
       <%# Pottery 101 sessions from Square, grouped by night %>
       <div class="w-full">
         <% if pottery_101.empty? %>
-          <p class="text-coal-0 mb-10">No Pottery 101 sessions are scheduled right now. Check back soon!</p>
+          <p class="text-coal-0 mb-10"><%= course["empty_schedule"] %></p>
         <% end %>
         <% pottery_101.group_by(&:weekday).each do |weekday, sessions| %>
         <div class="w-full mb-10">
@@ -82,51 +74,37 @@ title: Classes & Workshops
         </div>
         <% end %>
 
+        <% if course["cancellation_policy"].present? %>
         <div class="flex flex-col md:flex-row text-lime-500 gap-10">
           <h6 class="">Cancellation Policy:</h6>
-          <p class="">Full refund if canceled 14 days before class. 50% refund if cancellation is 7 days prior to first class. No Refund after this 7 day period.</p>
+          <p class=""><%= course["cancellation_policy"] %></p>
         </div>
+        <% end %>
 
       </div>
 
 
       <aside class="w-full max-w-xs flex flex-col justify-between h-full">
         <ul class="space-y-4 p-6" style="list-style-image: url(<%= relative_url '/images/icons/lime-disc.svg' %>)">
-          <h6 class="text-lime-700">Included with the class:</h6>
-          <li class="pl-3">
-            <p class="text-lg text-coal-0 mb-1 tracking-wider font-medium">UNLIMITED CLAY</p>
-            <p class="text-md text-coal-100">(no production potters, please)</p>
-          </li>
-          <li class="pl-3">
-            <span class="text-lg text-coal-0 mb-2 tracking-wider font-medium">TOOLS</span>
-            <p class="text-md text-coal-100">(tools provided, will sell you a kit if you want your own)</p>
-          </li>
-          <li class="pl-3">
-            <span class="text-lg text-coal-0 mb-2 tracking-wider font-medium">OPEN STUDIO</span>
-            <p class="text-md text-coal-100">(one per week! practice makes perfect)</p>
-          </li>
-          <li class="pl-3">
-            <span class="text-lg text-coal-0 mb-2 tracking-wider font-medium">UP TO 10 pieces to take home!</span>
-            <p class="text-md text-coal-100">(extras are $5 each)</p>
-          </li>
+          <h6 class="text-lime-700"><%= course["includes_heading"] %></h6>
+          <% Array(course["includes"]).each do |item| %>
+            <li class="pl-3">
+              <p class="text-lg text-coal-0 mb-1 tracking-wider font-medium"><%= item["title"] %></p>
+              <% if item["note"].present? %><p class="text-md text-coal-100"><%= item["note"] %></p><% end %>
+            </li>
+          <% end %>
         </ul>
-        <div class="">
-          <div class="bg-brown-950/60 backdrop-blur-md border border-brown-900 p-6 rounded-md mb-5">
-            <div class="flex flex-col md:flex-row justify-between items-center w-full mb-3">
-              <h6 class="text-red-50 uppercase tracking-wider">Warning</h6>
-              <img src="<%= relative_url '/images/icons/messy.svg' %>" class="w-14 h-14 object-cover" />
+        <div class="space-y-5">
+          <% Array(course["warnings"]).each do |warning| %>
+            <div class="bg-brown-950/60 backdrop-blur-md border border-brown-900 p-6 rounded-md">
+              <div class="flex flex-col md:flex-row justify-between items-center w-full mb-3">
+                <h6 class="text-red-50 uppercase tracking-wider">Warning</h6>
+                <img src="<%= relative_url "/images/icons/#{warning["icon"] == 'finger-nails' ? 'finger-nails' : 'messy'}.svg" %>" alt="" class="w-14 h-14 object-cover" />
+              </div>
+              <p class="text-brown-300 mb-3"><%= warning["text"] %></p>
+              <% if warning["note"].present? %><p class="text-brown-300"><%= warning["note"] %></p><% end %>
             </div>
-            <p class="text-brown-300 mb-3">Clay is MESSY, bring a towel/apron & wear clothes you don't mind getting dirty!!</p>
-            <p class="text-brown-300">(it does wash out, don't worry!)</p>
-          </div>
-          <div class="bg-brown-950/60 backdrop-blur-md border border-brown-900 p-6 rounded-md">
-            <div class="flex flex-col md:flex-row justify-between items-center w-full mb-3">
-              <h6 class="text-red-50 uppercase tracking-wider">Warning</h6>
-              <img src="<%= relative_url '/images/icons/finger-nails.svg' %>" class="w-14 h-14 object-cover" />
-            </div>
-            <p class="text-brown-300 mb-3">Individuals with long/false nails might find it tough to throw on the potter's wheel. </p>
-            <p class="text-brown-300">We recommend trimming your nails prior to the course! </p>
-          </div>
+          <% end %>
         </div>
       </aside>
     </div>
@@ -136,28 +114,25 @@ title: Classes & Workshops
 <section class="py-20 bg-indigo-950 px-12 text-coal-0  bg-fixed" style="background-image: url(<%= relative_url '/images/bg-kilnshelves-lg.jpg' %>)">
   <div class="container mx-auto flex flex-col md:flex-row justify-between">
     <div class="">
-      <h2 class="text-lime-500 mb-10">Workshops</h2>
-      <h5 class="mb-6 !leading-10">Are you hungry for more? Ready to master the teapot? Trying to make that big ol' planter? These one day workshops are EXACTLY what you need!</h5>
-      <p class="mb-4">These quick and dirty classes are designed for intermediate and advanced skill level. We want to help you sharpen specific skills! Make make make... then chop and slice it all up at the end. Learn from mistakes AND successes in a laid back yet challenging class format</p>
-      <p class="mb-4">Join instructors Brendan Kelley, James Griffiths, Tab Link, and MORE for workshops that will help you up your game with focused, detailed demos, challenging projects, & LOTS of tricks to go practice.</p>
-      <p class="mb-4">Each student can use as much clay as needed! We don’t plan on keeping anything. BUT we can fire stuff for a fee. (take it with if you have kiln access)</p>
-      <p class="">General Prerequisite: Pottery 101</p>
+      <h2 class="text-lime-500 mb-10"><%= workshop_copy["heading"] %></h2>
+      <h5 class="mb-6 !leading-10"><%= workshop_copy["lead"] %></h5>
+      <% workshop_paragraphs = paragraphs(workshop_copy["body"]) %>
+      <% workshop_paragraphs.each_with_index do |paragraph, i| %>
+        <p class="<%= 'mb-4' unless i == workshop_paragraphs.length - 1 %>"><%= paragraph %></p>
+      <% end %>
     </div>
     <aside class="pl-0 md:pl-10">
       <ul class="space-y-4 p-6" style="list-style-image: url(<%= relative_url '/images/icons/lime-disc.svg' %>)">
-        <h6 class="text-lime-700">Included with the class:</h6>
-        <li class="pl-3">
-          1.5 hours of focused practice & attentive instruction
-        </li>
-        <li class="pl-3">
-          Pick and choose only what YOU want to learn!
-        </li>
-        <li class="pl-3">
-          We provide EVERYTHING (bring your own tools & clay if you want!)
-        </li>
+        <h6 class="text-lime-700"><%= workshop_copy["includes_heading"] %></h6>
+        <% Array(workshop_copy["includes"]).each do |item| %>
+          <li class="pl-3"><%= item %></li>
+        <% end %>
       </ul>
     </aside>
   </div>
+  <% if workshops.empty? && workshop_copy["empty"].present? %>
+    <p class="container mx-auto mt-10"><%= workshop_copy["empty"] %> <a href="<%= relative_url '/contact#newsletter' %>" class="underline text-lime-500">Join the email list</a></p>
+  <% end %>
   <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 container mx-auto">
       <% workshops.each do |workshop| %>
         <%= render Shared::Workshop.new(
@@ -171,8 +146,21 @@ title: Classes & Workshops
           end_time: workshop.end_time,
           cost: workshop.price,
           message: "Email me when another is scheduled",
+          email: site.data.site_metadata.email,
           link: workshop.url
           ) %>
       <% end %>
     </ul>
 </section>
+
+<% if site.data.site_metadata.gift_card_url.present? %>
+<section class="bg-lime-300 border-b-10 border-lime-500 py-16 px-8 md:px-12">
+  <div class="container mx-auto flex flex-col md:flex-row md:items-center justify-between gap-8">
+    <div>
+      <h2 class="text-lime-800 mb-4">Give the gift of clay</h2>
+      <p>Treat someone to a class or workshop at the shed.</p>
+    </div>
+    <a href="<%= site.data.site_metadata.gift_card_url %>" target="_blank" rel="noopener" class="btn btn-primary">Buy a gift card</a>
+  </div>
+</section>
+<% end %>

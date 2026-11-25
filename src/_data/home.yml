@@ -1,0 +1,66 @@
+# Home page content. Edit in the CMS under "Home Page".
+# Membership cards come from the Membership entry; phone from Site Settings.
+
+hero:
+  heading_line_1: Made by hand
+  heading_line_2: No Bullshit
+  tagline: Northside Madison. Kilns hot. Shelves full. Come join.
+
+intro:
+  lines:
+    - It's not fancy.
+    - It's not polished.
+    - But it works—and that's the point.
+  body: |-
+    This is a working ceramic studio on Madison's north side, built inside an old warehouse and shaped by the people who use it.
+
+    No pressure to perform. No expectation to be anything other than where you are.
+
+classes:
+  heading: Classes & Workshops
+  disciplines:
+    - label: Pottery
+      icon: pottery
+    - label: Sculpture
+      icon: sculpture
+    - label: GLAZE-MAKING
+      icon: glaze
+    - label: Mold Making
+      icon: mold
+  body: |-
+    Never tried pottery before? Has it been awhile since that class you took?  We offer classes at a variety of skill levels.
+
+    Trying to improve? want to expand your skillset? Sign up to one of our workshops and make it happen!
+  button_text: Peep our classes & Workshops
+
+shed:
+  heading: The Shed
+  image: /images/kilnshed-empty.png
+  lead: Nothing precious. Just a studio that works as hard as you do.
+  body: It's practical, a little rough, and always evolving. You'll find worktables, wheels, kilns, and shelves packed with pieces in every stage—wet, drying, fired, glazed.
+  audience_heading: Who It Works For
+  audience:
+    - People who want a consistent place to make, not just visit
+    - Folks who learn best by doing, not being told
+    - Makers who want time, space, and access to keep improving
+    - Anyone looking for a studio that feels usable, not precious
+
+membership:
+  heading: Membership
+  intro: A community studio with a variety of memberships to fit your making style and schedule.
+
+kilns:
+  heading: The Kilns
+  lead: Need to fire pots?
+  body: We got you covered! Everything from low fire, to high fire gas!
+  button_text: Learn More
+  image: /images/kiln.jpg
+  repair_text: |-
+    Have your own electric kiln?
+    Need repair?
+  repair_call: Call James today!
+
+cta:
+  heading: CANT WAIT? CONTACT US TODAY!
+  body: Subscribe to our email list to be the first to know about classes, workshops, firings & more!
+  button_text: Join the email list

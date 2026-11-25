@@ -1,3 +1,7 @@
-image_src: https://picsum.photos/200/300
-title: It's a kiln
-message: Look at that thing, such a beaut ain't she? Want to touch it. Watch out it's pretty hot.
+image_src: /images/indigo-wheels.jpg
+alt: "Pottery wheels and tools in use, seen from above"
+title: "Wheel day"
+message: "Bats, tools, and a lot of wet clay. A normal night at the shed."
+category: studio
+sort: 4
+needs_review: true

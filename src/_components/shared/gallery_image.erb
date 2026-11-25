@@ -1,7 +1,9 @@
-<div class="relative">
-  <div class="hover:bg-coal-1000/88 w-full h-full text-coal-0 z-10 opacity-0 hover:opacity-100 absolute transition-all duration-400 ease-in-out flex flex-col gap-3 items-start justify-end p-8">
-    <p class="font-bold !text-xl"><%= @title %></p>
-    <p class="line-clamp-5"><%= @message %></p>
-  </div>
-  <img src="<%= relative_url @image_src %>" class="w-full h-full max-h-[400px] object-cover hover:blur-md" />
-</div>
+<figure class="relative">
+  <% if @show_caption && (@title.present? || @message.present?) %>
+    <figcaption class="hover:bg-coal-1000/88 w-full h-full text-coal-0 z-10 opacity-0 hover:opacity-100 focus-within:opacity-100 absolute transition-all duration-400 ease-in-out flex flex-col gap-3 items-start justify-end p-8">
+      <p class="font-bold !text-xl"><%= @title %></p>
+      <p class="line-clamp-5"><%= @message %></p>
+    </figcaption>
+  <% end %>
+  <img src="<%= relative_url @image_src %>" alt="<%= @alt.presence || @title %>" class="w-full h-full max-h-[400px] object-cover" />
+</figure>

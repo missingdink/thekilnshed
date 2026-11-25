@@ -1,0 +1,19 @@
+name: "Artist Name (example)"
+needs_review: true
+sort: 1
+studio: "Private studio member"
+portrait: ""
+bio: "Example entry to show the layout. Replace it with a real artist, or delete it. One or two sentences about the artist and their work go here."
+instagram: ""
+website: ""
+shop: ""
+works:
+  - image: /images/red-cup.png
+    alt: "A red glazed cup"
+    title: "Cup"
+  - image: /images/brown-vase.png
+    alt: "A brown stoneware vase"
+    title: "Vase"
+  - image: /images/lime-jug.png
+    alt: "A lime green jug"
+    title: "Jug"

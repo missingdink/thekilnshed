@@ -3,5 +3,9 @@ layout: default
 title: Not Found
 permalink: /404.html
 ---
-<h1>Page not found</h1>
-<p>The page you're looking for doesn't exist.</p>
+<% not_found = site.data.not_found || {} %>
+<section class="py-20 px-12 bg-indigo-900 hero bg-fixed min-h-[60vh]" style="background-image: url(<%= relative_url '/images/hero-cracks.jpg' %>)">
+  <h1 class="text-lime-500 mb-10"><%= not_found["heading"].presence || "Page not found" %></h1>
+  <p class="text-coal-0 !text-xl mb-10 max-w-2xl"><%= not_found["body"].presence || "The page you're looking for doesn't exist." %></p>
+  <a href="<%= relative_url '/' %>" class="btn btn-secondary"><%= not_found["button_text"].presence || "Back to the home page" %></a>
+</section>

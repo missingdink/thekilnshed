@@ -2,27 +2,32 @@
 layout: default
 title: Home
 ---
+<%
+  home = site.data.home
+  hero, intro, classes, shed, kilns, cta = home["hero"], home["intro"], home["classes"], home["shed"], home["kilns"], home["cta"]
+%>
 
-<section class="py-12 px-8 md:py-24 md:px-12 bg-brown-900 hero bg-fixed" style="background-image: url(<%= relative_url '/images/hero-cracks.jpg' %>)">
-  <div class="space-y-2 mb-10">
-    <h1 class="text-lime-500">Made by hand</h2>
-    <h1 class="text-lime-500 ml-0 md:ml-40">No Bullshit</h2>
-  </div>
-  <h5 class="text-brown-100 mb-10">Northside Madison. Kilns hot. Shelves full. Come join.</h5>
+<section class="py-12 px-8 md:py-24 md:px-12 bg-brown-900 hero bg-fixed" style="background-image: url(<%= relative_url('/images/hero-cracks.jpg') %>)">
+  <h1 class="text-lime-500 mb-10">
+    <span class="block"><%= hero["heading_line_1"] %></span>
+    <% if hero["heading_line_2"].present? %><span class="block mt-2 ml-0 md:ml-40"><%= hero["heading_line_2"] %></span><% end %>
+  </h1>
+  <h5 class="text-brown-100 mb-10"><%= hero["tagline"] %></h5>
 </section>
 
 <section class="flex flex-col lg:flex-row">
   <div class="w-full md:w-1/2 py-12 md:pb-14 md:pt-20 px-8 md:px-12">
-    <h4 class="text-indigo-600 mb-3">It's not fancy.</h4>
-    <h4 class="text-indigo-600 mb-3">It's not polished.</h4> 
-    <h4 class="text-indigo-600 mb-10">But it works—and that's the point.</h4>
-    <p class="mb-4">This is a working ceramic studio on Madison's north side, built inside an old warehouse and 
-    shaped by the people who use it.</p>
-    <p class="">No pressure to perform. No expectation to be anything other than where you are.</p>
+    <% lines = Array(intro["lines"]) %>
+    <% lines.each_with_index do |line, i| %>
+      <h4 class="text-indigo-600 <%= i == lines.length - 1 ? 'mb-10' : 'mb-3' %>"><%= line %></h4>
+    <% end %>
+    <% paragraphs(intro["body"]).each_with_index do |paragraph, i| %>
+      <p class="<%= 'mb-4' unless i == paragraphs(intro["body"]).length - 1 %>"><%= paragraph %></p>
+    <% end %>
   </div>
   <div class="w-full lg:w-1/2 relative h-50 md:h-auto">
-    <img src="<%= relative_url '/images/brown-vase.png' %>" class="w-full max-w-[200px] md:max-w-[310px] lg:max-w-[470px] h-auto object-cover absolute right-0 -bottom-5 lg:-bottom-20" />
-    <img src="<%= relative_url '/images/lime-jug.png' %>" class="w-full max-w-[140px] md:max-w-[200px] lg:max-w-[290px] h-auto object-cover absolute right-[160px] md:right-[240px] lg:right-95 -bottom-10 lg:-bottom-30" />
+    <img src="<%= relative_url '/images/brown-vase.png' %>" alt="" class="w-full max-w-[200px] md:max-w-[310px] lg:max-w-[470px] h-auto object-cover absolute right-0 -bottom-5 lg:-bottom-20" />
+    <img src="<%= relative_url '/images/lime-jug.png' %>" alt="" class="w-full max-w-[140px] md:max-w-[200px] lg:max-w-[290px] h-auto object-cover absolute right-[160px] md:right-[240px] lg:right-95 -bottom-10 lg:-bottom-30" />
   </div>
 </section>
 
@@ -30,26 +35,14 @@ title: Home
 <section class="py-12 md:pt-40 md:pb-80 px-8 md:px-12 lg:px-24 bg-coal-1100">
   <div class="flex flex-col lg:flex-row justify-evenly items-center lg:gap-20 mb-10">
     <div class="w-fit mb-24 container mx-auto">
-      <h2 class="text-lime-500 text-nowrap mb-10 text-center">Classes & Workshops</h2>
-      <ul class="grid grid-cols-1 md:grid-cols-2 md:justify-items-start gap-6 lg:gap-10">
-        <li class="flex flex-row gap-3 items-center justify-center">
-          <img src="<%= relative_url '/images/icons/pottery.svg' %>" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Pottery</span>
-        </li>
-        <li class="flex flex-row gap-3 items-center justify-center">
-          <img src="<%= relative_url '/images/icons/sculpture.svg' %>" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Sculpture</span>
-        </li>
-        <li class="flex flex-row gap-3 items-center justify-center">
-          <img src="<%= relative_url '/images/icons/glaze.svg' %>" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">GLAZE-MAKING</span>
-        </li>
-        <li class="flex flex-row gap-3 items-center justify-center">
-          <img src="<%= relative_url '/images/icons/mold.svg' %>" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider">Mold Making</span>
-        </li>
-      </ul>
+      <h2 class="text-lime-500 text-nowrap mb-10 text-center"><%= classes["heading"] %></h2>
+      <%= render Shared::Disciplines.new(items: classes["disciplines"]) %>
     </div>
     <div class="w-full container mx-auto  mb-10">
-      <p class="text-lime-100 mb-4">Never tried pottery before? Has it been awhile since that class you took?  We offer classes at a variety of skill levels.</p>
-      <p class="text-lime-100 mb-10">Trying to improve? want to expand your skillset? Sign up to one of our workshops and make it happen! </p>
-      <a href="<%= relative_url '/classes' %>" class="btn btn-primary md:w-fit w-full">Peep our classes & Workshops</a>
+      <% paragraphs(classes["body"]).each_with_index do |paragraph, i| %>
+        <p class="text-lime-100 <%= i == paragraphs(classes["body"]).length - 1 ? 'mb-10' : 'mb-4' %>"><%= paragraph %></p>
+      <% end %>
+      <a href="<%= relative_url '/classes' %>" class="btn btn-primary md:w-fit w-full"><%= classes["button_text"] %></a>
     </div>
   </div>
   <div class="container mx-auto">
@@ -60,66 +53,41 @@ title: Home
 
 <section class="arc-element flex md:flex-row flex-col md:-mt-60">
   <div class="w-full md:max-w-sm rounded-lg">
-    <img src="<%= relative_url '/images/kilnshed-empty.png' %>" class="w-full h-40 md:h-full object-cover bg-center max-h-md" />
+    <img src="<%= relative_url(shed["image"].presence || '/images/kilnshed-empty.png') %>" alt="" class="w-full h-40 md:h-full object-cover bg-center max-h-md" />
   </div>
   <div class="w-full py-12 md:py-20 px-8 md:px-20 bg-coal-0 flex flex-col justify-center">
-    <h2 class="text-indigo-600 mb-10">The Shed</h2>
-    <h4 class="text-indigo-600 mb-4">Nothing precious. Just a studio that works as hard as you do.</h4>
-    <p class="mb-10">It's practical, a little rough, and always evolving. You'll find worktables, wheels, kilns, and shelves packed with pieces in every stage—wet, drying, fired, glazed.</p>
+    <h2 class="text-indigo-600 mb-10"><%= shed["heading"] %></h2>
+    <h4 class="text-indigo-600 mb-4"><%= shed["lead"] %></h4>
+    <p class="mb-10"><%= shed["body"] %></p>
 
-    <h5 class="text-indigo-600 mb-4">Who It Works For</h5>
+    <h5 class="text-indigo-600 mb-4"><%= shed["audience_heading"] %></h5>
     <ul class="list-inside space-y-2" style="list-style-image: url(<%= relative_url '/images/icons/indigo-disc.svg' %>)">
-      <li class=""> People who want a consistent place to make, not just visit</li>
-      <li class=""> Folks who learn best by doing, not being told</li>
-      <li class=""> Makers who want time, space, and access to keep improving</li>
-      <li class=""> Anyone looking for a studio that feels usable, not precious</li>
+      <% Array(shed["audience"]).each do |item| %>
+        <li class=""> <%= item %></li>
+      <% end %>
     </ul>
   </div>
 </section>
 
 <section class="py-12 md:py-20 px-8 md:px-12 bg-brown-950">
   <div class="container mx-auto">
-    <h2 class="text-brown-600 mb-4 text-center">Membership</h2>
-    <h4 class="text-brown-300 mb-10 text-center">A community studio with a variety of memberships to fit your making style and schedule.</h4>
+    <h2 class="text-brown-600 mb-4 text-center"><%= home.dig("membership", "heading") %></h2>
+    <h4 class="text-brown-300 mb-10 text-center"><%= home.dig("membership", "intro") %></h4>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-
-      <div class="flex flex-col justify-between border border-brown-900">
-        <div class="p-8 bg-brown-900 space-y-3">
-          <h4 class="text-lime-500 mb-2 text-center">Drop-In Access</h4>
-          <p class="text-brown-150 text-center">4 times / month</p>
+      <% Array(site.data.membership.plans).each do |plan| %>
+        <div class="flex flex-col justify-between border border-brown-900">
+          <div class="p-8 bg-brown-900 space-y-3">
+            <h4 class="text-lime-500 mb-2 text-center"><%= plan["name"] %></h4>
+            <p class="text-brown-150 text-center"><%= plan["access"] %></p>
+          </div>
+          <ul class="list-inside space-y-4 py-12 px-6" style="list-style-image: url(<%= relative_url '/images/icons/brown-disc.svg' %>)">
+            <% Array(plan["highlights"]).each do |highlight| %>
+              <li class="text-brown-150"> <%= highlight %></li>
+            <% end %>
+          </ul>
+          <a href="<%= relative_url "/membership##{plan["slug"]}" %>" class="btn btn-outline brown m-4">Learn More<span class="sr-only"> about <%= plan["name"] %></span></a>
         </div>
-        <ul class="list-inside space-y-4 py-12 px-6" style="list-style-image: url(<%= relative_url '/images/icons/brown-disc.svg' %>)">
-          <li class="text-brown-150"> Drop off & pick up of fired works</li>
-          <li class="text-brown-150"> Additional days can be added </li>
-        </ul>
-        <a href="#" class="btn btn-outline brown m-4">Learn More</a>
-      </div>
-
-      <div class="flex flex-col justify-between border border-brown-900">
-        <div class="p-8 bg-brown-900 space-y-3">
-          <h4 class="text-lime-500 mb-2 text-center">Open Studio</h4>
-          <p class="text-brown-150 text-center">24 / 7 access</p>
-        </div>
-        <ul class="list-inside space-y-4 py-12 px-6" style="list-style-image: url(<%= relative_url '/images/icons/brown-disc.svg' %>)">
-          <li class="text-brown-150"> Ample shelf space to store clay, tools & your work</li>
-          <li class="text-brown-150"> Access to clay to purchase & studio selected bulk glazes</li>
-          <li class="text-brown-150"> Discounts on workshops, classes, material and firing</li>
-        </ul>
-        <a href="#" class="btn btn-outline brown m-4">Learn More</a>
-      </div>
-
-      <div class="flex flex-col justify-between border border-brown-900">
-        <div class="p-8 bg-brown-900 space-y-3">
-          <h4 class="text-lime-500 mb-2 text-center">Private Studio</h4>
-          <p class="text-brown-150 text-center">24 / 7 access</p>
-        </div>
-        <ul class="list-inside space-y-4 py-12 px-6" style="list-style-image: url(<%= relative_url '/images/icons/brown-disc.svg' %>)">
-          <li class="text-brown-150"> Multi sized spaces ranging from 6 x 8 to 10 x 12</li>
-          <li class="text-brown-150"> Access to clay to purchase & studio selected bulk glazes</li>
-          <li class="text-brown-150"> Discounts on workshops, classes, material and firing</li>
-        </ul>
-        <a href="#" class="btn btn-outline brown m-4">Learn More</a>
-      </div>
+      <% end %>
     </div>
   </div>
 </section>
@@ -127,10 +95,10 @@ title: Home
 <section class="bg-brown-150 flex flex-col md:flex-row justify-between items-center gap-10">
   
     <div class="py-20 px-12">
-      <h2 class="text-brown-700 mb-4">The Kilns</h2>
-      <h4 class="text-brown-700 mb-6">Need to fire pots?</h4>
-      <p class="">We got you covered! Everything from low fire, to high fire gas!</p>
-      <a href="btn btn-outline brown">Learn More</a>
+      <h2 class="text-brown-700 mb-4"><%= kilns["heading"] %></h2>
+      <h4 class="text-brown-700 mb-6"><%= kilns["lead"] %></h4>
+      <p class=""><%= kilns["body"] %></p>
+      <a href="<%= relative_url '/kilns' %>" class="btn btn-outline brown mt-6"><%= kilns["button_text"].presence || "Learn More" %></a>
     </div>
     <div class="flex flex-col xl:flex-row items-center justify-center">
       <div class="p-8 bg-coal-0/50 backdrop-blur-sm w-full xl:w-fit text-center h-fit">
@@ -138,16 +106,16 @@ title: Home
           <img src="<%= relative_url '/images/icons/kiln1.svg' %>" class="w-10 h-10 object-fit" alt="" />
           <img src="<%= relative_url '/images/icons/kiln2.svg' %>" class="w-10 h-10 object-fit" alt="" />
         </div>
-        <p class="mb-4">Have your own electric kiln? </br> Need repair?</p>
-        <p class="text-2xl font-extrabold mb-2">Call James today!</p>
+        <p class="mb-4"><% kilns["repair_text"].to_s.lines.map(&:strip).reject(&:empty?).each_with_index do |line, i| %><% if i > 0 %><br><% end %><%= line %><% end %></p>
+        <p class="text-2xl font-extrabold mb-2"><%= kilns["repair_call"] %></p>
         <a href="tel:<%= site.data.site_metadata.phone %>"><%= site.data.site_metadata.phone %></a>
       </div>
-      <img src="<%= relative_url '/images/kiln.jpg' %>" class="ml-0 xl:-ml-8 w-full xl:max-w-sm h-auto object-cover" />
+      <img src="<%= relative_url(kilns["image"].presence || '/images/kiln.jpg') %>" alt="" class="ml-0 xl:-ml-8 w-full xl:max-w-sm h-auto object-cover" />
     </div>
 </section>
 
 <section class="py-20 px-12 bg-lime-300 border-b-10 border-lime-500">
-  <h2 class="text-lime-800 mb-4">CANT WAIT? CONTACT US TODAY!</h2>
-  <p class="mb-6">Subscribe to our email list to be the first to know about classes, workshops, firings & more!</p>
-  <a href="#" class="btn btn-primary">Learn More</a>
+  <h2 class="text-lime-800 mb-4"><%= cta["heading"] %></h2>
+  <p class="mb-6"><%= cta["body"] %></p>
+  <a href="<%= relative_url '/contact#newsletter' %>" class="btn btn-primary"><%= cta["button_text"].presence || "Join the email list" %></a>
 </section>

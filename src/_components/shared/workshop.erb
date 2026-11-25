@@ -15,6 +15,8 @@
     </div>
     <p class="text-center text-xl"><%= @cost %></p>
     <a href="<%= @link %>" target="_blank" class="btn btn-outline white mb-4">LEARN MORE & SIGN UP</a>
-    <a href="mailto:kelly@example.com" class="text-indigo-300 text-sm text-center block"><%= @message %></a>
+    <% if @email.present? && @message.present? %>
+      <a href="mailto:<%= @email %>?subject=<%= ERB::Util.url_encode("Let me know when #{@title} is scheduled again") %>" class="text-indigo-300 text-sm text-center block"><%= @message %></a>
+    <% end %>
   </div>
 </li>

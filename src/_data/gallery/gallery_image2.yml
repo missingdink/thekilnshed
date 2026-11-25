@@ -1,3 +1,7 @@
-image_src: https://picsum.photos/240/500
-title: The kiln shed
-message: Look at that thing, such a beaut ain't she? Want to touch it. Watch out it's pretty hot.
+image_src: /images/wood-kiln.jpg
+alt: "Close view of the brick wood kiln"
+title: "Brick by brick"
+message: "The wood kiln up close. It takes a crew and a lot of wood to fire, and the results are worth it."
+category: space
+sort: 2
+needs_review: true

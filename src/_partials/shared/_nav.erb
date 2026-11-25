@@ -1,13 +1,33 @@
-<nav class="bg-coal-1000/65 max-sm:bg-indigo-900 md:flex flex-col md:flex-row justify-between items-center w-full p-6 fixed top-0 z-10 hidden" aria-label="Main">
-  <a href="<%= relative_url '/' %>" class=""><img src="<%= relative_url '/images/theKilnShed.svg' %>" class="mb-4 md:mb-0" alt="The logo that reads The Kiln Shed with a handwritten feel"/></a>
+<% announcement = EventListings.upcoming(site.data.events).find { |event| event["announce"] && show_content?(event) } %>
+<header class="fixed top-0 z-10 w-full">
+  <% if announcement %>
+    <div data-controller="announcement" data-announcement-ends-value="<%= EventListings.end_date(announcement)&.iso8601 %>" data-announcement-key-value="<%= announcement["title"].to_s.parameterize %>" class="bg-lime-500 text-lime-950 px-6 py-2 flex items-center justify-center gap-3 text-center text-sm md:text-base" datatest-id="announcement">
+      <a href="<%= relative_url '/gallery#events' %>" class="hover:underline">
+        <% if needs_review?(announcement) %><span class="uppercase text-red-700 font-medium">Draft:</span><% end %>
+        <strong><%= announcement["title"] %></strong>
+        <span aria-hidden="true">&middot;</span> <%= EventListings.date_range(announcement) %>
+        <span class="underline ml-1">Details</span>
+      </a>
+      <button type="button" class="px-2 text-lg leading-none" aria-label="Dismiss announcement" data-action="announcement#dismiss">&times;</button>
+    </div>
+  <% end %>
+<nav data-controller="nav" data-action="keydown.esc@window->nav#close resize@window->nav#closeOnDesktop" class="bg-coal-1000/65 max-md:bg-indigo-900 flex flex-wrap md:flex-nowrap justify-between items-center w-full px-6 py-4 md:p-6" aria-label="Main">
+  <a href="<%= relative_url '/' %>" class=""><img src="<%= relative_url '/images/theKilnShed.svg' %>" class="" alt="The logo that reads The Kiln Shed with a handwritten feel"/></a>
 
-  <ul class="flex flex-col md:flex-row items-center gap-3 md:gap-6 text-lime-500">
-    <li class=""><a href="<%= relative_url '/classes' %>">Classes & Workshops</a></li>
-    <li class=""><a href="<%= relative_url '/membership' %>">Membership</a></li>
-    <li class=""><a href="<%= relative_url '/gallery' %>">Gallery</a></li>
-    <li class=""><a href="<%= relative_url '/kilns' %>">Kilns</a></li>
-    <li class=""><a href="<%= relative_url '/about' %>">About Us</a></li>
-    <li class=""><a href="tel:<%= site.data.site_metadata.phone %>">Call @ <%= site.data.site_metadata.phone %></a></li>
+  <button type="button" class="group md:hidden -mr-2 p-2 text-lime-500" aria-controls="main-menu" aria-expanded="false" aria-label="Open menu" data-nav-target="button" data-action="nav#toggle">
+    <span class="block h-0.5 w-7 bg-current transition-transform duration-200 group-aria-expanded:translate-y-2 group-aria-expanded:rotate-45"></span>
+    <span class="block h-0.5 w-7 bg-current mt-1.5 transition-opacity duration-200 group-aria-expanded:opacity-0"></span>
+    <span class="block h-0.5 w-7 bg-current mt-1.5 transition-transform duration-200 group-aria-expanded:-translate-y-2 group-aria-expanded:-rotate-45"></span>
+  </button>
+
+  <ul id="main-menu" data-nav-target="menu" data-action="click->nav#closeOnLink" class="hidden md:flex basis-full md:basis-auto flex-col md:flex-row items-center gap-1 md:gap-6 pt-6 pb-4 md:p-0 text-lime-500 max-md:text-xl max-md:max-h-[calc(100dvh-8rem)] max-md:overflow-y-auto">
+    <li class=""><a class="block py-2 md:py-0" href="<%= relative_url '/classes' %>">Classes & Workshops</a></li>
+    <li class=""><a class="block py-2 md:py-0" href="<%= relative_url '/membership' %>">Membership</a></li>
+    <li class=""><a class="block py-2 md:py-0" href="<%= relative_url '/gallery' %>">Gallery</a></li>
+    <li class=""><a class="block py-2 md:py-0" href="<%= relative_url '/kilns' %>">Kilns</a></li>
+    <li class=""><a class="block py-2 md:py-0" href="<%= relative_url '/about' %>">About Us</a></li>
+    <li class=""><a class="block py-2 md:py-0" href="tel:<%= site.data.site_metadata.phone %>">Call @ <%= site.data.site_metadata.phone %></a></li>
     <li class="mt-4 md:mt-0"><a href="<%= relative_url '/contact' %>" class="btn btn-primary">Contact</a></li>
   </ul>
 </nav>
+</header>

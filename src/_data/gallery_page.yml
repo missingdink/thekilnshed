@@ -1,0 +1,25 @@
+# Gallery page headings and intros. Photos are edited under "Gallery",
+# artists under "Studio Artists" and events under "Events".
+
+banner:
+  heading: Gallery
+
+intro: A look inside the shed. The space, the classes, and the people who make work here.
+
+sections:
+  studio:
+    heading: In the studio
+    intro: Wheels spinning, shelves filling up, and pots in every stage.
+  classes:
+    heading: Classes
+    intro: Students learning to center, throw, trim and glaze.
+  space:
+    heading: The space
+    intro: An old warehouse with plenty of room, and kilns of every kind.
+
+artists:
+  heading: Studio artists
+  intro: Members and private studio artists who make their work at The Kiln Shed. Follow along, and buy their work.
+
+events:
+  heading: Upcoming events
