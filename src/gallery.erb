@@ -9,11 +9,22 @@ title: Gallery
   </div>
 </section>
 <section class="p-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-  <% site.data.gallery.each_with_index do |(slug, image), i| %>
-    <%= render Shared::GalleryImage.new(
-      image_src:    image.image_src,
-      title: image.title,
-      message: image.message
-    ) %>
+  <% if site.data.instagram_posts.present? %>
+    <% site.data.instagram_posts.each do |post| %>
+      <%= render Shared::InstagramPost.new(
+        image_src: post.image_src,
+        permalink: post.permalink,
+        caption: post.caption,
+        posted_at: post.posted_at
+      ) %>
+    <% end %>
+  <% else %>
+    <% site.data.gallery.each_with_index do |(slug, image), i| %>
+      <%= render Shared::GalleryImage.new(
+        image_src:    image.image_src,
+        title: image.title,
+        message: image.message
+      ) %>
+    <% end %>
   <% end %>
 </section>
