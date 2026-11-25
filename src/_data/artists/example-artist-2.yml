@@ -1,0 +1,19 @@
+name: "Artist Name 2 (example)"
+needs_review: true
+sort: 2
+studio: "Open studio member"
+portrait: ""
+bio: "Example entry to show the layout. Replace it with a real artist, or delete it. One or two sentences about the artist and their work go here."
+instagram: "https://www.instagram.com/"
+website: ""
+shop: ""
+works:
+  - image: /images/gray-goblet.png
+    alt: "A gray goblet"
+    title: "Goblet"
+  - image: /images/indigo-pitcher.png
+    alt: "An indigo pitcher"
+    title: "Pitcher"
+  - image: /images/green-mug.png
+    alt: "A green mug"
+    title: "Mug"

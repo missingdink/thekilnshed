@@ -1,3 +1,7 @@
-image_src: https://picsum.photos/400/500
-title: The beginning of making this our humble home
-message: The goal of POTTERY 101 is to teach you how to create food-safe functional pottery using the wheel! The instructor will cover things like, centering, throwing, trimming, adding handles, decorating and glazing!
+image_src: /images/bg-kilnshed-lg.jpg
+alt: "The open warehouse studio under steel roof trusses"
+title: "The warehouse"
+message: "High ceilings, steel trusses and plenty of room to make a mess."
+category: space
+sort: 6
+needs_review: true

@@ -5,3 +5,27 @@ locale: en
 email: manager@thekilnshed.studio
 phone: (608) 419-2640
 address: 2420 Pennsylvania Ave – Madison, WI 53704
+# Where people buy gift cards (e.g. the studio's Square gift card page).
+# Leave empty to hide gift card links.
+gift_card_url: ""
+
+# Social profiles. Leave a link empty to hide its icon.
+social:
+  instagram: ""
+  facebook: ""
+  youtube: ""
+
+# Visiting details shared by the About and Contact pages.
+# needs_review: true hides the hours and visiting details on the live site.
+visiting:
+  needs_review: true
+  hours:
+    - days: Tuesday to Thursday
+      times: 5 to 9 PM
+    - days: Saturday
+      times: 10 AM to 2 PM
+  member_note: Open studio and private studio members have 24/7 access.
+  entrance: The studio is in the warehouse building. Use the side door with the Kiln Shed sign, not the loading dock.
+  parking: Free parking in the lot next to the building. Street parking is available on Pennsylvania Ave.
+  transit: Metro Transit buses stop within a few blocks. Use the Metro trip planner to find the best route.
+  accessibility: The main studio is on one level with step-free entry from the parking lot. Questions about access? Reach out and we'll do our best to make it work.

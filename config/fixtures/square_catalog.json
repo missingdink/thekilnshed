@@ -1,0 +1,700 @@
+{
+  "objects": [
+    {
+      "type": "CATEGORY",
+      "id": "CAT_COURSES",
+      "version": 1760000000000,
+      "is_deleted": false,
+      "present_at_all_locations": true,
+      "category_data": {
+        "name": "Multi-Week Courses",
+        "category_type": "REGULAR_CATEGORY",
+        "is_top_level": true
+      }
+    },
+    {
+      "type": "CATEGORY",
+      "id": "CAT_WORKSHOPS",
+      "version": 1760000000000,
+      "is_deleted": false,
+      "present_at_all_locations": true,
+      "category_data": {
+        "name": "Workshops",
+        "category_type": "REGULAR_CATEGORY",
+        "is_top_level": true
+      }
+    },
+    {
+      "type": "ITEM",
+      "id": "FIXTURE0185POTTERY101TUES",
+      "updated_at": "2026-10-01T15:00:00.000Z",
+      "version": 1760000000000,
+      "is_deleted": false,
+      "present_at_all_locations": true,
+      "item_data": {
+        "name": "POTTERY 101 - TUES 10/13-11/10 6:00-8:30PM",
+        "description": "This 5 week course is great for both new and returning potters. The goal of POTTERY 101 is to teach you how to create food-safe functional pottery using the wheel! We will cover things like, Centering, throwing, trimming, adding handles, decorating and glazing! Upon completion of the course you will have the skills needed to start your clay adventure!\nIncluded with the class:\nUNLIMITED CLAY (no production potters please)\nTOOLS (tools provided, will sell you a kit if you want your own)\nOPEN STUDIO (one per week! practice makes perfect)\nUP TO 10 pieces to take home! (extras are $5 each)\n*WARNINGS* Individuals with long/false nails might find it tough to throw on the potter's wheel. We recommend trimming your nails prior to the course!\n*WARNINGS* Clay is MESSY, bring a towel/apron & wear clothes you don't mind getting dirty!! (it does wash out don't worry!)\nAll students should be at least 18 years old.\nCancellation Policy: Full refund if canceled 14 days before class. 50% refund if cancellation is 7 days prior to first class. No Refund after this 7 day period.",
+        "description_html": "<p>This 5 week course is great for both new and returning potters. The goal of POTTERY 101 is to teach you how to create food-safe functional pottery using the wheel! We will cover things like, Centering, throwing, trimming, adding handles, decorating and glazing! Upon completion of the course you will have the skills needed to start your clay adventure!</p><p>Included with the class:</p><ul><li>UNLIMITED CLAY (no production potters please)</li><li>TOOLS (tools provided, will sell you a kit if you want your own)</li><li>OPEN STUDIO (one per week! practice makes perfect)</li><li>UP TO 10 pieces to take home! (extras are $5 each)</li></ul><p>*WARNINGS* Individuals with long/false nails might find it tough to throw on the potter's wheel. We recommend trimming your nails prior to the course!</p><p>*WARNINGS* Clay is MESSY, bring a towel/apron &amp; wear clothes you don't mind getting dirty!! (it does wash out don't worry!)</p><p>All students should be at least 18 years old.</p><p>Cancellation Policy: Full refund if canceled 14 days before class. 50% refund if cancellation is 7 days prior to first class. No Refund after this 7 day period.</p>",
+        "description_plain": "This 5 week course is great for both new and returning potters. The goal of POTTERY 101 is to teach you how to create food-safe functional pottery using the wheel! We will cover things like, Centering, throwing, trimming, adding handles, decorating and glazing! Upon completion of the course you will have the skills needed to start your clay adventure!\nIncluded with the class:\nUNLIMITED CLAY (no production potters please)\nTOOLS (tools provided, will sell you a kit if you want your own)\nOPEN STUDIO (one per week! practice makes perfect)\nUP TO 10 pieces to take home! (extras are $5 each)\n*WARNINGS* Individuals with long/false nails might find it tough to throw on the potter's wheel. We recommend trimming your nails prior to the course!\n*WARNINGS* Clay is MESSY, bring a towel/apron & wear clothes you don't mind getting dirty!! (it does wash out don't worry!)\nAll students should be at least 18 years old.\nCancellation Policy: Full refund if canceled 14 days before class. 50% refund if cancellation is 7 days prior to first class. No Refund after this 7 day period.",
+        "is_taxable": true,
+        "product_type": "EVENT",
+        "categories": [
+          {
+            "id": "CAT_COURSES",
+            "ordinal": 0
+          }
+        ],
+        "reporting_category": {
+          "id": "CAT_COURSES"
+        },
+        "ecom_uri": "https://thekilnshed.square.site/s/order?cs=true&cst=custom&item=185",
+        "ecom_visibility": "VISIBLE",
+        "variations": [
+          {
+            "type": "ITEM_VARIATION",
+            "id": "FIXTURE0185POTTERYVAR001",
+            "version": 1760000000000,
+            "is_deleted": false,
+            "present_at_all_locations": true,
+            "item_variation_data": {
+              "item_id": "FIXTURE0185POTTERY101TUES",
+              "name": "Regular",
+              "ordinal": 0,
+              "pricing_type": "FIXED_PRICING",
+              "price_money": {
+                "amount": 30000,
+                "currency": "USD"
+              },
+              "sellable": true,
+              "stockable": true
+            }
+          }
+        ]
+      },
+      "custom_attribute_values": {
+        "class_start_date": {
+          "name": "Class start date",
+          "string_value": "2026-10-13",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTDATE0000001",
+          "type": "STRING",
+          "key": "class_start_date"
+        },
+        "class_end_date": {
+          "name": "Class end date",
+          "string_value": "2026-11-10",
+          "custom_attribute_definition_id": "FIXTUREDEFENDDATE00000001",
+          "type": "STRING",
+          "key": "class_end_date"
+        },
+        "class_start_time": {
+          "name": "Class start time",
+          "string_value": "6:00 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTTIME000001",
+          "type": "STRING",
+          "key": "class_start_time"
+        },
+        "class_end_time": {
+          "name": "Class end time",
+          "string_value": "8:30 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFENDTIME00000001",
+          "type": "STRING",
+          "key": "class_end_time"
+        }
+      }
+    },
+    {
+      "type": "ITEM",
+      "id": "JRSX36FQYEBWBOKOIXQ5PWJD",
+      "updated_at": "2026-10-01T15:00:00.000Z",
+      "version": 1760000000000,
+      "is_deleted": false,
+      "present_at_all_locations": true,
+      "item_data": {
+        "name": "POTTERY 101 - THURS 10/22-11/19 6:00-8:30PM",
+        "description": "This 5 week course is great for both new and returning potters. The goal of POTTERY 101 is to teach you how to create food-safe functional pottery using the wheel! We will cover things like, Centering, throwing, trimming, adding handles, decorating and glazing! Upon completion of the course you will have the skills needed to start your clay adventure!\nIncluded with the class:\nUNLIMITED CLAY (no production potters please)\nTOOL KIT (basic set of tools for you to keep)\nOPEN STUDIO (one per week! practice makes perfect)\nUP TO 10 pieces to take home! (extras are $5 each)\n*WARNINGS* Individuals with long/false nails might find it tough to throw on the potter's wheel. We recommend trimming your nails prior to the course!\n*WARNINGS* Clay is MESSY, bring a towel/apron & wear clothes you don't mind getting dirty!! (it does wash out don't worry!)\nAll students should be at least 18 years old.\nCancellation Policy: Full refund if canceled 14 days before class. 50% refund if cancellation is 7 days prior to first class. No Refund after this 7 day period.",
+        "description_html": "<p>This 5 week course is great for both new and returning potters. The goal of POTTERY 101 is to teach you how to create food-safe functional pottery using the wheel! We will cover things like, Centering, throwing, trimming, adding handles, decorating and glazing! Upon completion of the course you will have the skills needed to start your clay adventure!</p><p>Included with the class:</p><ul><li>UNLIMITED CLAY (no production potters please)</li><li>TOOL KIT (basic set of tools for you to keep)</li><li>OPEN STUDIO (one per week! practice makes perfect)</li><li>UP TO 10 pieces to take home! (extras are $5 each)</li></ul><p>*WARNINGS* Individuals with long/false nails might find it tough to throw on the potter's wheel. We recommend trimming your nails prior to the course!</p><p>*WARNINGS* Clay is MESSY, bring a towel/apron &amp; wear clothes you don't mind getting dirty!! (it does wash out don't worry!)</p><p>All students should be at least 18 years old.</p><p>Cancellation Policy: Full refund if canceled 14 days before class. 50% refund if cancellation is 7 days prior to first class. No Refund after this 7 day period.</p>",
+        "description_plain": "This 5 week course is great for both new and returning potters. The goal of POTTERY 101 is to teach you how to create food-safe functional pottery using the wheel! We will cover things like, Centering, throwing, trimming, adding handles, decorating and glazing! Upon completion of the course you will have the skills needed to start your clay adventure!\nIncluded with the class:\nUNLIMITED CLAY (no production potters please)\nTOOL KIT (basic set of tools for you to keep)\nOPEN STUDIO (one per week! practice makes perfect)\nUP TO 10 pieces to take home! (extras are $5 each)\n*WARNINGS* Individuals with long/false nails might find it tough to throw on the potter's wheel. We recommend trimming your nails prior to the course!\n*WARNINGS* Clay is MESSY, bring a towel/apron & wear clothes you don't mind getting dirty!! (it does wash out don't worry!)\nAll students should be at least 18 years old.\nCancellation Policy: Full refund if canceled 14 days before class. 50% refund if cancellation is 7 days prior to first class. No Refund after this 7 day period.",
+        "is_taxable": true,
+        "product_type": "EVENT",
+        "categories": [
+          {
+            "id": "CAT_COURSES",
+            "ordinal": 0
+          }
+        ],
+        "reporting_category": {
+          "id": "CAT_COURSES"
+        },
+        "ecom_uri": "https://thekilnshed.square.site/s/order?cs=true&cst=custom&item=JRSX36FQYEBWBOKOIXQ5PWJD",
+        "ecom_visibility": "VISIBLE",
+        "variations": [
+          {
+            "type": "ITEM_VARIATION",
+            "id": "JRSX36FQYEBWBOKOIXVAR001",
+            "version": 1760000000000,
+            "is_deleted": false,
+            "present_at_all_locations": true,
+            "item_variation_data": {
+              "item_id": "JRSX36FQYEBWBOKOIXQ5PWJD",
+              "name": "Regular",
+              "ordinal": 0,
+              "pricing_type": "FIXED_PRICING",
+              "price_money": {
+                "amount": 30000,
+                "currency": "USD"
+              },
+              "sellable": true,
+              "stockable": true
+            }
+          }
+        ]
+      },
+      "custom_attribute_values": {
+        "class_start_date": {
+          "name": "Class start date",
+          "string_value": "2026-10-22",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTDATE0000001",
+          "type": "STRING",
+          "key": "class_start_date"
+        },
+        "class_end_date": {
+          "name": "Class end date",
+          "string_value": "2026-11-19",
+          "custom_attribute_definition_id": "FIXTUREDEFENDDATE00000001",
+          "type": "STRING",
+          "key": "class_end_date"
+        },
+        "class_start_time": {
+          "name": "Class start time",
+          "string_value": "6:00 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTTIME000001",
+          "type": "STRING",
+          "key": "class_start_time"
+        },
+        "class_end_time": {
+          "name": "Class end time",
+          "string_value": "8:30 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFENDTIME00000001",
+          "type": "STRING",
+          "key": "class_end_time"
+        }
+      }
+    },
+    {
+      "type": "ITEM",
+      "id": "PMYI2CNXVDZINNPVE4QU7S7H",
+      "updated_at": "2026-10-01T15:00:00.000Z",
+      "version": 1760000000000,
+      "is_deleted": false,
+      "present_at_all_locations": true,
+      "item_data": {
+        "name": "Handbuilding 101 NOV12-DEC10",
+        "description": "Have you been wanting to explore clay sculpture? Do you have a vision for a piece in your head that you just can't shake? Do you not know where to start? In this four-week course, we will cover the core techniques of handbuilding and learn how to examine creative problems through a new, 3D lens. We will build three pieces, each using either pinching, coiling, or slab-building, and you will leave with the ability to apply these new skills to your ceramic projects. Come with a few project ideas and we will learn how to make them come to life!\nIf you haven't tried ceramic handbuilding, this course is made for you. Advanced handbuilding courses and hands-on, one-on-one help with larger projects will be offered in future workshops.",
+        "description_html": "<p>Have you been wanting to explore clay sculpture? Do you have a vision for a piece in your head that you just can't shake? Do you not know where to start? In this four-week course, we will cover the core techniques of handbuilding and learn how to examine creative problems through a new, 3D lens. We will build three pieces, each using either pinching, coiling, or slab-building, and you will leave with the ability to apply these new skills to your ceramic projects. Come with a few project ideas and we will learn how to make them come to life!</p><p>If you haven't tried ceramic handbuilding, this course is made for you. Advanced handbuilding courses and hands-on, one-on-one help with larger projects will be offered in future workshops.</p>",
+        "description_plain": "Have you been wanting to explore clay sculpture? Do you have a vision for a piece in your head that you just can't shake? Do you not know where to start? In this four-week course, we will cover the core techniques of handbuilding and learn how to examine creative problems through a new, 3D lens. We will build three pieces, each using either pinching, coiling, or slab-building, and you will leave with the ability to apply these new skills to your ceramic projects. Come with a few project ideas and we will learn how to make them come to life!\nIf you haven't tried ceramic handbuilding, this course is made for you. Advanced handbuilding courses and hands-on, one-on-one help with larger projects will be offered in future workshops.",
+        "is_taxable": true,
+        "product_type": "EVENT",
+        "categories": [
+          {
+            "id": "CAT_WORKSHOPS",
+            "ordinal": 0
+          }
+        ],
+        "reporting_category": {
+          "id": "CAT_WORKSHOPS"
+        },
+        "ecom_uri": "https://thekilnshed.square.site/s/order?cs=true&cst=custom&item=PMYI2CNXVDZINNPVE4QU7S7H",
+        "ecom_visibility": "VISIBLE",
+        "variations": [
+          {
+            "type": "ITEM_VARIATION",
+            "id": "PMYI2CNXVDZINNPVE4VAR001",
+            "version": 1760000000000,
+            "is_deleted": false,
+            "present_at_all_locations": true,
+            "item_variation_data": {
+              "item_id": "PMYI2CNXVDZINNPVE4QU7S7H",
+              "name": "Regular",
+              "ordinal": 0,
+              "pricing_type": "FIXED_PRICING",
+              "price_money": {
+                "amount": 25000,
+                "currency": "USD"
+              },
+              "sellable": true,
+              "stockable": true
+            }
+          }
+        ]
+      },
+      "custom_attribute_values": {
+        "class_start_date": {
+          "name": "Class start date",
+          "string_value": "2026-11-12",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTDATE0000001",
+          "type": "STRING",
+          "key": "class_start_date"
+        },
+        "class_end_date": {
+          "name": "Class end date",
+          "string_value": "2026-12-10",
+          "custom_attribute_definition_id": "FIXTUREDEFENDDATE00000001",
+          "type": "STRING",
+          "key": "class_end_date"
+        },
+        "class_start_time": {
+          "name": "Class start time",
+          "string_value": "6:00 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTTIME000001",
+          "type": "STRING",
+          "key": "class_start_time"
+        },
+        "class_end_time": {
+          "name": "Class end time",
+          "string_value": "8:30 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFENDTIME00000001",
+          "type": "STRING",
+          "key": "class_end_time"
+        }
+      }
+    },
+    {
+      "type": "ITEM",
+      "id": "FIXTURE0192CENTERINGMORE",
+      "updated_at": "2026-10-01T15:00:00.000Z",
+      "version": 1760000000000,
+      "is_deleted": false,
+      "present_at_all_locations": true,
+      "item_data": {
+        "name": "Centering & Throwing MORE clay 10/21",
+        "description": "LETS GET CENTERED! Are you struggling to scale up your work? It could due to centering! Its challenging but SO important to making bigger pieces!\nThis class is intended to teach you how to center more and more clay! we start small(ish) and work our way up to bigger and bigger pieces. Using a variety of techniques and ideas our instructor will help you find a way! each of our bodies and the clays we use are different so we throw everything at the wall and see what sticks!\nJoin us for this Bi-monthly workshop and really get that under control!",
+        "description_html": "<p>LETS GET CENTERED! Are you struggling to scale up your work? It could due to centering! Its challenging but SO important to making bigger pieces!</p><p>This class is intended to teach you how to center more and more clay! we start small(ish) and work our way up to bigger and bigger pieces. Using a variety of techniques and ideas our instructor will help you find a way! each of our bodies and the clays we use are different so we throw everything at the wall and see what sticks!</p><p>Join us for this Bi-monthly workshop and really get that under control!</p>",
+        "description_plain": "LETS GET CENTERED! Are you struggling to scale up your work? It could due to centering! Its challenging but SO important to making bigger pieces!\nThis class is intended to teach you how to center more and more clay! we start small(ish) and work our way up to bigger and bigger pieces. Using a variety of techniques and ideas our instructor will help you find a way! each of our bodies and the clays we use are different so we throw everything at the wall and see what sticks!\nJoin us for this Bi-monthly workshop and really get that under control!",
+        "is_taxable": true,
+        "product_type": "EVENT",
+        "categories": [
+          {
+            "id": "CAT_WORKSHOPS",
+            "ordinal": 0
+          }
+        ],
+        "reporting_category": {
+          "id": "CAT_WORKSHOPS"
+        },
+        "ecom_uri": "https://thekilnshed.square.site/s/order?cs=true&cst=custom&item=192",
+        "ecom_visibility": "VISIBLE",
+        "variations": [
+          {
+            "type": "ITEM_VARIATION",
+            "id": "FIXTURE0192CENTERIVAR001",
+            "version": 1760000000000,
+            "is_deleted": false,
+            "present_at_all_locations": true,
+            "item_variation_data": {
+              "item_id": "FIXTURE0192CENTERINGMORE",
+              "name": "Regular",
+              "ordinal": 0,
+              "pricing_type": "FIXED_PRICING",
+              "price_money": {
+                "amount": 7500,
+                "currency": "USD"
+              },
+              "sellable": true,
+              "stockable": true
+            }
+          }
+        ]
+      },
+      "custom_attribute_values": {
+        "class_start_date": {
+          "name": "Class start date",
+          "string_value": "2026-10-21",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTDATE0000001",
+          "type": "STRING",
+          "key": "class_start_date"
+        },
+        "class_end_date": {
+          "name": "Class end date",
+          "string_value": "2026-10-21",
+          "custom_attribute_definition_id": "FIXTUREDEFENDDATE00000001",
+          "type": "STRING",
+          "key": "class_end_date"
+        },
+        "class_start_time": {
+          "name": "Class start time",
+          "string_value": "6:00 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTTIME000001",
+          "type": "STRING",
+          "key": "class_start_time"
+        },
+        "class_end_time": {
+          "name": "Class end time",
+          "string_value": "7:30 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFENDTIME00000001",
+          "type": "STRING",
+          "key": "class_end_time"
+        }
+      }
+    },
+    {
+      "type": "ITEM",
+      "id": "FIXTURE0196JARSLIDS00000",
+      "updated_at": "2026-10-01T15:00:00.000Z",
+      "version": 1760000000000,
+      "is_deleted": false,
+      "present_at_all_locations": true,
+      "item_data": {
+        "name": "Jars, Containers, Lids 10/28",
+        "description": "Put a Lid on it! Learn to throw big(ish) vessels and lids that fit/match! We will show you a variety of ways to help your lids fit well, stay in place and look great while doing it!\n*no beginners please!* students are expected to be able to center 2lbs or more! if you think your not ready try our class CENTERING MORE CLAY!",
+        "description_html": "<p>Put a Lid on it! Learn to throw big(ish) vessels and lids that fit/match! We will show you a variety of ways to help your lids fit well, stay in place and look great while doing it!</p><p>*no beginners please!* students are expected to be able to center 2lbs or more! if you think your not ready try our class CENTERING MORE CLAY!</p>",
+        "description_plain": "Put a Lid on it! Learn to throw big(ish) vessels and lids that fit/match! We will show you a variety of ways to help your lids fit well, stay in place and look great while doing it!\n*no beginners please!* students are expected to be able to center 2lbs or more! if you think your not ready try our class CENTERING MORE CLAY!",
+        "is_taxable": true,
+        "product_type": "EVENT",
+        "categories": [
+          {
+            "id": "CAT_WORKSHOPS",
+            "ordinal": 0
+          }
+        ],
+        "reporting_category": {
+          "id": "CAT_WORKSHOPS"
+        },
+        "ecom_uri": "https://thekilnshed.square.site/s/order?cs=true&cst=custom&item=196",
+        "ecom_visibility": "VISIBLE",
+        "variations": [
+          {
+            "type": "ITEM_VARIATION",
+            "id": "FIXTURE0196JARSLIDVAR001",
+            "version": 1760000000000,
+            "is_deleted": false,
+            "present_at_all_locations": true,
+            "item_variation_data": {
+              "item_id": "FIXTURE0196JARSLIDS00000",
+              "name": "Regular",
+              "ordinal": 0,
+              "pricing_type": "FIXED_PRICING",
+              "price_money": {
+                "amount": 7500,
+                "currency": "USD"
+              },
+              "sellable": true,
+              "stockable": true
+            }
+          }
+        ]
+      },
+      "custom_attribute_values": {
+        "class_start_date": {
+          "name": "Class start date",
+          "string_value": "2026-10-28",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTDATE0000001",
+          "type": "STRING",
+          "key": "class_start_date"
+        },
+        "class_end_date": {
+          "name": "Class end date",
+          "string_value": "2026-10-28",
+          "custom_attribute_definition_id": "FIXTUREDEFENDDATE00000001",
+          "type": "STRING",
+          "key": "class_end_date"
+        },
+        "class_start_time": {
+          "name": "Class start time",
+          "string_value": "6:00 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTTIME000001",
+          "type": "STRING",
+          "key": "class_start_time"
+        },
+        "class_end_time": {
+          "name": "Class end time",
+          "string_value": "7:30 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFENDTIME00000001",
+          "type": "STRING",
+          "key": "class_end_time"
+        }
+      }
+    },
+    {
+      "type": "ITEM",
+      "id": "PM2MH5V4BFBENO6ZFB7V3PLT",
+      "updated_at": "2026-10-01T15:00:00.000Z",
+      "version": 1760000000000,
+      "is_deleted": false,
+      "present_at_all_locations": true,
+      "item_data": {
+        "name": "Handle those handles 11/18",
+        "description": "Are you trying to get a handle on handles?\nCome on in and learn a variety of methods for making, attaching, and shaping handles with us!\nHow do we do a class on handle only?!\nBring some greenware if you have it! wet but firm is best!\nThrow come cylinders a day or two ahead of time and bring em with!\nStudents will be provided with some greenware cylinders to practice on if you dont have your own!\n*no beginners please!* students are expected to be able to center 2lbs or more! if you think your not ready try our class CENTERING MORE CLAY!\nALSO! we have all the clay, tools, materials needed, but feel free to bring your own if you want to practice with your own gear!",
+        "description_html": "<p>Are you trying to get a handle on handles?</p><p>Come on in and learn a variety of methods for making, attaching, and shaping handles with us!</p><p>How do we do a class on handle only?!</p><ul><li>Bring some greenware if you have it! wet but firm is best!</li><li>Throw come cylinders a day or two ahead of time and bring em with!</li><li>Students will be provided with some greenware cylinders to practice on if you dont have your own!</li></ul><p>*no beginners please!* students are expected to be able to center 2lbs or more! if you think your not ready try our class CENTERING MORE CLAY!</p><p>ALSO! we have all the clay, tools, materials needed, but feel free to bring your own if you want to practice with your own gear!</p>",
+        "description_plain": "Are you trying to get a handle on handles?\nCome on in and learn a variety of methods for making, attaching, and shaping handles with us!\nHow do we do a class on handle only?!\nBring some greenware if you have it! wet but firm is best!\nThrow come cylinders a day or two ahead of time and bring em with!\nStudents will be provided with some greenware cylinders to practice on if you dont have your own!\n*no beginners please!* students are expected to be able to center 2lbs or more! if you think your not ready try our class CENTERING MORE CLAY!\nALSO! we have all the clay, tools, materials needed, but feel free to bring your own if you want to practice with your own gear!",
+        "is_taxable": true,
+        "product_type": "EVENT",
+        "categories": [
+          {
+            "id": "CAT_WORKSHOPS",
+            "ordinal": 0
+          }
+        ],
+        "reporting_category": {
+          "id": "CAT_WORKSHOPS"
+        },
+        "ecom_uri": "https://thekilnshed.square.site/s/order?cs=true&cst=custom&item=169",
+        "ecom_visibility": "VISIBLE",
+        "variations": [
+          {
+            "type": "ITEM_VARIATION",
+            "id": "PM2MH5V4BFBENO6ZFBVAR001",
+            "version": 1760000000000,
+            "is_deleted": false,
+            "present_at_all_locations": true,
+            "item_variation_data": {
+              "item_id": "PM2MH5V4BFBENO6ZFB7V3PLT",
+              "name": "Regular",
+              "ordinal": 0,
+              "pricing_type": "FIXED_PRICING",
+              "price_money": {
+                "amount": 7500,
+                "currency": "USD"
+              },
+              "sellable": true,
+              "stockable": true
+            }
+          }
+        ]
+      },
+      "custom_attribute_values": {
+        "class_start_date": {
+          "name": "Class start date",
+          "string_value": "2026-11-18",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTDATE0000001",
+          "type": "STRING",
+          "key": "class_start_date"
+        },
+        "class_end_date": {
+          "name": "Class end date",
+          "string_value": "2026-11-18",
+          "custom_attribute_definition_id": "FIXTUREDEFENDDATE00000001",
+          "type": "STRING",
+          "key": "class_end_date"
+        },
+        "class_start_time": {
+          "name": "Class start time",
+          "string_value": "6:00 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTTIME000001",
+          "type": "STRING",
+          "key": "class_start_time"
+        },
+        "class_end_time": {
+          "name": "Class end time",
+          "string_value": "7:30 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFENDTIME00000001",
+          "type": "STRING",
+          "key": "class_end_time"
+        }
+      }
+    },
+    {
+      "type": "ITEM",
+      "id": "FIXTURE0194BOWLSBIGSMALL",
+      "updated_at": "2026-10-01T15:00:00.000Z",
+      "version": 1760000000000,
+      "is_deleted": false,
+      "present_at_all_locations": true,
+      "item_data": {
+        "name": "BOWLS Big & Small 11/18",
+        "description": "BOWLS of all sizes! Start small and scale it up! Learn to throw and shape and wide variety of bowls! stacking, nesting, uniform size and shape! Bring samples or ideas of what shapes, sizes and functions. Come hungry! Leave ready for more!\n*no beginners please!* students are expected to be able to center 2lbs or more! Not ready? First Try our centering class CENTERING MORE CLAY!",
+        "description_html": "<p>BOWLS of all sizes! Start small and scale it up! Learn to throw and shape and wide variety of bowls! stacking, nesting, uniform size and shape! Bring samples or ideas of what shapes, sizes and functions. Come hungry! Leave ready for more!</p><p>*no beginners please!* students are expected to be able to center 2lbs or more! Not ready? First Try our centering class CENTERING MORE CLAY!</p>",
+        "description_plain": "BOWLS of all sizes! Start small and scale it up! Learn to throw and shape and wide variety of bowls! stacking, nesting, uniform size and shape! Bring samples or ideas of what shapes, sizes and functions. Come hungry! Leave ready for more!\n*no beginners please!* students are expected to be able to center 2lbs or more! Not ready? First Try our centering class CENTERING MORE CLAY!",
+        "is_taxable": true,
+        "product_type": "EVENT",
+        "categories": [
+          {
+            "id": "CAT_WORKSHOPS",
+            "ordinal": 0
+          }
+        ],
+        "reporting_category": {
+          "id": "CAT_WORKSHOPS"
+        },
+        "ecom_uri": "https://thekilnshed.square.site/s/order?cs=true&cst=custom&item=194",
+        "ecom_visibility": "VISIBLE",
+        "variations": [
+          {
+            "type": "ITEM_VARIATION",
+            "id": "FIXTURE0194BOWLSBIVAR001",
+            "version": 1760000000000,
+            "is_deleted": false,
+            "present_at_all_locations": true,
+            "item_variation_data": {
+              "item_id": "FIXTURE0194BOWLSBIGSMALL",
+              "name": "Regular",
+              "ordinal": 0,
+              "pricing_type": "FIXED_PRICING",
+              "price_money": {
+                "amount": 7500,
+                "currency": "USD"
+              },
+              "sellable": true,
+              "stockable": true
+            }
+          }
+        ]
+      },
+      "custom_attribute_values": {
+        "class_start_date": {
+          "name": "Class start date",
+          "string_value": "2026-11-18",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTDATE0000001",
+          "type": "STRING",
+          "key": "class_start_date"
+        },
+        "class_end_date": {
+          "name": "Class end date",
+          "string_value": "2026-11-18",
+          "custom_attribute_definition_id": "FIXTUREDEFENDDATE00000001",
+          "type": "STRING",
+          "key": "class_end_date"
+        },
+        "class_start_time": {
+          "name": "Class start time",
+          "string_value": "6:00 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTTIME000001",
+          "type": "STRING",
+          "key": "class_start_time"
+        },
+        "class_end_time": {
+          "name": "Class end time",
+          "string_value": "7:30 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFENDTIME00000001",
+          "type": "STRING",
+          "key": "class_end_time"
+        }
+      }
+    },
+    {
+      "type": "ITEM",
+      "id": "FIXTURE0195CUPSCUPSCUPS0",
+      "updated_at": "2026-10-01T15:00:00.000Z",
+      "version": 1760000000000,
+      "is_deleted": false,
+      "present_at_all_locations": true,
+      "item_data": {
+        "name": "CUPS CUPS CUPS and CUPS 11/4",
+        "description": "Fixture placeholder: this workshop is hidden from Square Online and should not render.",
+        "description_html": "<p>Fixture placeholder: this workshop is hidden from Square Online and should not render.</p>",
+        "description_plain": "Fixture placeholder: this workshop is hidden from Square Online and should not render.",
+        "is_taxable": true,
+        "product_type": "EVENT",
+        "categories": [
+          {
+            "id": "CAT_WORKSHOPS",
+            "ordinal": 0
+          }
+        ],
+        "reporting_category": {
+          "id": "CAT_WORKSHOPS"
+        },
+        "ecom_uri": "https://thekilnshed.square.site/s/order?cs=true&cst=custom&item=195",
+        "ecom_visibility": "HIDDEN",
+        "variations": [
+          {
+            "type": "ITEM_VARIATION",
+            "id": "FIXTURE0195CUPSCUPVAR001",
+            "version": 1760000000000,
+            "is_deleted": false,
+            "present_at_all_locations": true,
+            "item_variation_data": {
+              "item_id": "FIXTURE0195CUPSCUPSCUPS0",
+              "name": "Regular",
+              "ordinal": 0,
+              "pricing_type": "FIXED_PRICING",
+              "price_money": {
+                "amount": 7500,
+                "currency": "USD"
+              },
+              "sellable": true,
+              "stockable": true
+            }
+          }
+        ]
+      },
+      "custom_attribute_values": {
+        "class_start_date": {
+          "name": "Class start date",
+          "string_value": "2026-11-04",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTDATE0000001",
+          "type": "STRING",
+          "key": "class_start_date"
+        },
+        "class_end_date": {
+          "name": "Class end date",
+          "string_value": "2026-11-04",
+          "custom_attribute_definition_id": "FIXTUREDEFENDDATE00000001",
+          "type": "STRING",
+          "key": "class_end_date"
+        },
+        "class_start_time": {
+          "name": "Class start time",
+          "string_value": "6:00 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFSTARTTIME000001",
+          "type": "STRING",
+          "key": "class_start_time"
+        },
+        "class_end_time": {
+          "name": "Class end time",
+          "string_value": "7:30 PM",
+          "custom_attribute_definition_id": "FIXTUREDEFENDTIME00000001",
+          "type": "STRING",
+          "key": "class_end_time"
+        }
+      }
+    },
+    {
+      "type": "ITEM",
+      "id": "FIXTURE0193PLATESPLATTER",
+      "updated_at": "2026-10-01T15:00:00.000Z",
+      "version": 1760000000000,
+      "is_deleted": false,
+      "present_at_all_locations": true,
+      "item_data": {
+        "name": "Plates and Platters!",
+        "description": "Fixture placeholder: this workshop has no schedule attributes and is hidden from Square Online.",
+        "description_html": "<p>Fixture placeholder: this workshop has no schedule attributes and is hidden from Square Online.</p>",
+        "description_plain": "Fixture placeholder: this workshop has no schedule attributes and is hidden from Square Online.",
+        "is_taxable": true,
+        "product_type": "EVENT",
+        "categories": [
+          {
+            "id": "CAT_WORKSHOPS",
+            "ordinal": 0
+          }
+        ],
+        "reporting_category": {
+          "id": "CAT_WORKSHOPS"
+        },
+        "ecom_uri": "https://thekilnshed.square.site/s/order?cs=true&cst=custom&item=193",
+        "ecom_visibility": "HIDDEN",
+        "variations": [
+          {
+            "type": "ITEM_VARIATION",
+            "id": "FIXTURE0193PLATESPVAR001",
+            "version": 1760000000000,
+            "is_deleted": false,
+            "present_at_all_locations": true,
+            "item_variation_data": {
+              "item_id": "FIXTURE0193PLATESPLATTER",
+              "name": "Regular",
+              "ordinal": 0,
+              "pricing_type": "FIXED_PRICING",
+              "price_money": {
+                "amount": 6000,
+                "currency": "USD"
+              },
+              "sellable": true,
+              "stockable": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

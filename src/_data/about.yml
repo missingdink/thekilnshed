@@ -1,0 +1,72 @@
+# About page copy. Edit in the CMS under "About Page".
+# Sections with needs_review: true are placeholder drafts. They show a
+# Draft label in development and are hidden on the live site.
+
+banner:
+  heading: Behind the Kiln
+
+intro:
+  needs_review: false
+  heading: Who runs this place
+  lead: The Kiln Shed is run by working potters, for anyone who wants to get their hands dirty.
+  body: |-
+    Brendan Kelley and James Griffith own the place, and Tab Link keeps the kilns running. Between the three of them you'll find wood-fired pots, someone who can fix your electric kiln, and more than a decade of salt, soda and wood firing experience.
+
+    We built this place for people who want to make things, not just admire them. Beginners still figuring out centering. Members who've been throwing for years. Folks who just need kiln space and someone to ask. Everybody shares the same tables, the same wheels and the same shelves.
+
+    Take a class, grab a membership, or stop by and see what's firing.
+
+story:
+  needs_review: true
+  heading: How it started
+  image: /images/kilnshed-empty.png
+  image_alt: The Kiln Shed warehouse before it was a studio
+  body: |-
+    The Kiln Shed started the way a lot of good things do: a few potters, not enough kiln space, and a warehouse on the north side with more potential than heat.
+
+    Brendan and James spent a winter hauling out junk, running power to every corner, and building shelves out of whatever was lying around. The first kiln went in before the bathroom did.
+
+    Word got around. Friends brought friends, the friends wanted lessons, and the lessons turned into classes. Today the shed is home to members, students, private studio renters and a steady stream of pots in every stage of drying.
+
+    It still isn't fancy. That was never the point.
+
+house_rules:
+  needs_review: true
+  heading: How we run things
+  items:
+    - title: No gatekeeping
+      text: Beginners and lifers share the same wheels. Ask questions. Nobody here is going to make you feel dumb for it.
+    - title: Clean up your mess
+      text: Shared space only works when everyone wipes down their wheel, reclaims their slop and leaves the glaze area better than they found it.
+    - title: Make a lot, break some
+      text: The kilns are here to be used, not saved for the perfect pot. Experiments and failures are part of the process.
+    - title: Leave room for others
+      text: Shelf space, kiln space and wheel time are shared. Take what you need and leave some for the next person.
+
+space:
+  needs_review: true
+  heading: The space
+  body: |-
+    The shed lives in an old warehouse on Pennsylvania Ave. It's big, a little drafty, and packed with everything you need to go from a bag of clay to a finished piece.
+  facts:
+    - value: "12"
+      label: Pottery wheels
+    - value: "3"
+      label: Electric kilns for rent
+    - value: "24/7"
+      label: Member access
+    - value: "4"
+      label: Private studio sizes
+  photos:
+    - image: /images/studio-space.jpg
+      alt: A worktable under the studio windows
+    - image: /images/electric-kiln.jpg
+      alt: An electric kiln at the Kiln Shed
+    - image: /images/indigo-wheels.jpg
+      alt: Pottery wheels and tools in use, seen from above
+
+visit:
+  needs_review: true
+  heading: Come see it
+  body: |-
+    Stop by during staffed hours to look around, ask about memberships, or watch a kiln get unloaded. Members have their own 24/7 access.

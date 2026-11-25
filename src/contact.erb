@@ -2,24 +2,219 @@
 layout: default
 title: Contact Us
 ---
+<%
+  contact = site.data.contact
+  meta = site.data.site_metadata
+  banner = contact.banner || {}
+  intro, form, newsletter = contact.intro, contact.form, contact.newsletter
+  shortcuts, visit = contact.shortcuts, contact.visit
+  visiting = meta.visiting
+  social = (meta.social || {}).to_h.select { |_, url| url.present? }
+  social_names = { "instagram" => "Instagram", "facebook" => "Facebook", "youtube" => "YouTube" }
+  link_to = ->(url) { url.to_s.start_with?("/") ? relative_url(url) : url }
+  field = "block w-full rounded-sm border-brown-300 bg-coal-0 text-coal-1000 focus:border-indigo-500 focus:ring-indigo-500"
+  label = "block mb-2 font-medium text-indigo-800"
+  status = "mt-4 p-4 rounded-sm data-[kind=success]:bg-lime-100 data-[kind=success]:text-lime-900 data-[kind=error]:bg-red-100 data-[kind=error]:text-red-700"
+  # Without JavaScript the form posts to the endpoint, or falls back to the visitor's mail app.
+  fallback_action = ->(endpoint) { endpoint.presence || "mailto:#{meta.email}" }
+%>
 
-<section class="py-20 px-12 bg-indigo-900 hero bg-fixed" style="background-image: url(<%= relative_url '/images/hero-kilnshelves.jpg' %>)">
+<section class="py-20 px-12 bg-indigo-900 hero bg-fixed" style="background-image: url(<%= relative_url('/images/hero-kilnshelves.jpg') %>)">
   <div class="space-y-2 mb-10">
-    <h2 class="text-lime-500">Contact n' shit</h2>
+    <h2 class="text-lime-500"><%= banner["heading"].presence || "Contact n' shit" %></h2>
   </div>
 </section>
 
-<section class="py-20 px-12">
-  <h3 class="">Information</h3>
-  <a href="tel:<%= site.data.site_metadata.phone %>" class="block"><%= site.data.site_metadata.phone %></a>
-  <a href="mailto:<%= site.data.site_metadata.email %>" class="block"><%= site.data.site_metadata.email %></a>
-  <p><%= site.data.site_metadata.address %></p>
+<section class="py-20 px-8 md:px-12">
+  <div class="container mx-auto flex flex-col lg:flex-row gap-12 lg:gap-20">
+
+    <%# Contact details %>
+    <div class="lg:w-2/5 text-indigo-600">
+      <h2 class="mb-10"><%= intro.heading %></h2>
+      <div class="space-y-4 mb-10 text-coal-1000">
+        <% paragraphs(intro.body).each do |paragraph| %>
+          <p><%= paragraph %></p>
+        <% end %>
+      </div>
+      <dl class="space-y-6">
+        <div>
+          <dt class="uppercase tracking-wider text-indigo-800 mb-1">Phone</dt>
+          <dd><a href="tel:<%= meta.phone %>" class="text-2xl font-medium"><%= meta.phone %></a></dd>
+        </div>
+        <div>
+          <dt class="uppercase tracking-wider text-indigo-800 mb-1">Email</dt>
+          <dd><a href="mailto:<%= meta.email %>" class="text-xl font-medium break-all"><%= meta.email %></a></dd>
+        </div>
+        <div>
+          <dt class="uppercase tracking-wider text-indigo-800 mb-1">Studio</dt>
+          <dd class="text-xl"><%= meta.address %></dd>
+        </div>
+        <% if social.any? %>
+          <div>
+            <dt class="uppercase tracking-wider text-indigo-800 mb-1">Follow along</dt>
+            <dd class="flex flex-wrap gap-x-6 gap-y-2 text-xl font-medium">
+              <% social.each do |network, url| %>
+                <a href="<%= url %>" target="_blank" rel="noopener"><%= social_names.fetch(network.to_s, network.to_s.titleize) %></a>
+              <% end %>
+            </dd>
+          </div>
+        <% end %>
+      </dl>
+      <% if intro.response_time.present? %>
+        <p class="mt-10 text-brown-700"><%= intro.response_time %></p>
+      <% end %>
+      <% if shortcuts && Array(shortcuts.items).any? %>
+        <nav class="mt-12 pt-8 border-t border-brown-150" aria-labelledby="contact-shortcuts">
+          <h6 id="contact-shortcuts" class="text-indigo-800 mb-4"><%= shortcuts.heading %></h6>
+          <ul class="space-y-3">
+            <% shortcuts.items.each do |item| %>
+              <li><a href="<%= link_to.(item.url) %>" class="btn btn-outline icon-right text-indigo-600 border-indigo-600 !inline-flex" style="--icon: url('<%= relative_url '/images/icons/arrow-up-right.svg' %>')"><%= item.text %></a></li>
+            <% end %>
+            <% if meta.gift_card_url.present? %>
+              <li><a href="<%= meta.gift_card_url %>" target="_blank" rel="noopener" class="btn btn-outline icon-right text-indigo-600 border-indigo-600 !inline-flex" style="--icon: url('<%= relative_url '/images/icons/arrow-up-right.svg' %>')">Buy a gift card</a></li>
+            <% end %>
+          </ul>
+        </nav>
+      <% end %>
+    </div>
+
+    <%# Inquiry form %>
+    <div class="lg:w-3/5 bg-coal-0 border border-brown-150 p-8 md:p-10 rounded-md">
+      <h4 class="text-indigo-600 mb-8"><%= form.heading %></h4>
+      <form
+        action="<%= fallback_action.(form.endpoint) %>"
+        method="post"
+        <% if form.endpoint.blank? %>enctype="text/plain"<% end %>
+        class="space-y-6"
+        datatest-id="contact-form"
+        data-controller="contact-form"
+        data-action="submit->contact-form#submit"
+        data-contact-form-endpoint-value="<%= form.endpoint %>"
+        data-contact-form-email-value="<%= meta.email %>"
+        data-contact-form-subject-value="{topic} from {name}"
+        data-contact-form-success-value="<%= form.success_message %>">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6">
+          <div>
+            <label for="contact-name" class="<%= label %>">Name <span class="text-red-700" aria-hidden="true">*</span></label>
+            <input id="contact-name" name="name" type="text" autocomplete="name" required class="<%= field %>" />
+          </div>
+          <div>
+            <label for="contact-email" class="<%= label %>">Email <span class="text-red-700" aria-hidden="true">*</span></label>
+            <input id="contact-email" name="email" type="email" autocomplete="email" required class="<%= field %>" />
+          </div>
+          <div>
+            <label for="contact-phone" class="<%= label %>">Phone <span class="font-normal text-brown-700">(optional)</span></label>
+            <input id="contact-phone" name="phone" type="tel" autocomplete="tel" class="<%= field %>" />
+          </div>
+          <div>
+            <label for="contact-topic" class="<%= label %>">What's this about?</label>
+            <select id="contact-topic" name="topic" class="<%= field %>">
+              <% Array(form.topics).each do |topic| %>
+                <option value="<%= topic.slug %>"><%= topic.label %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="contact-message" class="<%= label %>">Message <span class="text-red-700" aria-hidden="true">*</span></label>
+          <textarea id="contact-message" name="message" rows="6" required class="<%= field %>"></textarea>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <input id="contact-newsletter" name="newsletter" type="checkbox" value="yes" class="rounded-sm border-brown-300 text-indigo-600 focus:ring-indigo-500" />
+          <label for="contact-newsletter">Add me to the studio email list too</label>
+        </div>
+
+        <%# Spam trap: hidden from people, filled in by bots %>
+        <div class="hidden" aria-hidden="true">
+          <label for="contact-company-website">Leave this empty</label>
+          <input id="contact-company-website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" data-contact-form-target="submit"><%= form.submit_label %></button>
+        <p class="<%= status %>" role="status" aria-live="polite" hidden data-contact-form-target="status"></p>
+      </form>
+    </div>
+  </div>
 </section>
+
+<%# Visiting details, shared with the About page via Site Settings %>
+<% if visiting && show_content?(visiting) %>
+<section class="angle-top-right -mt-[50px] bg-indigo-900 text-coal-0 pt-32 pb-24 px-8 md:px-12">
+  <div class="container mx-auto">
+    <%= render Shared::ReviewFlag.new(item: visiting) %>
+    <h2 class="text-lime-500 mb-12"><%= visit&.heading.presence || "Plan your visit" %></h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+      <% if Array(visiting.hours).any? %>
+        <div>
+          <h6 class="text-lime-500 mb-4">Staffed hours</h6>
+          <dl class="space-y-2">
+            <% visiting.hours.each do |row| %>
+              <div class="flex justify-between gap-6 border-b border-indigo-700 pb-2">
+                <dt><%= row.days %></dt>
+                <dd class="text-lime-200"><%= row.times %></dd>
+              </div>
+            <% end %>
+          </dl>
+          <% if visiting.member_note.present? %><p class="mt-4 text-coal-100"><%= visiting.member_note %></p><% end %>
+        </div>
+      <% end %>
+      <div class="space-y-6">
+        <h6 class="text-lime-500">Getting here</h6>
+        <% { "Entrance" => visiting.entrance, "Parking" => visiting.parking, "Bus" => visiting.transit }.each do |title, text| %>
+          <% next if text.blank? %>
+          <div>
+            <p class="uppercase tracking-wider text-sm text-lime-200 mb-1"><%= title %></p>
+            <p class="text-coal-100"><%= text %></p>
+          </div>
+        <% end %>
+      </div>
+      <% if visiting.accessibility.present? %>
+        <div>
+          <h6 class="text-lime-500 mb-4">Accessibility</h6>
+          <p class="text-coal-100"><%= visiting.accessibility %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
 
 <section class="bg-coal-1100 px-12 py-20 grayscale invert">
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3265.7439388813427!2d-89.36150952365448!3d43.10455528774222!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88065539e405a5f3%3A0xf3efbcbfb9dc182b!2sThe%20Kiln%20Shed!5e1!3m2!1sen!2sus!4v1787718590661!5m2!1sen!2sus" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" class="container mx-auto"></iframe>
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3265.7439388813427!2d-89.36150952365448!3d43.10455528774222!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88065539e405a5f3%3A0xf3efbcbfb9dc182b!2sThe%20Kiln%20Shed!5e1!3m2!1sen!2sus!4v1787718590661!5m2!1sen!2sus" title="Map showing The Kiln Shed" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" class="container mx-auto"></iframe>
 </section>
 
-<section class="">
-newsletter
+<%# Newsletter signup %>
+<section id="newsletter" class="bg-brown-100 border-b-10 border-brown-400 px-8 md:px-12 py-20">
+  <div class="container mx-auto flex flex-col lg:flex-row gap-10 lg:items-end justify-between text-brown-700">
+    <div class="lg:w-1/2">
+      <h2 class="mb-4"><%= newsletter.heading %></h2>
+      <h6><%= newsletter.body %></h6>
+    </div>
+    <form
+      action="<%= fallback_action.(newsletter.endpoint) %>"
+      method="post"
+      <% if newsletter.endpoint.blank? %>enctype="text/plain"<% end %>
+      class="lg:w-1/2 w-full"
+      datatest-id="newsletter-form"
+      data-controller="contact-form"
+      data-action="submit->contact-form#submit"
+      data-contact-form-endpoint-value="<%= newsletter.endpoint %>"
+      data-contact-form-email-value="<%= meta.email %>"
+      data-contact-form-subject-value="Add me to the email list"
+      data-contact-form-success-value="<%= newsletter.success_message %>">
+      <label for="newsletter-email" class="block mb-2 font-medium">Email address</label>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input id="newsletter-email" name="email" type="email" autocomplete="email" required class="<%= field %> sm:flex-1" />
+        <button type="submit" class="btn btn-primary" data-contact-form-target="submit"><%= newsletter.button_label %></button>
+      </div>
+      <div class="hidden" aria-hidden="true">
+        <label for="newsletter-company-website">Leave this empty</label>
+        <input id="newsletter-company-website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <p class="<%= status %>" role="status" aria-live="polite" hidden data-contact-form-target="status"></p>
+    </form>
+  </div>
 </section>

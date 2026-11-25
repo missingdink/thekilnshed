@@ -1,0 +1,41 @@
+# Kilns page content. Edit in the CMS under "Kilns Page".
+# Entries with needs_review: true are placeholder drafts, hidden on the
+# live site until the owners approve them.
+
+banner:
+  heading: Kilns
+
+intro:
+  needs_review: true
+  heading: Types of kilns
+  body: Most work at the shed goes through our electric kilns, and we fire soda and wood when there's enough work to fill them. Members and outside potters can rent space in all of them.
+
+kilns:
+  - name: Electric
+    needs_review: true
+    firing: Electric Firing
+    temperature: Up to cone 6
+    image: /images/electric-kiln.jpg
+    image_alt: One of the studio's electric kilns
+    description: Our everyday workhorses. Three sizes, from 3 to 10 cubic feet, firing bisque and glaze loads to cone 6. Rent a whole kiln or a shelf.
+  - name: Soda
+    needs_review: true
+    firing: Soda Reduction
+    temperature: Cone 10
+    image: /images/soda-kiln.jpg
+    image_alt: The soda kiln
+    description: A gas kiln fired in reduction with soda added near the end, leaving flashing and glossy orange-peel surfaces you can't get any other way. Fired a few times a year.
+  - name: Wood
+    needs_review: true
+    firing: Wood Firing
+    temperature: Cone 10 to 12
+    image: /images/wood-kiln.jpg
+    image_alt: The wood kiln
+    description: Days of stoking, ash and flame doing the glazing. A wood firing is a group effort, so watch the calendar and join the crew.
+
+calendar:
+  heading: Kiln Firing Calendar
+  body: All scheduling is done through email or our rental request form
+
+faq:
+  heading: Kiln & Firing FAQs

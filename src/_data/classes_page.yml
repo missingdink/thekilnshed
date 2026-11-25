@@ -1,0 +1,72 @@
+# Classes page content. Edit in the CMS under "Classes Page".
+# Class dates, prices and sign-up links come from Square; photos and
+# blurbs for individual workshops are under "Class Extras".
+
+banner:
+  heading: Classes! Workshops!
+  tagline: You’re allowed to take it seriously here—without having to take yourself too seriously.
+
+intro:
+  heading: Here at The Kiln Shed we offer classes & workshops at a variety of skill levels.
+  body: |-
+    Some are just starting out, learning how clay moves and what it can do. Others have been at it for years and are dialing in their process. Most fall somewhere in between.
+
+    Everyone's working on something different, but it all shares the same thing:
+  highlight: it's made by hand, and it means something to the person making it.
+
+pottery_101:
+  heading: Class:Pottery 101
+  lead: This 5 week course is a great class for both new and returning potters.
+  body: |-
+    The goal of POTTERY 101 is to teach you how to create food-safe functional pottery using the wheel!
+
+    We will cover things like, Centering, throwing, trimming, adding handles, decorating and glazing!
+
+    Upon completion of the course you will have the skills needed to start/continue your clay adventure!
+  disciplines:
+    - label: Pottery
+      icon: pottery
+    - label: Sculpture
+      icon: sculpture
+    - label: GLAZE-MAKING
+      icon: glaze
+    - label: Mold Making
+      icon: mold
+  schedule_heading: "Pottery 101: Info & Upcoming Schedules"
+  empty_schedule: No Pottery 101 sessions are scheduled right now. Check back soon!
+  cancellation_policy: Full refund if canceled 14 days before class. 50% refund if cancellation is 7 days prior to first class. No Refund after this 7 day period.
+  includes_heading: "Included with the class:"
+  includes:
+    - title: UNLIMITED CLAY
+      note: (no production potters, please)
+    - title: TOOLS
+      note: (tools provided, will sell you a kit if you want your own)
+    - title: OPEN STUDIO
+      note: (one per week! practice makes perfect)
+    - title: UP TO 10 pieces to take home!
+      note: (extras are $5 each)
+  warnings:
+    - icon: messy
+      text: Clay is MESSY, bring a towel/apron & wear clothes you don't mind getting dirty!!
+      note: (it does wash out, don't worry!)
+    - icon: finger-nails
+      text: Individuals with long/false nails might find it tough to throw on the potter's wheel.
+      note: We recommend trimming your nails prior to the course!
+
+workshops:
+  heading: Workshops
+  lead: Are you hungry for more? Ready to master the teapot? Trying to make that big ol' planter? These one day workshops are EXACTLY what you need!
+  body: |-
+    These quick and dirty classes are designed for intermediate and advanced skill level. We want to help you sharpen specific skills! Make make make... then chop and slice it all up at the end. Learn from mistakes AND successes in a laid back yet challenging class format
+
+    Join instructors Brendan Kelley, James Griffiths, Tab Link, and MORE for workshops that will help you up your game with focused, detailed demos, challenging projects, & LOTS of tricks to go practice.
+
+    Each student can use as much clay as needed! We don’t plan on keeping anything. BUT we can fire stuff for a fee. (take it with if you have kiln access)
+
+    General Prerequisite: Pottery 101
+  includes_heading: "Included with the class:"
+  includes:
+    - 1.5 hours of focused practice & attentive instruction
+    - Pick and choose only what YOU want to learn!
+    - We provide EVERYTHING (bring your own tools & clay if you want!)
+  empty: New workshops are on the way. Join the email list to hear when they're scheduled.

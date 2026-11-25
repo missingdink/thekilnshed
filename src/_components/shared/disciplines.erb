@@ -1,0 +1,17 @@
+<% if @layout == :column %>
+  <ul class="flex flex-col space-y-10 w-full md:w-1/3">
+    <% @items.each do |item| %>
+      <li class="flex flex-row gap-3">
+        <img src="<%= relative_url "/images/icons/#{icon_for(item)}.svg" %>" class="w-14 h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider"><%= item["label"] %></span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <ul class="grid grid-cols-1 md:grid-cols-2 md:justify-items-start gap-6 lg:gap-10">
+    <% @items.each do |item| %>
+      <li class="flex flex-row gap-3 items-center justify-center">
+        <img src="<%= relative_url "/images/icons/#{icon_for(item)}.svg" %>" class="w-10 h-10 md:w-14 md:h-14 object-fit" alt="" /><span class="uppercase text-2xl text-lime-200 tracking-wider"><%= item["label"] %></span>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

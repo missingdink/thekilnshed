@@ -1,0 +1,142 @@
+# Membership page content. Edit in the CMS under "Membership".
+# Plans also feed the membership cards on the home page.
+# Sections with needs_review: true are placeholder drafts, hidden on the
+# live site until the owners approve them.
+
+banner:
+  heading: Membership
+
+intro:
+  lead: A community studio with a variety of memberships to fit your making style & schedule.
+  body: Here at THE KILN SHED, we provide a variety of ways to get messy.
+
+plans:
+  - slug: drop-in
+    name: Drop-In Access
+    access: 4 times / month
+    price: Starting at $50 / month
+    contact_topic: membership
+    image: ""
+    highlights:
+      - Drop off & pick up of fired works
+      - Additional days can be added
+    perks:
+      - text: DROP OFF your work to be fired; PICK UP your work when its done!
+      - text: Come in to open studio FOUR TIMES each month! Need more? ($10 for the DAY)
+      - text: Access to clay and glaze materials
+      - text: Studio Member discount on workshops, classes, and firing credits
+    sizes: []
+    compare:
+      access: 4 visits a month, $10 for extra days
+      storage: Drop-off shelf for work being fired
+      firing: Bisque and glaze firing at member rates
+      materials: Buy clay; use studio glazes
+      discounts: Member discount on classes and workshops
+
+  - slug: open-studio
+    name: Open Studio
+    access: 24 / 7 access
+    price: Starting at $115 / month
+    contact_topic: membership
+    image: ""
+    highlights:
+      - Ample shelf space to store clay, tools & your work
+      - Access to clay to purchase & studio selected bulk glazes
+      - Discounts on workshops, classes, material and firing
+    perks:
+      - text: Ample shelf space to safely store clay, tools & your work
+      - text: 24hr access to the building and your space.
+        note: (classroom wheels unavailable during class times)
+      - text: Access to clay and glaze materials
+      - text: Studio Member discount on workshops, classes, and firing credits
+    sizes: []
+    compare:
+      access: 24/7
+      storage: Your own shelf for clay, tools and work
+      firing: Bisque and glaze firing at member rates
+      materials: Buy clay; use studio glazes
+      discounts: Member discount on classes, workshops and firing
+
+  - slug: private-studio
+    name: Private Studio
+    access: 24 / 7 access
+    price: Starting at $300 / month
+    contact_topic: private-studio
+    image: /images/studio-space.jpg
+    highlights:
+      - Multi sized spaces ranging from 6 x 8 to 10 x 12
+      - Access to clay to purchase & studio selected bulk glazes
+      - Discounts on workshops, classes, material and firing
+    perks:
+      - text: Our PRIVATE STUDIOS come in a variety of sizes
+      - text: Each spot has an electrical outlet for your WHEEL and/or TOOLS
+      - text: 24hr access to the building and your space.
+        note: (classroom wheels unavailable during class times)
+      - text: Access to clay and glaze materials
+      - text: Studio Member discount on workshops, classes, and firing credits
+    sizes: ["6x8", "8x10", "10x10", "10x12"]
+    compare:
+      access: 24/7
+      storage: Your own walled space, 6x8 to 10x12
+      firing: Bisque and glaze firing at member rates
+      materials: Buy clay; use studio glazes; outlet for your own wheel
+      discounts: Member discount on classes, workshops and firing
+
+comparison:
+  needs_review: true
+  heading: Compare memberships
+
+joining:
+  needs_review: true
+  heading: How joining works
+  intro: No portfolio, no audition. If you can center a pound of clay on your own, you're ready. If not, start with Pottery 101.
+  steps:
+    - title: Come see the space
+      text: Stop by during staffed hours or book a quick tour so you can see the wheels, shelves and kilns for yourself.
+    - title: Pick your plan
+      text: Choose Drop-In, Open Studio or a Private Studio. Not sure? We'll help you figure out what fits your schedule.
+    - title: Do a quick orientation
+      text: A staff member walks you through the studio, kiln loading, glaze area and cleanup so you can work on your own with confidence.
+    - title: Get your access and start making
+      text: Sign the member agreement, get your door code and shelf, and get to work.
+
+faq:
+  needs_review: true
+  heading: Membership questions
+  items:
+    - question: Do I need experience to join?
+      answer: You should be comfortable working on your own at the wheel or with handbuilding. If you're new to clay, Pottery 101 is the best way in, and it includes open studio time so you can see if membership is for you.
+    - question: Is membership month-to-month?
+      answer: Yes. Memberships renew monthly and you can cancel with 30 days' notice.
+    - question: Is there a waitlist?
+      answer: Open Studio and Drop-In usually have room. Private studios fill up, so reach out and we'll add you to the list for the size you want.
+    - question: Is firing included?
+      answer: Members fire at a discounted member rate. Ask us about current firing prices and how kiln space is shared.
+    - question: Can I bring my own clay?
+      answer: Yes. Just tell us what clay you're using so we can make sure it's fired correctly. We also sell a small selection of Laguna clays.
+    - question: Can I bring a friend?
+      answer: Members can bring a guest during staffed hours. Guests can watch or try a little clay, but regular making needs its own membership.
+    - question: What happens to my work if I cancel?
+      answer: You'll have two weeks after your last month to pick up your work and clear your shelf. Anything left after that is reclaimed or donated.
+
+rules:
+  needs_review: true
+  heading: Studio rules
+  intro: A shared studio only works when everybody pitches in. Here is the short version of the member agreement.
+  items:
+    - Clean your wheel, tools and work area before you leave.
+    - Reclaim your slop and trimmings in the marked buckets.
+    - Keep your work on your own shelf. Unlabeled work gets moved after two weeks.
+    - Label everything that goes on a kiln cart with your name and clay body.
+    - Wipe glaze drips off the bottom of your pots. Kiln shelves are shared.
+    - Respect class times. Classroom wheels belong to students during classes.
+    - Ask a staff member before loading or unloading a kiln.
+
+testimonials:
+  heading: What members say
+  # Real quotes only, shared with the member's permission.
+  items: []
+
+cta:
+  heading: CANT WAIT? CONTACT US TODAY!
+  body: Subscribe to our email list to be the first to know about classes, workshops, firings & more!

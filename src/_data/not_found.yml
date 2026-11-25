@@ -1,0 +1,4 @@
+# The "page not found" page. Edit in the CMS under "Page Not Found".
+heading: Page not found
+body: The page you're looking for doesn't exist. It may have moved, or the link might be old.
+button_text: Back to the home page

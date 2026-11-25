@@ -2,100 +2,195 @@
 layout: default
 title: Membership
 ---
+<%
+  membership = site.data.membership
+  plans = Array(membership.plans)
+  comparison, joining, faq, rules, testimonials, cta = membership.comparison, membership.joining, membership.faq, membership.rules, membership.testimonials, membership.cta
+  compare_rows = [
+    ["Studio access", "access"],
+    ["Storage", "storage"],
+    ["Firing", "firing"],
+    ["Clay & glaze", "materials"],
+    ["Member discounts", "discounts"],
+  ]
+%>
 
-<section class="py-20 px-12 bg-brown-900 hero bg-fixed" style="background-image: url(<%= relative_url '/images/hero-strokes.jpg' %>)">
+<% banner = membership["banner"] || {} %>
+<section class="py-20 px-12 bg-brown-900 hero bg-fixed" style="background-image: url(<%= relative_url('/images/hero-strokes.jpg') %>)">
   <div class="space-y-2 mb-10">
-    <h2 class="text-lime-500">Membership</h2>
+    <h2 class="text-lime-500"><%= banner["heading"].presence || "Membership" %></h2>
   </div>
 </section>
 
 <section class="py-20 px-12 bg-coal-0 flex flex-col md:flex-row justify-between container mx-auto">
   <div class="max-w-[800px]">
-    <h5 class="mb-4">A community studio with a variety of memberships to fit your making style & schedule.​</h5>
-    <p class="!text-xl">Here at THE KILN SHED, we provide a variety of ways to get messy.</p>
+    <h5 class="mb-4"><%= membership.intro.lead %></h5>
+    <p class="!text-xl"><%= membership.intro.body %></p>
   </div>
-  <img src="<%= relative_url '/images/red-bowl.png' %>" class="h-fit w-auto -mt-44 z-1" />
+  <img src="<%= relative_url '/images/red-bowl.png' %>" alt="" class="h-fit w-auto -mt-44 z-1" />
 </section>
 
-<section class="py-20 px-12 bg-indigo-900 bg-cover bg-fixed pb-100" style="background-image: url(<%= relative_url '/images/bg-kilnshed-lg.jpg' %>)">
-
-  <div class="flex flex-col md:flex-row mb-10 container mx-auto">
-    <div class="bg-indigo-950 flex flex-col items-center justify-center p-12 text-center space-y-4 w-xl">
-      <h2 class="text-lime-500">Drop-In Access</h2>
-      <span class="text-lime-600 text-2xl">4 times / month</span>
-      <h5 class="text-indigo-300">Starting at $50 / month</h5>
-    </div>
-    <div class="bg-indigo-950/80 backdrop-blur-sm p-12 flex-1">
-      <ul class="space-y-4 mb-8 text-indigo-200" style="list-style-image: url(<%= relative_url '/images/icons/indigo-disc.svg' %>)">
-        <li class="pl-3">DROP OFF your work to be fired; PICK UP your work when its done!</li>
-        <li class="pl-3">Come in to open studio FOUR TIMES each month! Need more? ($10 for the DAY)</li>
-        <li class="pl-3">Access to clay and glaze materials</li>
-        <li class="pl-3">Studio Member discount on workshops, classes, and firing credits</li>
-      </ul>
-      <a href="" class="btn btn-secondary">Message x to sign up</a>
-    </div>
-  </div>
-
-  <div class="flex flex-col md:flex-row mb-10 container mx-auto">
-    <div class="bg-indigo-950 flex flex-col items-center justify-center p-12 text-center space-y-4 w-xl">
-      <h2 class="text-lime-500">Open Studio</h2>
-      <span class="text-lime-600 text-2xl">24 / 7 access</span>
-      <h5 class="text-indigo-300">Starting at $115 / month</h5>
-    </div>
-    <div class="bg-indigo-950/80 backdrop-blur-sm p-12 flex-1">
-      <ul class="space-y-4 mb-8 text-indigo-200" style="list-style-image: url(<%= relative_url '/images/icons/indigo-disc.svg' %>)">
-        <li class="pl-3">Ample shelf space to safely store clay, tools & your work</li>
-        <li class="pl-3">24hr access to the building and your space. <span class="block text-indigo-300 text-base">(classroom wheels unavailable during class times)</span>
-        </li>
-        <li class="pl-3">Access to clay and glaze materials</li>
-        <li class="pl-3">Studio Member discount on workshops, classes, and firing credits</li>
-      </ul>
-      <a href="" class="btn btn-secondary">Message x to sign up</a>
-    </div>
-  </div>
-
-  <div class="flex flex-col md:flex-row container mx-auto">
-    <div class="">
-      <div class="h-[220px]">
-        <img src="<%= relative_url '/images/studio-space.jpg' %>" class="w-full h-full object-cover object-top"/>
-      </div>
-      <div class="bg-indigo-950 flex flex-col items-center justify-center p-12 text-center space-y-4 w-xl">
-        <h2 class="text-lime-500">Private Studio</h2>
-        <span class="text-lime-600 text-2xl">4 times / month</span>
-        <h5 class="text-indigo-300">Starting at $300 / month</h5>
-      </div>
-
-    </div>
-    <div class="bg-indigo-950/80 backdrop-blur-sm p-12 flex-1">
-      <ul class="space-y-4 mb-8 text-indigo-200" style="list-style-image: url(<%= relative_url '/images/icons/indigo-disc.svg' %>)">
-        <li class="pl-3">Our PRIVATE STUDIOS come in a variety of sizes:
-          <div class="flex flex-col md:flex-row gap-4 mt-2">
-            <span class="bg-indigo-800 py-2 px-4">6x8</span>
-            <span class="bg-indigo-800 py-2 px-4">8x10</span>
-            <span class="bg-indigo-800 py-2 px-4">10x10</span>
-            <span class="bg-indigo-800 py-2 px-4">10x12</span>
+<%# Plans %>
+<section class="py-20 px-12 bg-indigo-900 bg-cover bg-fixed pb-40" style="background-image: url(<%= relative_url '/images/bg-kilnshed-lg.jpg' %>)">
+  <% plans.each_with_index do |plan, i| %>
+    <div id="<%= plan.slug %>" class="flex flex-col md:flex-row container mx-auto scroll-mt-32 <%= 'mb-10' unless i == plans.length - 1 %>">
+      <div class="flex flex-col">
+        <% if plan.image.present? %>
+          <div class="h-[220px]">
+            <img src="<%= relative_url plan.image %>" alt="" class="w-full h-full object-cover object-top"/>
           </div>
+        <% end %>
+        <div class="bg-indigo-950 flex flex-col flex-1 items-center justify-center p-12 text-center space-y-4 md:w-xl">
+          <h2 class="text-lime-500"><%= plan.name %></h2>
+          <span class="text-lime-600 text-2xl"><%= plan.access %></span>
+          <h5 class="text-indigo-300"><%= plan.price %></h5>
+        </div>
+      </div>
+      <div class="bg-indigo-950/80 backdrop-blur-sm p-12 flex-1">
+        <ul class="space-y-4 mb-8 text-indigo-200" style="list-style-image: url(<%= relative_url '/images/icons/indigo-disc.svg' %>)">
+          <% Array(plan.perks).each_with_index do |perk, p| %>
+            <li class="pl-3"><%= perk.text %>
+              <% if perk.note.present? %><span class="block text-indigo-300 text-base"><%= perk.note %></span><% end %>
+              <% if p.zero? && Array(plan.sizes).any? %>
+                <div class="flex flex-col md:flex-row gap-4 mt-2">
+                  <% plan.sizes.each do |size| %><span class="bg-indigo-800 py-2 px-4"><%= size %></span><% end %>
+                </div>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+        <a href="<%= relative_url "/contact?topic=#{plan.contact_topic.presence || 'membership'}" %>" class="btn btn-secondary">Message us to sign up</a>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<%# How joining works %>
+<% if joining && show_content?(joining) %>
+<section class="angle-top-left -mt-[50px] bg-coal-0 pt-32 pb-24 px-8 md:px-12">
+  <div class="container mx-auto">
+    <%= render Shared::ReviewFlag.new(item: joining) %>
+    <div class="flex flex-col lg:flex-row gap-6 lg:gap-16 mb-12 text-indigo-600">
+      <h2 class="lg:w-1/3 md:!text-wrap"><%= joining.heading %></h2>
+      <h5 class="lg:w-2/3"><%= joining.intro %></h5>
+    </div>
+    <ol class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <% Array(joining.steps).each_with_index do |step, i| %>
+        <li>
+          <span class="block font-display text-6xl text-indigo-600 mb-4" aria-hidden="true"><%= i + 1 %></span>
+          <h6 class="text-indigo-800 mb-2"><%= step.title %></h6>
+          <p><%= step.text %></p>
         </li>
-        <li class="pl-3">Each spot has an electrical outlet for your WHEEL and/or TOOLS</li>
-        <li class="pl-3">24hr access to the building and your space. <span class="block text-indigo-300 text-base">(classroom wheels unavailable during class times)</span>
-        </li>
-        <li class="pl-3">Access to clay and glaze materials</li>
-        <li class="pl-3">Studio Member discount on workshops, classes, and firing credits</li>
-      </ul>
-      <a href="" class="btn btn-secondary">Message x to sign up</a>
+      <% end %>
+    </ol>
+  </div>
+</section>
+<% end %>
+
+<%# Compare plans %>
+<% if comparison && show_content?(comparison) && plans.any? %>
+<section class="angle-top-right -mt-[50px] bg-coal-1000 text-coal-0 pt-32 pb-24 px-8 md:px-12">
+  <div class="container mx-auto">
+    <%= render Shared::ReviewFlag.new(item: comparison) %>
+    <h2 class="text-lime-500 mb-12"><%= comparison.heading %></h2>
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[640px] text-left border-collapse">
+        <thead>
+          <tr class="border-b border-coal-700">
+            <td class="py-4 pr-6"></td>
+            <% plans.each do |plan| %>
+              <th scope="col" class="py-4 px-6 align-bottom">
+                <span class="block text-lime-500 text-xl font-medium"><%= plan.name %></span>
+                <span class="block text-coal-100 font-normal"><%= plan.price %></span>
+              </th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% compare_rows.each do |label, key| %>
+            <tr class="border-b border-coal-800">
+              <th scope="row" class="py-4 pr-6 uppercase tracking-wider text-sm text-lime-200 font-medium align-top"><%= label %></th>
+              <% plans.each do |plan| %>
+                <td class="py-4 px-6 align-top text-coal-100"><%= (plan.compare || {})[key] %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
+<% end %>
+
+<%# Studio rules %>
+<% if rules && show_content?(rules) %>
+<section class="angle-top-left -mt-[50px] bg-indigo-900 text-coal-0 pt-32 pb-24 px-8 md:px-12">
+  <div class="container mx-auto flex flex-col lg:flex-row gap-10 lg:gap-20">
+    <div class="lg:w-1/3">
+      <%= render Shared::ReviewFlag.new(item: rules) %>
+      <h2 class="text-lime-500 mb-6 md:!text-wrap"><%= rules.heading %></h2>
+      <p class="text-coal-100"><%= rules.intro %></p>
+    </div>
+    <ul class="lg:w-2/3 space-y-4" style="list-style-image: url(<%= relative_url '/images/icons/lime-disc.svg' %>)">
+      <% Array(rules.items).each do |rule| %>
+        <li class="pl-3 ml-6"><%= rule %></li>
+      <% end %>
+    </ul>
+  </div>
+</section>
+<% end %>
+
+<%# Member FAQ %>
+<% if faq && show_content?(faq) %>
+<section class="angle-top-right -mt-[50px] bg-brown-100 pt-32 pb-24 px-8 md:px-12">
+  <ul class="container mx-auto space-y-2 md:px-20">
+    <%= render Shared::ReviewFlag.new(item: faq) %>
+    <h2 class="text-red-600 mb-10"><%= faq.heading %></h2>
+    <% Array(faq.items).each do |item| %>
+      <%= render Shared::Faq.new(question: item.question, answer: ERB::Util.html_escape(item.answer)) %>
+    <% end %>
+  </ul>
+</section>
+<% end %>
+
+<%# Member quotes: real quotes only, added in the CMS %>
+<% quotes = Array(testimonials&.items) %>
+<% if quotes.any? %>
+<section class="bg-coal-0 py-20 px-8 md:px-12">
+  <div class="container mx-auto">
+    <h2 class="text-indigo-600 mb-12"><%= testimonials.heading %></h2>
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <% quotes.each do |quote| %>
+        <li>
+          <figure class="border-l-4 border-lime-500 pl-6">
+            <blockquote><p class="text-xl text-indigo-800">&ldquo;<%= quote.quote %>&rdquo;</p></blockquote>
+            <figcaption class="mt-4 text-brown-700"><%= quote.name %><% if quote.detail.present? %>, <%= quote.detail %><% end %></figcaption>
+          </figure>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</section>
+<% elsif Bridgetown.env.development? %>
+<section class="bg-coal-0 py-12 px-8 md:px-12">
+  <p class="container mx-auto p-6 border-2 border-dashed border-brown-300 text-brown-700" datatest-id="testimonials-placeholder">Member quotes will appear here once they're added in the CMS under Membership, What Members Say. This note only shows in development.</p>
+</section>
+<% end %>
 
 <section class="bg-brown-100 border-b-10 border-brown-400 flex flex-col lg:flex-row">
   <div class="text-brown-700 p-12 w-full mr-10">
-    <h2 class="mb-4">CANT WAIT? CONTACT US TODAY!</h2>
-    <h6 class="mb-10">Subscribe to our email list to be the first to know about classes, workshops, firings & more!</h6>
-    <a href="<%= relative_url '/contact' %>" class="btn btn-primary">Contact us now</a>
+    <h2 class="mb-4"><%= cta&.heading.presence || "CANT WAIT? CONTACT US TODAY!" %></h2>
+    <h6 class="mb-10"><%= cta&.body %></h6>
+    <div class="flex flex-wrap gap-4">
+      <a href="<%= relative_url '/contact?topic=membership' %>" class="btn btn-primary">Contact us now</a>
+      <a href="<%= relative_url '/contact#newsletter' %>" class="btn btn-outline brown !text-brown-700 !border-brown-700">Join the email list</a>
+      <% if site.data.site_metadata.gift_card_url.present? %>
+        <a href="<%= site.data.site_metadata.gift_card_url %>" target="_blank" rel="noopener" class="btn btn-outline brown !text-brown-700 !border-brown-700">Give a gift card</a>
+      <% end %>
+    </div>
   </div>
   <div class="relative w-full md:max-w-[300px] lg:max-w-[450px]">
-    <img src="<%= relative_url '/images/green-mug.png' %>" class="z-1 max-w-[140px] lg:max-w-[220px] h-auto absolute bottom-0 right-[280px]" />
-    <img src="<%= relative_url '/images/indigo-pitcher.png' %>" class="max-w-[200px] lg:max-w-[320px] h-auto absolute bottom-0 right-10 transform-[scaleX(-1)]" />
+    <img src="<%= relative_url '/images/green-mug.png' %>" alt="" class="z-1 max-w-[140px] lg:max-w-[220px] h-auto absolute bottom-0 right-[280px]" />
+    <img src="<%= relative_url '/images/indigo-pitcher.png' %>" alt="" class="max-w-[200px] lg:max-w-[320px] h-auto absolute bottom-0 right-10 transform-[scaleX(-1)]" />
   </div>
-
 </section>

@@ -1,0 +1,12 @@
+title: "Holiday Pottery Sale (example)"
+needs_review: true
+announce: true
+start_date: 2026-12-12
+end_date: 2026-12-13
+time: "10 AM to 4 PM both days"
+location: "The Kiln Shed, 2420 Pennsylvania Ave"
+description: "Example event to show the layout. Mugs, bowls, vases and more from studio members and staff, just in time for gifting. Replace or delete this entry."
+image: /images/bg-kilnshelves-lg.jpg
+image_alt: "Studio shelves packed with pots"
+link_text: ""
+link_url: ""

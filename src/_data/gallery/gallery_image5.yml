@@ -1,3 +1,7 @@
-image_src: https://picsum.photos/500/400
-title: The kiln shed
-message: Look at that thing, such a beaut ain't she? Want to touch it. Watch out it's pretty hot.
+image_src: /images/bg-kilnshelves-lg.jpg
+alt: "Studio shelves packed with pots in different stages"
+title: "Shelves full"
+message: "Pots in every stage: wet, drying, bisqued and glazed."
+category: studio
+sort: 5
+needs_review: true

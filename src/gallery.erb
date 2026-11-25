@@ -2,18 +2,101 @@
 layout: default
 title: Gallery
 ---
+<%
+  gallery_page = site.data.gallery_page
+  sections = gallery_page["sections"] || {}
+  photos = site.data.gallery.values.sort_by { |image| [image["sort"] || 999, image["title"].to_s] }
+  section_keys = %w[studio classes space]
+  artists = site.data.artists.values
+    .select { |artist| show_content?(artist) }
+    .sort_by { |artist| [artist["sort"] || 999, artist["name"].to_s] }
+  events = EventListings.upcoming(site.data.events).select { |event| show_content?(event) }
+%>
 
-<section class="py-20 px-12 bg-indigo-900 hero bg-fixed" style="background-image: url(<%= relative_url '/images/hero-kilnshelves.jpg' %>)">
+<% banner = gallery_page["banner"] || {} %>
+<section class="py-20 px-12 bg-indigo-900 hero bg-fixed" style="background-image: url(<%= relative_url('/images/hero-kilnshelves.jpg') %>)">
   <div class="space-y-2 mb-10">
-    <h2 class="text-lime-500">Gallery</h2>
+    <h2 class="text-lime-500"><%= banner["heading"].presence || "Gallery" %></h2>
   </div>
 </section>
-<section class="p-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-  <% site.data.gallery.each_with_index do |(slug, image), i| %>
-    <%= render Shared::GalleryImage.new(
-      image_src:    image.image_src,
-      title: image.title,
-      message: image.message
-    ) %>
-  <% end %>
+
+<%# Upcoming events %>
+<% if events.any? %>
+<section id="events" class="bg-lime-300 border-b-10 border-lime-500 py-16 px-8 md:px-12 scroll-mt-32">
+  <div class="container mx-auto">
+    <h2 class="text-lime-800 mb-10"><%= gallery_page.dig("events", "heading").presence || "Upcoming events" %></h2>
+    <ul class="space-y-10">
+      <% events.each do |event| %>
+        <li class="flex flex-col md:flex-row gap-8 bg-coal-0/60 p-6 md:p-8">
+          <% if event["image"].present? %>
+            <img src="<%= relative_url event["image"] %>" alt="<%= event["image_alt"] %>" class="w-full md:w-1/3 aspect-[4/3] object-cover" />
+          <% end %>
+          <div class="flex-1">
+            <%= render Shared::ReviewFlag.new(item: event) %>
+            <p class="uppercase tracking-wider font-medium text-lime-800 mb-2"><%= EventListings.date_range(event) %><% if event["time"].present? %> &middot; <%= event["time"] %><% end %></p>
+            <h4 class="text-coal-1000 mb-4"><%= event["title"] %></h4>
+            <% if event["location"].present? %><p class="text-brown-700 mb-4"><%= event["location"] %></p><% end %>
+            <p class="mb-6"><%= event["description"] %></p>
+            <% if event["link_url"].present? %>
+              <a href="<%= event["link_url"].to_s.start_with?("/") ? relative_url(event["link_url"]) : event["link_url"] %>" class="btn btn-primary"><%= event["link_text"].presence || "Learn more" %></a>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </div>
 </section>
+<% end %>
+
+<% if gallery_page["intro"].present? %>
+  <section class="px-8 md:px-12 pt-16">
+    <h5 class="container mx-auto text-indigo-600"><%= gallery_page["intro"] %></h5>
+  </section>
+<% end %>
+
+<%# Photo sections %>
+<% section_keys.each do |key| %>
+  <% section_photos = photos.select { |image| (image["category"].presence || "studio") == key } %>
+  <% section = sections[key] || {} %>
+  <% if section_photos.any? %>
+    <section class="px-8 md:px-12 py-12">
+      <div class="container mx-auto">
+        <h2 class="text-indigo-600 mb-4"><%= section["heading"].presence || key.titleize %></h2>
+        <% if section["intro"].present? %><p class="mb-8 max-w-2xl"><%= section["intro"] %></p><% end %>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <% section_photos.each do |image| %>
+            <div>
+              <%= render Shared::ReviewFlag.new(item: image) %>
+              <%= render Shared::GalleryImage.new(
+                image_src:    image["image_src"],
+                alt:          image["alt"],
+                title:        image["title"],
+                message:      image["message"],
+                show_caption: show_content?(image)
+              ) %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </section>
+  <% elsif Bridgetown.env.development? %>
+    <section class="px-8 md:px-12 py-8">
+      <p class="container mx-auto p-6 border-2 border-dashed border-brown-300 text-brown-700">No photos in "<%= section["heading"].presence || key.titleize %>" yet. Add one in the CMS under Gallery and set its Section. This note only shows in development.</p>
+    </section>
+  <% end %>
+<% end %>
+
+<%# Studio artists %>
+<% if artists.any? %>
+<section class="angle-top-right mt-12 bg-brown-50 pt-32 pb-24 px-8 md:px-12">
+  <div class="container mx-auto">
+    <h2 class="text-indigo-600 mb-4"><%= gallery_page.dig("artists", "heading").presence || "Studio artists" %></h2>
+    <% if gallery_page.dig("artists", "intro").present? %><p class="mb-12 max-w-2xl"><%= gallery_page.dig("artists", "intro") %></p><% end %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <% artists.each do |artist| %>
+        <%= render Shared::Artist.new(artist: artist) %>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>

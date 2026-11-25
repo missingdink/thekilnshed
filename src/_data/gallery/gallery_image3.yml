@@ -1,3 +1,7 @@
-image_src: https://picsum.photos/500/300
-title: The beginning of making this our humble home
-message: The goal of POTTERY 101 is to teach you how to create food-safe functional pottery using the wheel! The instructor will cover things like, centering, throwing, trimming, adding handles, decorating and glazing!
+image_src: /images/soda-kiln.jpg
+alt: "A small wooden shed housing the soda kiln"
+title: "The soda shed"
+message: "Our soda kiln lives in its own little shed out back."
+category: space
+sort: 3
+needs_review: true

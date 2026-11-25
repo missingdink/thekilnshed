@@ -1,5 +1,5 @@
 class Shared::Workshop < Bridgetown::Component
-   def initialize(image_src: "", alt_text: "", title:"", description: "", start_date: "", end_date:"", start_time:"", end_time:"", cost: "", message: "", link:"https://thekilnshed.square.site/s/order#2")
+   def initialize(image_src: "", alt_text: "", title:"", description: "", start_date: "", end_date:"", start_time:"", end_time:"", cost: "", message: "", link:"https://thekilnshed.square.site/s/order#2", email: nil)
     @image_src = image_src
     @alt_text = alt_text
     @title = title 
@@ -11,5 +11,6 @@ class Shared::Workshop < Bridgetown::Component
     @cost = cost
     @message = message
     @link = link
+    @email = email
   end
 end

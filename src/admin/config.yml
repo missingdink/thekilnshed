@@ -1,3 +1,7 @@
+# Lets the CMS edit local files through the Decap server (npx decap-server)
+# when opened on localhost. Ignored on the live site.
+local_backend: true
+
 backend:
   name: github
   branch: main
@@ -5,40 +9,965 @@ backend:
   base_url: __OAUTH_WORKER_URL__
   auth_endpoint: auth
 
+# Every change is saved as a draft first. Move it to "Ready" and then
+# "Publish" in the Workflow tab to put it on the live site.
 publish_mode: editorial_workflow
 media_folder: "src/images/uploads"
 public_folder: "/images/uploads"
 
 collections:
+  - name: settings
+    label: "Site Settings"
+    description: >-
+      Contact details and basic info used across the whole website: the menu,
+      the footer, the home page, the Contact page and the About page. Change
+      something here once and it updates everywhere.
+    files:
+      - name: site_metadata
+        label: "Site Settings"
+        file: "src/_data/site_metadata.yml"
+        fields:
+          - { label: "Studio Name", name: "title", widget: "string", hint: "Shown in the browser tab and in search results on pages without their own title." }
+          - { label: "Short Description", name: "description", widget: "string", hint: "One short line that search engines and link previews show under the studio name. Under 160 characters." }
+          - { label: "Phone", name: "phone", widget: "string", hint: "Shown in the menu, footer, home page and Contact page. Tapping it on a phone starts a call. e.g. (608) 419-2640" }
+          - { label: "Email", name: "email", widget: "string", pattern: ['^\S+@\S+\.\S+$', "Enter a full email address, like name@example.com."], hint: "Shown in the footer and on the Contact page. Clicking it opens a new email." }
+          - { label: "Address", name: "address", widget: "string", hint: "Street, city, state and zip on one line. Shown in the footer, Contact page and About page." }
+          - label: "Gift Card Link"
+            name: "gift_card_url"
+            widget: "string"
+            required: false
+            hint: >-
+              The full web address where people buy gift cards, usually the studio's
+              Square gift card page (look under Gift Cards in the Square Dashboard).
+              When filled in, gift card links appear on the Contact,
+              Membership and Classes pages. Leave empty to hide them.
+          - label: "Social Links"
+            name: "social"
+            widget: "object"
+            hint: "Full web addresses of the studio's profiles. Each one shows as an icon in the footer and a link on the Contact page. Leave a link empty to hide it."
+            fields:
+              - { label: "Instagram", name: "instagram", widget: "string", required: false, hint: "e.g. https://www.instagram.com/thekilnshed/" }
+              - { label: "Facebook", name: "facebook", widget: "string", required: false, hint: "e.g. https://www.facebook.com/thekilnshed" }
+              - { label: "YouTube", name: "youtube", widget: "string", required: false, hint: "e.g. https://www.youtube.com/@thekilnshed" }
+          - label: "Visiting Info"
+            name: "visiting"
+            widget: "object"
+            hint: "Hours and how to get here. Shown on both the Contact page and the About page, so you only update it here."
+            fields:
+              - { label: "Needs owner review", name: "needs_review", widget: "boolean", default: true, required: false, hint: "On = placeholder draft, hidden on the live site. Turn off once the owners confirm these details." }
+              - label: "Staffed Hours"
+                name: "hours"
+                widget: "list"
+                label_singular: "Day or days"
+                summary: "{{fields.days}}: {{fields.times}}"
+                hint: "When someone is at the studio to answer questions. One row per day or group of days. Drag to reorder."
+                fields:
+                  - { label: "Days", name: "days", widget: "string", hint: "e.g. Tuesday to Thursday, or Saturday" }
+                  - { label: "Times", name: "times", widget: "string", hint: "e.g. 5 to 9 PM" }
+              - { label: "Member Access Note", name: "member_note", widget: "string", required: false, hint: "Optional line under the hours, e.g. Open studio members have 24/7 access." }
+              - { label: "Entrance", name: "entrance", widget: "text", required: false, hint: "Which door to use and how to spot it. Leave empty to hide." }
+              - { label: "Parking", name: "parking", widget: "text", required: false, hint: "Where visitors can park. Leave empty to hide." }
+              - { label: "Bus", name: "transit", widget: "text", required: false, hint: "Nearby bus routes or stops. Leave empty to hide." }
+              - { label: "Accessibility", name: "accessibility", widget: "text", required: false, hint: "Step-free entry, restrooms, parking close to the door, anything a visitor might need to know. Leave empty to hide." }
+          - { label: "Language", name: "locale", widget: "hidden" }
+
+  - name: home_page
+    label: "Home"
+    description: >-
+      Everything on the home page. The three membership cards come from
+      the Membership entry, and the phone number from Site Settings.
+    files:
+      - name: home
+        label: "Home Page"
+        file: "src/_data/home.yml"
+        fields:
+          - label: "Banner"
+            name: "hero"
+            widget: "object"
+            collapsed: false
+            hint: "The big opening banner."
+            fields:
+              - { label: "Heading Line 1", name: "heading_line_1", widget: "string", hint: "Shown huge in lime, e.g. Made by hand" }
+              - { label: "Heading Line 2", name: "heading_line_2", widget: "string", required: false, hint: "Second line, shown indented under the first. Leave empty for one line." }
+              - { label: "Tagline", name: "tagline", widget: "string", hint: "One short line under the heading." }
+          - label: "Intro"
+            name: "intro"
+            widget: "object"
+            hint: "The section right under the banner, next to the two pots."
+            fields:
+              - label: "Short Lines"
+                name: "lines"
+                widget: "list"
+                field: { label: "Line", name: "line", widget: "string" }
+                hint: "Punchy one-liners shown in larger blue text, one per line. Two or three works best."
+              - { label: "Text", name: "body", widget: "text", hint: "A couple of short paragraphs. Leave a blank line between paragraphs." }
+          - label: "Classes & Workshops"
+            name: "classes"
+            widget: "object"
+            hint: "The dark section with the class icons and the events calendar. The calendar itself is managed in Styled Calendar."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - &disciplines
+                label: "What We Teach"
+                name: "disciplines"
+                widget: "list"
+                label_singular: "Subject"
+                summary: "{{fields.label}}"
+                hint: "Short labels with an icon. Four fits the layout best."
+                fields:
+                  - { label: "Label", name: "label", widget: "string", hint: "e.g. Pottery" }
+                  - label: "Icon"
+                    name: "icon"
+                    widget: "select"
+                    options:
+                      - { label: "Pot on wheel", value: "pottery" }
+                      - { label: "Sculpture", value: "sculpture" }
+                      - { label: "Glaze", value: "glaze" }
+                      - { label: "Mold", value: "mold" }
+              - { label: "Text", name: "body", widget: "text", hint: "Leave a blank line between paragraphs." }
+              - { label: "Button Text", name: "button_text", widget: "string", hint: "The button links to the Classes page." }
+          - label: "The Shed"
+            name: "shed"
+            widget: "object"
+            hint: "The white section with the arched top and the warehouse photo."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Photo", name: "image", widget: "image", required: false, hint: "A tall photo works best. Leave empty for the empty-warehouse photo." }
+              - { label: "Lead", name: "lead", widget: "string", hint: "One sentence, shown larger." }
+              - { label: "Text", name: "body", widget: "text" }
+              - { label: "List Heading", name: "audience_heading", widget: "string", hint: "e.g. Who It Works For" }
+              - label: "List"
+                name: "audience"
+                widget: "list"
+                field: { label: "Item", name: "item", widget: "string" }
+                hint: "Short points, one per line."
+          - label: "Membership"
+            name: "membership"
+            widget: "object"
+            hint: "The heading over the membership cards. The cards themselves are edited under Membership."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Intro", name: "intro", widget: "string" }
+          - label: "The Kilns"
+            name: "kilns"
+            widget: "object"
+            hint: "The tan section about firing and kiln repair. The phone number comes from Site Settings."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Lead", name: "lead", widget: "string" }
+              - { label: "Text", name: "body", widget: "text" }
+              - { label: "Button Text", name: "button_text", widget: "string", hint: "The button links to the Kilns page." }
+              - { label: "Photo", name: "image", widget: "image", required: false }
+              - { label: "Repair Box Text", name: "repair_text", widget: "text", hint: "Each line shows on its own line." }
+              - { label: "Repair Box Call Out", name: "repair_call", widget: "string", hint: "Shown big above the phone number, e.g. Call James today!" }
+          - label: "Bottom Call to Action"
+            name: "cta"
+            widget: "object"
+            hint: "The lime box at the bottom of the page. The button goes to the email list signup."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Text", name: "body", widget: "string" }
+              - { label: "Button Text", name: "button_text", widget: "string" }
+
+  - name: classes_page
+    label: "Classes & Workshops"
+    description: >-
+      The writing on the Classes page. Class dates, times, prices and sign-up
+      links come from Square automatically. To add a photo or short blurb to
+      a specific workshop, use Classes › Class Extras.
+    files:
+      - name: classes_page
+        label: "Classes Page"
+        file: "src/_data/classes_page.yml"
+        fields:
+          - label: "Banner"
+            name: "banner"
+            widget: "object"
+            hint: "The big strip at the top of the page."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Tagline", name: "tagline", widget: "string", required: false }
+          - label: "Intro"
+            name: "intro"
+            widget: "object"
+            hint: "The tan section under the banner."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Text", name: "body", widget: "text", hint: "Leave a blank line between paragraphs." }
+              - { label: "Highlighted Ending", name: "highlight", widget: "string", required: false, hint: "Optional. Added to the end of the last paragraph in green." }
+          - label: "Pottery 101"
+            name: "pottery_101"
+            widget: "object"
+            hint: "The Pottery 101 description, what's included, and warnings. The session dates come from Square."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Lead", name: "lead", widget: "string" }
+              - { label: "Description", name: "body", widget: "text", hint: "Leave a blank line between paragraphs." }
+              - *disciplines
+              - { label: "Schedule Heading", name: "schedule_heading", widget: "string" }
+              - { label: "No Sessions Message", name: "empty_schedule", widget: "string", hint: "Shown when Square has no upcoming Pottery 101 sessions." }
+              - { label: "Cancellation Policy", name: "cancellation_policy", widget: "text", required: false }
+              - { label: "Included Heading", name: "includes_heading", widget: "string" }
+              - label: "Included"
+                name: "includes"
+                widget: "list"
+                label_singular: "Item"
+                summary: "{{fields.title}}"
+                fields:
+                  - { label: "Title", name: "title", widget: "string", hint: "Shown in caps, e.g. UNLIMITED CLAY" }
+                  - { label: "Small Print", name: "note", widget: "string", required: false }
+              - label: "Warnings"
+                name: "warnings"
+                widget: "list"
+                label_singular: "Warning"
+                summary: "{{fields.text}}"
+                hint: "The boxes under the included list."
+                fields:
+                  - label: "Icon"
+                    name: "icon"
+                    widget: "select"
+                    options:
+                      - { label: "Messy hands", value: "messy" }
+                      - { label: "Fingernails", value: "finger-nails" }
+                  - { label: "Text", name: "text", widget: "string" }
+                  - { label: "Small Print", name: "note", widget: "string", required: false }
+          - label: "Workshops"
+            name: "workshops"
+            widget: "object"
+            hint: "The text above the workshop cards. The cards come from Square, with photos and blurbs from Classes › Class Extras."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Lead", name: "lead", widget: "text" }
+              - { label: "Text", name: "body", widget: "text", hint: "Leave a blank line between paragraphs." }
+              - { label: "Included Heading", name: "includes_heading", widget: "string" }
+              - label: "Included"
+                name: "includes"
+                widget: "list"
+                field: { label: "Item", name: "item", widget: "string" }
+              - { label: "No Workshops Message", name: "empty", widget: "string", hint: "Shown when Square has no upcoming workshops." }
+
+  - name: class_extras
+    label: "Classes › Class Extras"
+    label_singular: "Class Extra"
+    description: >-
+      Classes and workshops are managed in Square. The class name, dates,
+      times, price and Sign Up link all come from Square automatically, so
+      change those in Square, not here. Use a Class Extra to add things Square
+      does not have: a photo, a short blurb for the workshop card, a Featured
+      flag, or a switch to hide a class from the website. Classes without a
+      Class Extra still show up, using a stock photo and the start of their
+      Square description. Pottery 101 sessions appear in the schedule list
+      and do not use photos or blurbs; all other classes appear as cards in
+      the Workshops section.
+    folder: "src/_data/class_extras"
+    extension: "yml"
+    format: "yml"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: label
+    summary: "{{label}}{{featured | ternary(' (featured)', '')}}{{hide | ternary(' (hidden)', '')}}"
+    fields:
+      - label: "Class Name"
+        name: "label"
+        widget: "string"
+        hint: >-
+          Only used to find this entry in the CMS list; it is not shown on the
+          website. Use the class name from Square, e.g. "Handle those handles".
+      - label: "Square Item ID"
+        name: "square_id"
+        widget: "string"
+        pattern: ['^[A-Za-z0-9]+$', "Use only letters and numbers, with no spaces."]
+        hint: >-
+          Connects this entry to a class in Square. In the Square Dashboard, go
+          to Items, open the class, and copy the long code of letters and
+          numbers at the end of the page address (e.g. PM2MH5V4BFBENO6ZFB7V3PLT).
+          If it does not match a Square item exactly, this entry does nothing.
+      - label: "Photo"
+        name: "image"
+        widget: "image"
+        required: false
+        hint: >-
+          Shown at the top of the workshop card. Landscape photos around
+          1200 x 800 pixels look best. Leave empty to use the stock photo.
+      - label: "Photo Description"
+        name: "alt_text"
+        widget: "string"
+        required: false
+        hint: >-
+          Describe what is in the photo in one short sentence, e.g. "Three
+          speckled mugs drying on a ware board". Screen readers read this
+          aloud to people who cannot see the image. Fill this in whenever you
+          add a photo.
+      - label: "Card Blurb"
+        name: "card_text"
+        widget: "text"
+        required: false
+        hint: >-
+          One to three sentences for the workshop card. The full Square
+          description is still used on Square's sign-up page. Leave empty to
+          use the first couple of sentences from Square instead.
+      - label: "Featured"
+        name: "featured"
+        widget: "boolean"
+        default: false
+        required: false
+        hint: "Turn on to move this workshop to the front of the Workshops section."
+      - label: "Hide From Website"
+        name: "hide"
+        widget: "boolean"
+        default: false
+        required: false
+        hint: >-
+          Turn on to keep this class off the website while leaving it for sale
+          in Square. To stop selling a class, change it in Square instead.
+
+  - name: membership_page
+    label: "Membership"
+    description: >-
+      Everything on the Membership page. The plans also fill the three
+      membership cards on the home page, so prices and perks only need
+      updating here. Sections with "Needs owner review" switched on are
+      placeholder drafts and stay off the live site until it's turned off.
+    files:
+      - name: membership
+        label: "Membership"
+        file: "src/_data/membership.yml"
+        fields:
+          - label: "Banner"
+            name: "banner"
+            widget: "object"
+            hint: "The big strip at the top of the page, under the menu."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+          - label: "Intro"
+            name: "intro"
+            widget: "object"
+            hint: "The text under the Membership banner."
+            fields:
+              - { label: "Lead", name: "lead", widget: "string", hint: "One sentence, shown larger." }
+              - { label: "Text", name: "body", widget: "string", hint: "A short line under the lead." }
+          - label: "Plans"
+            name: "plans"
+            widget: "list"
+            label_singular: "Plan"
+            summary: "{{fields.name}} ({{fields.price}})"
+            hint: "Each membership option, in the order shown. Drag to reorder. These also appear as cards on the home page."
+            fields:
+              - { label: "Name", name: "name", widget: "string", hint: "e.g. Open Studio" }
+              - label: "Link Name"
+                name: "slug"
+                widget: "string"
+                pattern: ['^[a-z0-9-]+$', "Use lowercase letters, numbers and dashes only."]
+                hint: "A short code like open-studio. The home page's Learn More buttons jump to this plan with it, so avoid changing existing ones."
+              - { label: "Access", name: "access", widget: "string", hint: "How often members can come in, e.g. 24 / 7 access or 4 times / month" }
+              - { label: "Price", name: "price", widget: "string", hint: "e.g. Starting at $115 / month" }
+              - label: "Contact Topic"
+                name: "contact_topic"
+                widget: "select"
+                options: ["membership", "private-studio", "general"]
+                default: "membership"
+                hint: "Which topic is picked in the contact form when someone clicks Message us to sign up."
+              - { label: "Photo", name: "image", widget: "image", required: false, hint: "Optional. Shown above the plan name. Leave empty for no photo." }
+              - label: "Home Page Highlights"
+                name: "highlights"
+                widget: "list"
+                field: { label: "Highlight", name: "highlight", widget: "string" }
+                hint: "Two or three short points for the card on the home page."
+              - label: "Perks"
+                name: "perks"
+                widget: "list"
+                label_singular: "Perk"
+                summary: "{{fields.text}}"
+                hint: "The full list of what's included, shown on the Membership page."
+                fields:
+                  - { label: "Text", name: "text", widget: "string" }
+                  - { label: "Small Print", name: "note", widget: "string", required: false, hint: "Optional. Shown smaller under the perk, e.g. (classroom wheels unavailable during class times)" }
+              - label: "Studio Sizes"
+                name: "sizes"
+                widget: "list"
+                required: false
+                field: { label: "Size", name: "size", widget: "string" }
+                hint: "Optional, for private studios. Shown as tags under the first perk, e.g. 6x8"
+              - label: "Comparison Table"
+                name: "compare"
+                widget: "object"
+                hint: "This plan's column in the Compare Memberships table. Keep each answer short."
+                fields:
+                  - { label: "Studio access", name: "access", widget: "string", required: false }
+                  - { label: "Storage", name: "storage", widget: "string", required: false }
+                  - { label: "Firing", name: "firing", widget: "string", required: false }
+                  - { label: "Clay & glaze", name: "materials", widget: "string", required: false }
+                  - { label: "Member discounts", name: "discounts", widget: "string", required: false }
+          - label: "Compare Memberships"
+            name: "comparison"
+            widget: "object"
+            hint: "A side-by-side table of the plans. The answers are entered on each plan under Comparison Table."
+            fields:
+              - { label: "Needs owner review", name: "needs_review", widget: "boolean", default: true, required: false, hint: "On = placeholder draft, hidden on the live site. Turn off once the owners approve it." }
+              - { label: "Heading", name: "heading", widget: "string" }
+          - label: "How Joining Works"
+            name: "joining"
+            widget: "object"
+            hint: "Numbered steps from first visit to first day as a member."
+            fields:
+              - { label: "Needs owner review", name: "needs_review", widget: "boolean", default: true, required: false, hint: "On = placeholder draft, hidden on the live site. Turn off once the owners approve it." }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Intro", name: "intro", widget: "text", hint: "One or two sentences, e.g. who membership is right for." }
+              - label: "Steps"
+                name: "steps"
+                widget: "list"
+                label_singular: "Step"
+                summary: "{{fields.title}}"
+                hint: "Three to five steps works best. They're numbered automatically in this order."
+                fields:
+                  - { label: "Title", name: "title", widget: "string", hint: "A short action, e.g. Come see the space" }
+                  - { label: "Text", name: "text", widget: "text", hint: "One or two sentences." }
+          - label: "Studio Rules"
+            name: "rules"
+            widget: "object"
+            hint: "The short version of the member agreement."
+            fields:
+              - { label: "Needs owner review", name: "needs_review", widget: "boolean", default: true, required: false, hint: "On = placeholder draft, hidden on the live site. Turn off once the owners approve it." }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Intro", name: "intro", widget: "text" }
+              - label: "Rules"
+                name: "items"
+                widget: "list"
+                field: { label: "Rule", name: "rule", widget: "string" }
+                hint: "One short rule per line. Drag to reorder."
+          - label: "Membership Questions"
+            name: "faq"
+            widget: "object"
+            hint: "Common questions from people thinking about joining. Kiln and firing questions live under Kilns › FAQs instead."
+            fields:
+              - { label: "Needs owner review", name: "needs_review", widget: "boolean", default: true, required: false, hint: "On = placeholder draft, hidden on the live site. Turn off once the owners approve it." }
+              - { label: "Heading", name: "heading", widget: "string" }
+              - label: "Questions"
+                name: "items"
+                widget: "list"
+                label_singular: "Question"
+                summary: "{{fields.question}}"
+                fields:
+                  - { label: "Question", name: "question", widget: "string", hint: "Write it the way a visitor would ask it." }
+                  - { label: "Answer", name: "answer", widget: "text", hint: "Keep it short and plain." }
+          - label: "What Members Say"
+            name: "testimonials"
+            widget: "object"
+            hint: "Quotes from real members. Only add quotes members have agreed to share. The section stays hidden until there's at least one."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - label: "Quotes"
+                name: "items"
+                widget: "list"
+                label_singular: "Quote"
+                summary: "{{fields.name}}"
+                required: false
+                fields:
+                  - { label: "Quote", name: "quote", widget: "text", hint: "Their words. One to three sentences reads best." }
+                  - { label: "Name", name: "name", widget: "string", hint: "How they'd like to be credited, e.g. first name and last initial." }
+                  - { label: "Detail", name: "detail", widget: "string", required: false, hint: "Optional, e.g. Open Studio member since 2023" }
+          - label: "Bottom Call to Action"
+            name: "cta"
+            widget: "object"
+            hint: "The brown box at the bottom of the page."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Text", name: "body", widget: "string" }
+
+  - name: gallery_page
+    label: "Gallery"
+    description: >-
+      Headings and intros on the Gallery page. The photos themselves are
+      under Gallery › Photos, artists under Gallery › Studio Artists, and
+      events under Gallery › Events.
+    files:
+      - name: gallery_page
+        label: "Gallery Page"
+        file: "src/_data/gallery_page.yml"
+        fields:
+          - label: "Banner"
+            name: "banner"
+            widget: "object"
+            hint: "The big strip at the top of the page, under the menu."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+          - { label: "Intro", name: "intro", widget: "text", required: false, hint: "One sentence under the Gallery banner. Leave empty to hide." }
+          - label: "Photo Sections"
+            name: "sections"
+            widget: "object"
+            hint: "The three photo sections, in the order shown. A section only appears once it has at least one photo."
+            fields:
+              - label: "In the Studio"
+                name: "studio"
+                widget: "object"
+                fields:
+                  - { label: "Heading", name: "heading", widget: "string" }
+                  - { label: "Intro", name: "intro", widget: "string", required: false }
+              - label: "Classes"
+                name: "classes"
+                widget: "object"
+                fields:
+                  - { label: "Heading", name: "heading", widget: "string" }
+                  - { label: "Intro", name: "intro", widget: "string", required: false }
+              - label: "The Space"
+                name: "space"
+                widget: "object"
+                fields:
+                  - { label: "Heading", name: "heading", widget: "string" }
+                  - { label: "Intro", name: "intro", widget: "string", required: false }
+          - label: "Studio Artists Section"
+            name: "artists"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Intro", name: "intro", widget: "text", required: false }
+          - label: "Events Section"
+            name: "events"
+            widget: "object"
+            fields:
+              - { label: "Heading", name: "heading", widget: "string", hint: "Shown above upcoming events. The section disappears when there are none." }
+
+  - name: gallery
+    label: "Gallery › Photos"
+    label_singular: "Photo"
+    description: >-
+      Photos on the Gallery page. Each entry is one photo with a short
+      caption that appears when someone hovers over it. Add an entry to add
+      a photo; delete an entry to remove it.
+    folder: "src/_data/gallery"
+    extension: "yml"
+    format: "yml"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    sortable_fields: ["sort", "title"]
+    summary: "{{category}}: {{sort}}. {{title}}{{needs_review | ternary(' (draft caption)', '')}}"
+    fields:
+      - { label: "Photo", name: "image_src", widget: "image", hint: "Photos are cropped to fit the grid, so keep the main subject near the center. Landscape photos at least 1200 pixels wide look best." }
+      - { label: "Photo Description", name: "alt", widget: "string", hint: "Describe what's in the photo in one short sentence for screen readers, e.g. Three speckled mugs drying on a ware board." }
+      - label: "Section"
+        name: "category"
+        widget: "select"
+        default: "studio"
+        options:
+          - { label: "In the studio", value: "studio" }
+          - { label: "Classes", value: "classes" }
+          - { label: "The space", value: "space" }
+        hint: "Which part of the Gallery page this photo appears in."
+      - { label: "Title", name: "title", widget: "string", hint: "A few words, shown in bold when someone hovers over the photo." }
+      - { label: "Caption", name: "message", widget: "text", required: false, hint: "One or two sentences shown under the title on hover." }
+      - { label: "Order", name: "sort", widget: "number", value_type: "int", min: 1, default: 99, hint: "Lower numbers show first. Photos with the same number are sorted by title." }
+      - { label: "Needs owner review", name: "needs_review", widget: "boolean", default: false, required: false, hint: "On = the title and caption are placeholders and are hidden on the live site. The photo itself still shows." }
+
+  - name: artists
+    label: "Gallery › Studio Artists"
+    label_singular: "Artist"
+    description: >-
+      Artists who work out of The Kiln Shed, shown on the Gallery page with
+      photos of their work, a short bio and their links. Only add artists
+      who've agreed to be featured, using photos they've approved.
+    folder: "src/_data/artists"
+    extension: "yml"
+    format: "yml"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: name
+    summary: "{{name}}{{needs_review | ternary(' (draft)', '')}}"
+    fields:
+      - { label: "Name", name: "name", widget: "string", hint: "How they'd like to be credited." }
+      - { label: "Studio or Membership", name: "studio", widget: "string", required: false, hint: "Optional, e.g. Private studio member or Open studio member since 2022." }
+      - { label: "Portrait", name: "portrait", widget: "image", required: false, hint: "Optional. A photo of the artist, used as the big card photo only if no work photos are added." }
+      - { label: "Bio", name: "bio", widget: "text", hint: "One or two sentences about them and what they make." }
+      - { label: "Instagram", name: "instagram", widget: "string", required: false, hint: "Full link to their Instagram, e.g. https://www.instagram.com/theirname/" }
+      - { label: "Website", name: "website", widget: "string", required: false, hint: "Full link to their website, starting with https://" }
+      - { label: "Shop", name: "shop", widget: "string", required: false, hint: "Full link to where people can buy their work, e.g. Etsy." }
+      - label: "Work"
+        name: "works"
+        widget: "list"
+        label_singular: "Piece"
+        summary: "{{fields.title}}"
+        hint: "The first photo is the big featured image on their card; the next two show smaller underneath. Photos are cropped square, so keep the piece centered. Any beyond three aren't shown."
+        fields:
+          - { label: "Photo", name: "image", widget: "image" }
+          - { label: "Photo Description", name: "alt", widget: "string", hint: "Describe the piece for screen readers, e.g. A tall speckled vase with a blue drip glaze." }
+          - { label: "Title", name: "title", widget: "string", required: false, hint: "Optional. Shown under the photo." }
+      - { label: "Order", name: "sort", widget: "number", value_type: "int", min: 1, default: 99, hint: "Lower numbers show first." }
+      - { label: "Needs owner review", name: "needs_review", widget: "boolean", default: false, required: false, hint: "On = this artist is hidden on the live site. Use it while you wait for their approval." }
+
+  - name: events
+    label: "Gallery › Events"
+    label_singular: "Event"
+    description: >-
+      Studio sales, open houses, firings and other events. Upcoming events
+      appear on the Gallery page. Turn on "Show banner" to also announce one
+      across the top of every page. Events disappear on their own after
+      their last day; you don't need to delete them.
+    folder: "src/_data/events"
+    extension: "yml"
+    format: "yml"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    sortable_fields: ["start_date", "title"]
+    summary: "{{start_date}}: {{title}}{{announce | ternary(' (banner)', '')}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string", hint: "e.g. Holiday Pottery Sale" }
+      - { label: "First Day", name: "start_date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", picker_utc: true, hint: "The day the event starts." }
+      - { label: "Last Day", name: "end_date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", picker_utc: true, required: false, hint: "Leave empty for a one-day event. The event stays listed through the end of this day." }
+      - { label: "Time", name: "time", widget: "string", required: false, hint: "e.g. 10 AM to 4 PM both days" }
+      - { label: "Location", name: "location", widget: "string", required: false, hint: "Leave empty if it's at the studio and that's obvious." }
+      - { label: "Description", name: "description", widget: "text", hint: "Two or three sentences: what it is, who it's for, anything people should bring or know." }
+      - { label: "Photo", name: "image", widget: "image", required: false, hint: "Optional. Shown beside the event on the Gallery page. Landscape photos work best." }
+      - { label: "Photo Description", name: "image_alt", widget: "string", required: false, hint: "Describe the photo for screen readers." }
+      - { label: "Button Text", name: "link_text", widget: "string", required: false, hint: "Optional, e.g. RSVP. Only shows when Button Link is filled in." }
+      - { label: "Button Link", name: "link_url", widget: "string", required: false, hint: "Optional. A page on this site like /contact, or a full web address." }
+      - { label: "Show banner", name: "announce", widget: "boolean", default: false, required: false, hint: "Shows a slim banner about this event across the top of every page until it's over. Visitors can close it. Use it for one event at a time; if several are on, the soonest one shows." }
+      - { label: "Needs owner review", name: "needs_review", widget: "boolean", default: false, required: false, hint: "On = this event is hidden on the live site, banner included." }
+
+  - name: kilns_page
+    label: "Kilns"
+    description: >-
+      The kiln types on the Kilns page and the text beside the firing
+      calendar. Kiln and firing questions are edited under Kilns › FAQs.
+    files:
+      - name: kilns
+        label: "Kilns Page"
+        file: "src/_data/kilns.yml"
+        fields:
+          - label: "Banner"
+            name: "banner"
+            widget: "object"
+            hint: "The big strip at the top of the page, under the menu."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+          - label: "Intro"
+            name: "intro"
+            widget: "object"
+            hint: "The text to the left of the kiln cards."
+            fields:
+              - { label: "Needs owner review", name: "needs_review", widget: "boolean", default: true, required: false, hint: "On = placeholder draft, hidden on the live site. Turn off once the owners approve it." }
+              - { label: "Heading", name: "heading", widget: "string", hint: "e.g. Types of kilns" }
+              - { label: "Text", name: "body", widget: "text", hint: "One or two sentences about the studio's kilns overall." }
+          - label: "Kilns"
+            name: "kilns"
+            widget: "list"
+            label_singular: "Kiln"
+            summary: "{{fields.name}}"
+            hint: "One card per kind of kiln, in the order shown. Drag to reorder."
+            fields:
+              - { label: "Needs owner review", name: "needs_review", widget: "boolean", default: true, required: false, hint: "On = the description is a placeholder and is hidden on the live site. The name, firing type and temperature still show." }
+              - { label: "Name", name: "name", widget: "string", hint: "Shown big, e.g. Electric" }
+              - { label: "Firing Type", name: "firing", widget: "string", hint: "e.g. Soda Reduction" }
+              - { label: "Temperature", name: "temperature", widget: "string", hint: "e.g. Up to cone 6" }
+              - { label: "Photo", name: "image", widget: "image", required: false, hint: "A photo of this kiln. Landscape photos work best." }
+              - { label: "Photo Description", name: "image_alt", widget: "string", required: false, hint: "Describe the photo in one short sentence for screen readers." }
+              - { label: "Description", name: "description", widget: "text", hint: "Two or three sentences: what it's good for, sizes, how often it's fired, how to get work in it." }
+          - label: "FAQ Section"
+            name: "faq"
+            widget: "object"
+            hint: "The heading over the kiln questions. The questions themselves are edited under Kilns › FAQs."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+          - label: "Firing Calendar"
+            name: "calendar"
+            widget: "object"
+            hint: "The text beside the embedded Google Calendar. The calendar itself is managed in Google Calendar."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string" }
+              - { label: "Text", name: "body", widget: "text", hint: "How to book a firing." }
+
+  - name: faqs
+    label: "Kilns › FAQs"
+    label_singular: "FAQ"
+    description: >-
+      Questions and answers shown on the Kilns page. Each entry is one
+      question. Add, edit or delete entries here; the page updates when the
+      change is published.
+    folder: "src/_data/faqs"
+    extension: "yml"
+    format: "yml"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: question
+    fields:
+      - label: "Question"
+        name: "question"
+        widget: "string"
+        hint: "Write it the way a visitor would ask it, e.g. \"How much does a kiln rental cost?\""
+      - label: "Answer"
+        name: "answer"
+        widget: "text"
+        hint: "Keep it short and plain. A few sentences is plenty."
+      - label: "Button Text"
+        name: "button_text"
+        widget: "string"
+        required: false
+        hint: >-
+          Optional. Adds a button under the answer, e.g. "Book a kiln". The
+          button only appears when Button Link is also filled in.
+      - label: "Button Link"
+        name: "link"
+        widget: "string"
+        required: false
+        hint: >-
+          Optional. Where the button goes. Use a full web address
+          (https://...), a page on this site (/contact), or an email link
+          (mailto:manager@thekilnshed.studio).
+
+  - name: about_page
+    label: "About Us"
+    description: >-
+      All the writing on the About page except staff, which is under
+      About Us › Staff. Each part of the page has a "Needs owner review" switch.
+      While it is on, that part is treated as a placeholder draft: you can
+      see it when previewing the site locally, but it is left off the live
+      website. Turn it off once the owners have read and approved the text.
+    files:
+      - name: about
+        label: "About Page"
+        file: "src/_data/about.yml"
+        fields:
+          - label: "Banner"
+            name: "banner"
+            widget: "object"
+            collapsed: false
+            hint: "The big strip at the very top of the page, under the menu."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string", hint: "Two to four words, shown large in lime. e.g. Behind the Kiln" }
+          - label: "Intro"
+            name: "intro"
+            widget: "object"
+            collapsed: false
+            hint: "The first section under the 'Behind the Kiln' banner."
+            fields:
+              - &review { label: "Needs owner review", name: "needs_review", widget: "boolean", default: true, required: false, hint: "On = placeholder draft, hidden on the live site. Turn off once the owners approve this section." }
+              - { label: "Heading", name: "heading", widget: "string", hint: "A few words. Shown large on the left." }
+              - { label: "Lead", name: "lead", widget: "text", hint: "One sentence that sums up the studio. Shown in bigger text." }
+              - { label: "Body", name: "body", widget: "text", hint: "A few short paragraphs. Leave a blank line between paragraphs." }
+          - label: "Origin Story"
+            name: "story"
+            widget: "object"
+            hint: "How The Kiln Shed got started. Shown on a dark background next to a photo."
+            fields:
+              - *review
+              - { label: "Heading", name: "heading", widget: "string", hint: "e.g. How it started" }
+              - { label: "Story", name: "body", widget: "text", hint: "Who started it, when, why, and what it took. Leave a blank line between paragraphs." }
+              - { label: "Photo", name: "image", widget: "image", required: false, hint: "Optional. An old photo of the building or the early days works great." }
+              - { label: "Photo Description", name: "image_alt", widget: "string", required: false, hint: "Describe the photo in one short sentence for screen readers." }
+          - label: "How We Run Things"
+            name: "house_rules"
+            widget: "object"
+            hint: "The studio's values or house rules, shown as a grid of short points."
+            fields:
+              - *review
+              - { label: "Heading", name: "heading", widget: "string", hint: "e.g. How we run things" }
+              - label: "Points"
+                name: "items"
+                widget: "list"
+                label_singular: "Point"
+                summary: "{{fields.title}}"
+                hint: "Two to six points works best. Drag to reorder."
+                fields:
+                  - { label: "Title", name: "title", widget: "string", hint: "A short, punchy phrase, e.g. No gatekeeping" }
+                  - { label: "Text", name: "text", widget: "text", hint: "One or two sentences explaining it." }
+          - label: "The Space"
+            name: "space"
+            widget: "object"
+            hint: "What the studio is like, with quick numbers and a row of photos."
+            fields:
+              - *review
+              - { label: "Heading", name: "heading", widget: "string", hint: "e.g. The space" }
+              - { label: "Description", name: "body", widget: "text", hint: "A short description of the building and what's in it. Leave a blank line between paragraphs." }
+              - label: "Quick Facts"
+                name: "facts"
+                widget: "list"
+                label_singular: "Fact"
+                summary: "{{fields.value}} {{fields.label}}"
+                hint: "Big numbers with a label underneath. Four fits one row on desktop."
+                fields:
+                  - { label: "Number or short value", name: "value", widget: "string", hint: "Shown big, e.g. 12 or 24/7" }
+                  - { label: "Label", name: "label", widget: "string", hint: "What the number is, e.g. Pottery wheels" }
+              - label: "Photos"
+                name: "photos"
+                widget: "list"
+                label_singular: "Photo"
+                summary: "{{fields.alt}}"
+                hint: "Three photos fill one row. They are cropped to the same shape, so keep the main subject near the center."
+                fields:
+                  - { label: "Photo", name: "image", widget: "image" }
+                  - { label: "Photo Description", name: "alt", widget: "string", hint: "Describe the photo in one short sentence for screen readers." }
+          - label: "Visit"
+            name: "visit"
+            widget: "object"
+            hint: "The last section: how to come by. The address, hours and accessibility details come from Site Settings, so they match the Contact page."
+            fields:
+              - *review
+              - { label: "Heading", name: "heading", widget: "string", hint: "e.g. Come see it" }
+              - { label: "Text", name: "body", widget: "text", hint: "A sentence or two inviting people in." }
+
+  - name: staff
+    label: "About Us › Staff"
+    label_singular: "Staff Member"
+    description: >-
+      People shown on the About page. Add an entry for each person; delete an
+      entry to remove them from the page.
+    folder: "src/_data/staff"
+    extension: "yml"
+    format: "yml"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: name
+    fields:
+      - label: "Photo"
+        name: "image"
+        widget: "image"
+        hint: "A clear photo of the person. Square photos around 800 x 800 pixels work best."
+      - label: "Name"
+        name: "name"
+        widget: "string"
+        hint: "Their name as they would like it shown."
+      - label: "Title"
+        name: "title"
+        widget: "string"
+        hint: "Their role at the studio, e.g. Co-owner, Kiln manager, Instructor."
+      - label: "Instagram Link"
+        name: "instagram"
+        widget: "string"
+        required: false
+        hint: "Optional. The full address of their Instagram profile, e.g. https://www.instagram.com/theirname/"
+      - label: "Website Link"
+        name: "website"
+        widget: "string"
+        required: false
+        hint: "Optional. The full address of their website or shop, starting with https://"
+      - label: "Bio"
+        name: "bio"
+        widget: "text"
+        hint: "A short paragraph about them and their work. Two to four sentences works well."
+      - label: "Needs owner review"
+        name: "needs_review"
+        widget: "boolean"
+        default: false
+        required: false
+        hint: >-
+          On = the bio is a placeholder draft. The person's card still shows
+          on the live site, but without the bio. Turn off once they approve it.
+
+  - name: contact_page
+    label: "Contact"
+    description: >-
+      The writing on the Contact page, the choices in the contact form, and
+      the email list signup. The phone number, email and address shown on
+      this page come from Site Settings.
+    files:
+      - name: contact
+        label: "Contact Page"
+        file: "src/_data/contact.yml"
+        fields:
+          - label: "Banner"
+            name: "banner"
+            widget: "object"
+            hint: "The big strip at the very top of the page, under the menu."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string", hint: "Two to four words, shown large in lime." }
+          - label: "Intro"
+            name: "intro"
+            widget: "object"
+            collapsed: false
+            hint: "The text beside the form, above the phone, email and address."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string", hint: "e.g. Get in touch" }
+              - { label: "Text", name: "body", widget: "text", hint: "A short welcome. Leave a blank line between paragraphs." }
+              - { label: "Response Time", name: "response_time", widget: "string", required: false, hint: "Optional. Sets expectations, e.g. We usually reply within two business days. Leave empty to hide." }
+          - label: "Shortcuts"
+            name: "shortcuts"
+            widget: "object"
+            hint: "Links under the contact details that point people to the right page before they write in."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string", hint: "e.g. Looking for something specific?" }
+              - label: "Links"
+                name: "items"
+                widget: "list"
+                label_singular: "Link"
+                summary: "{{fields.text}}"
+                hint: "Three to five links works best. Drag to reorder."
+                fields:
+                  - { label: "Text", name: "text", widget: "string", hint: "What the link says, e.g. Class dates and sign-ups" }
+                  - { label: "Link", name: "url", widget: "string", hint: "A page on this site like /classes, or a full web address starting with https://" }
+          - label: "Plan Your Visit"
+            name: "visit"
+            widget: "object"
+            hint: "The section with hours, parking and accessibility. Those details are edited in Site Settings under Visiting Info."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string", hint: "e.g. Plan your visit" }
+          - label: "Contact Form"
+            name: "form"
+            widget: "object"
+            hint: "The message form. Visitors fill in name, email, optional phone, a topic and their message."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string", hint: "Shown above the form, e.g. Send us a message" }
+              - { label: "Button Text", name: "submit_label", widget: "string", hint: "The text on the send button. Keep it short, e.g. Send message" }
+              - { label: "Thank-You Message", name: "success_message", widget: "string", hint: "Shown under the form after someone sends a message." }
+              - label: "Topics"
+                name: "topics"
+                widget: "list"
+                label_singular: "Topic"
+                summary: "{{fields.label}}"
+                hint: >-
+                  The choices in the "What's this about?" dropdown, in order. The first one is
+                  picked by default. Drag to reorder.
+                fields:
+                  - { label: "Label", name: "label", widget: "string", hint: "What visitors see in the dropdown, e.g. Kiln rental or firing" }
+                  - label: "Link Name"
+                    name: "slug"
+                    widget: "string"
+                    pattern: ['^[a-z0-9-]+$', "Use lowercase letters, numbers and dashes only."]
+                    hint: >-
+                      A short code for this topic, e.g. kilns. Other pages use it to open the form
+                      with this topic already picked (like /contact?topic=membership on the
+                      Membership page), so avoid changing existing ones.
+              - { label: "Form Destination", name: "endpoint", widget: "hidden" }
+          - label: "Email List Signup"
+            name: "newsletter"
+            widget: "object"
+            hint: "The signup box at the bottom of the Contact page."
+            fields:
+              - { label: "Heading", name: "heading", widget: "string", hint: "e.g. Stay in the loop" }
+              - { label: "Text", name: "body", widget: "text", hint: "One or two sentences on what people will get." }
+              - { label: "Button Text", name: "button_label", widget: "string", hint: "e.g. Sign me up" }
+              - { label: "Thank-You Message", name: "success_message", widget: "string", hint: "Shown after someone signs up." }
+              - { label: "Signup Destination", name: "endpoint", widget: "hidden" }
+
   - name: pages
-    label: "Pages"
+    label: "Extra Pages"
+    label_singular: "Page"
+    description: >-
+      Simple text pages that are not part of the main menu, like policies or
+      announcements. The main pages (Home, Classes, Membership, Gallery,
+      Kilns, About, Contact) are built by the developer and are not edited
+      here. A new page gets its own web address based on its title and
+      needs to be linked from somewhere for visitors to find it.
     folder: "src/_pages"
     create: true
     slug: "{{slug}}"
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Body", name: "body", widget: "markdown" }
+      - label: "Title"
+        name: "title"
+        widget: "string"
+        hint: "The page heading. It also sets the page address, so keep it short."
+      - label: "Body"
+        name: "body"
+        widget: "markdown"
+        hint: "The page content. Use the toolbar for headings, lists, links and images."
 
-  - name: faqs
-    label: "Faqs"
-    folder: "src/_data/faqs"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - { label: "Question", name: "question", widget: "string" }
-      - { label: "Answer", name: "answer", widget: "string" }
-      - { label: "Button Text", name: "button_text", widget: "string" }
-      - { label: "Button Link", name: "link", widget: "string" }
-
-  - name: staff
-    label: "Staff"
-    folder: "src/_data/staff"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - { label: "Image", name: "image", widget: "image" }
-      - { label: "Name", name: "name", widget: "string" }
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Instagram Link", name: "instrgram", widget: "string" }
-      - { label: "Website Link", name: "website", widget: "string" }
-      - { label: "Bio", name: "bio", widget: "string" }
+  - name: not_found
+    label: "Page Not Found"
+    description: "The page people see when they follow a broken or old link."
+    files:
+      - name: not_found
+        label: "Page Not Found"
+        file: "src/_data/not_found.yml"
+        fields:
+          - { label: "Heading", name: "heading", widget: "string", hint: "Shown huge in lime, e.g. Page not found" }
+          - { label: "Text", name: "body", widget: "text", hint: "A sentence or two letting people know the link is broken or old." }
+          - { label: "Button Text", name: "button_text", widget: "string", hint: "The button goes to the home page." }
